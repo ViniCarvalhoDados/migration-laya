@@ -254,6 +254,62 @@ LR empatam.
 > parecido próximas do acaso e eu teria concluído "o checkpoint não serve" — com
 > a mesma convicção.
 
+### Validação 4 · agregar paráfrases resolve a sensibilidade
+
+Se uma redação sortuda vale 0,57 de AUC, nenhum resultado de redação única vale
+nada. A saída é não depender de acertar a frase: **6 paráfrases genuínas por
+pergunta** (mesmas condições de verdade, vocabulário diferente), todas na mesma
+chamada, e a resposta é a média de P(true) entre elas — que **não olha o
+gabarito**, então é honesta e implantável.
+
+| pergunta | pior | melhor (oráculo) | amplitude | média | **ensemble** | leitura |
+|---|---|---|---|---|---|---|
+| `has_subquery` | 0,77 | 1,00 | 0,23 | 0,91 | **1,00** | agregar resolve |
+| `has_window_function` | 0,42 | 0,99 | 0,57 | 0,78 | **0,91** | agregar ajuda |
+| `multi_source` | 0,55 | 0,90 | 0,35 | 0,73 | **0,86** | agregar ajuda |
+| `needs_human_review` | 0,15 | 0,40 | 0,25 | 0,28 | 0,24 | não ajuda |
+
+O "oráculo" é a melhor redação isolada **escolhida com o gabarito na mão** — é
+teto, não estratégia. O ensemble chega nele em `has_subquery` e recupera a maior
+parte do caminho nas outras duas, sem precisar saber qual frase era a boa.
+
+E isso muda a comparação com a regressão logística pela terceira vez. Pareado,
+200 splits, os dois ajustados só no treino:
+
+| pergunta | Laya 1× | **Laya 6×** | LR | baseline | 6× − LR | IC90 | splits |
+|---|---|---|---|---|---|---|---|
+| `has_subquery` | 86% | **95%** | 80% | 58% | **+15,2** | +6,0 a +26,0 | **100%** |
+| `has_window_function` | 95% | 87% | 83% | 85% | +4,1 | −4,0 a +12,0 | 75% |
+| `multi_source` | 79% | 79% | 77% | 79% | +2,8 | −6,0 a +12,0 | 62% |
+| `needs_human_review` | 75% | 74% | **84%** | 70% | **−9,8** | −18,0 a 0,0 | 3% |
+
+**`has_subquery` é a primeira vitória sólida do Laya neste estudo:** 95% contra
+80% da regressão e 58% do baseline, com IC90 longe de zero e consistência em
+100% dos splits. É também a única pergunta que já era robusta à paráfrase e que
+passa no teste de negação. As três evidências apontam para o mesmo lugar.
+
+Repare no que aconteceu com `has_window_function`: o ensemble (87%) fica
+**abaixo** da redação sortuda (95%). Esse é o preço honesto — você troca um
+número que não teria como saber escolher por um que dá para implantar.
+
+> **Custo:** 8,1 s por script em CPU contra 2,3 s (3,5×), porque são 24 chamadas
+> em vez de 6. Para um backlog de 99 scripts, 13 minutos contra 4.
+
+### A tensão que fecha o discovery
+
+O Laya **consegue** ler uma descrição comprimida de SQL e responder uma pergunta
+estrutural de forma confiável — 95% em `has_subquery`, batendo a regressão por
+15 pontos, com ensemble e hold-out. Isso é capacidade real, e eu não teria
+encontrado sem as quatro validações.
+
+Mas `has_subquery` é exatamente a pergunta que o `sqlglot` responde com **100%
+de acurácia em milissegundos**, e cujo valor o cartão já entrega de bandeja. A
+capacidade é real; o valor de negócio, não.
+
+Na única pergunta que exigiria julgamento — `needs_human_review` — o modelo
+continua abaixo do baseline e perde para a regressão por 10 pontos, com ou sem
+ensemble. Agregar não cria sinal onde não há.
+
 ### O que o experimento **não** pode concluir
 
 - **A rubrica não mede dificuldade de migração.** Ela tem **rho = 0.82 com
@@ -409,7 +465,7 @@ mlaya compare full99 sql99              # head-to-head sobre o mesmo gabarito
 Auditoria e testes:
 
 ```bash
-pytest                                   # 150 testes
+pytest                                   # 159 testes
 mlaya census --verify                    # falha se alguma das 99 não parsear
 mlaya features corpus/tpcds/query23.sql  # dump de features para conferência manual
 mlaya card --check                       # valida orçamento sem escrever

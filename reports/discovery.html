@@ -270,18 +270,20 @@
   </p>
 
   <div class="answer">
-    <strong>Resposta curta:</strong> não com este checkpoint. O modelo
-    <em>ordena</em> bem (AUC 0,88–0,99) mas <em>corta</em> no lugar errado, e uma
-    regressão logística sobre as mesmas features empata com ele — ou ganha por
-    35 pontos na única pergunta sem vazamento. Alimentá-lo com SQL cru, que era
-    a correção óbvia, piora tudo.
+    <strong>Resposta curta:</strong> não com este checkpoint. Depois de quatro
+    validações o modelo <em>sabe</em> responder uma pergunta estrutural de forma
+    robusta &mdash; 95% em <code>has_subquery</code>, batendo uma regressão
+    logística por 15 pontos. Mas é justamente a pergunta que o
+    <code>sqlglot</code> responde de graça, e na única que exigiria julgamento
+    ele perde para a regressão por 10 pontos. Capacidade real, valor de
+    negócio não.
   </div>
 
   <div class="facts">
     <span><b>99</b> queries</span>
     <span><b>99/99</b> parseadas</span>
     <span><b>594</b> decisões avaliadas</span>
-    <span><b>150</b> testes</span>
+    <span><b>159</b> testes</span>
     <span><b>2,3 s</b> por script (CPU)</span>
   </div>
 </header>
@@ -925,6 +927,169 @@ flowchart TB
       perguntas teriam parecido próximas do acaso — e eu teria concluído "o
       checkpoint não serve" com a mesma convicção com que antes concluí o
       contrário.
+    </p>
+  </div>
+</section>
+
+<!-- ===================== ENSEMBLE ===================== -->
+<section id="ensemble">
+  <div class="sec-head col">
+    <p class="eyebrow">Rodada 3 &middot; a correção</p>
+    <h2>Não dependa de acertar a frase</h2>
+  </div>
+
+  <div class="col">
+    <p>
+      Se uma redação sortuda vale 0,57 de AUC, nenhum resultado de redação única
+      vale nada. A saída não é encontrar a frase certa &mdash; é não depender dela:
+      <b>seis paráfrases genuínas por pergunta</b>, mesmas condições de verdade,
+      vocabulário diferente, todas na mesma chamada. A resposta é a média de
+      P(true) entre elas, que <b>não olha o gabarito</b>.
+    </p>
+  </div>
+
+  <figure>
+    <div class="diagram">
+<pre class="mermaid">
+flowchart LR
+  C["evidence card"]
+  C --> P1["inline subquery?"]
+  C --> P2["one query nested<br/>inside another?"]
+  C --> P3["a SELECT inside<br/>another SELECT?"]
+  C --> P4["derived table or<br/>subquery in predicates?"]
+  C --> P5["nest one query<br/>inside another?"]
+  C --> P6["at least one<br/>subselect?"]
+  P1 --> L(["Laya"])
+  P2 --> L
+  P3 --> L
+  P4 --> L
+  P5 --> L
+  P6 --> L
+  L --> M["m&eacute;dia de P(true)<br/><small>n&atilde;o olha o gabarito</small>"]
+  M --> R["AUC 1,00<br/>vs 0,77&ndash;1,00 isoladas"]
+
+  classDef good fill:#e8f4ec,stroke:#15803d,color:#0d1417
+  classDef pred fill:#e0f0f4,stroke:#0e7490,color:#0d1417
+  class R good
+  class L,M pred
+</pre>
+    </div>
+    <figcaption>
+      Seis perguntas, uma resposta. A média entre paráfrases troca a loteria da
+      formulação por um número <b>reproduzível</b> &mdash; e chega ao teto que só se
+      alcançaria escolhendo a frase certa com o gabarito na mão.
+    </figcaption>
+  </figure>
+
+  <div class="plate">
+    <div class="plate-head">
+      <span>Redação isolada vs ensemble de 6 paráfrases</span>
+      <span class="mono">oráculo = melhor frase escolhida com o gabarito</span>
+    </div>
+    <div class="plate-body scroll">
+      <table>
+        <thead><tr>
+          <th>pergunta</th><th class="num">pior</th><th class="num">oráculo</th>
+          <th class="num">amplitude</th><th class="num">média isolada</th>
+          <th class="num">ensemble</th><th>leitura</th>
+        </tr></thead>
+        <tbody>
+          <tr><td class="q">has_subquery</td>
+            <td class="num">0,77</td><td class="num">1,00</td><td class="num">0,23</td>
+            <td class="num">0,91</td><td class="num strong-num">1,00</td>
+            <td><span class="pill pos">agregar resolve</span></td></tr>
+          <tr><td class="q">has_window_function</td>
+            <td class="num" style="color:var(--neg)">0,42</td><td class="num">0,99</td>
+            <td class="num strong-num">0,57</td><td class="num">0,78</td>
+            <td class="num strong-num">0,91</td>
+            <td><span class="pill warn">agregar ajuda</span></td></tr>
+          <tr><td class="q">multi_source</td>
+            <td class="num">0,55</td><td class="num">0,90</td><td class="num">0,35</td>
+            <td class="num">0,73</td><td class="num strong-num">0,86</td>
+            <td><span class="pill warn">agregar ajuda</span></td></tr>
+          <tr><td class="q">needs_human_review</td>
+            <td class="num">0,15</td><td class="num">0,40</td><td class="num">0,25</td>
+            <td class="num">0,28</td><td class="num" style="color:var(--neg)">0,24</td>
+            <td><span class="pill neg">não ajuda</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="plate">
+    <div class="plate-head">
+      <span>Terceira e última comparação com a regressão &middot; 200 splits pareados</span>
+    </div>
+    <div class="plate-body scroll">
+      <table>
+        <thead><tr>
+          <th>pergunta</th><th class="num">Laya 1&times;</th><th class="num">Laya 6&times;</th>
+          <th class="num">LR</th><th class="num">baseline</th>
+          <th class="num">6&times; &minus; LR</th><th class="num">IC90</th>
+          <th class="num">splits</th><th>leitura</th>
+        </tr></thead>
+        <tbody>
+          <tr><td class="q">has_subquery</td>
+            <td class="num">86%</td><td class="num strong-num">95%</td>
+            <td class="num">80%</td><td class="num">58%</td>
+            <td class="num strong-num">+15,2</td><td class="num">+6,0 a +26,0</td>
+            <td class="num strong-num">100%</td>
+            <td><span class="pill pos">Laya vence</span></td></tr>
+          <tr><td class="q">has_window_function</td>
+            <td class="num">95%</td><td class="num">87%</td>
+            <td class="num">83%</td><td class="num">85%</td>
+            <td class="num">+4,1</td><td class="num">&minus;4,0 a +12,0</td><td class="num">75%</td>
+            <td><span class="pill flat">dentro do ruído</span></td></tr>
+          <tr><td class="q">multi_source</td>
+            <td class="num">79%</td><td class="num">79%</td>
+            <td class="num">77%</td><td class="num">79%</td>
+            <td class="num">+2,8</td><td class="num">&minus;6,0 a +12,0</td><td class="num">62%</td>
+            <td><span class="pill flat">dentro do ruído</span></td></tr>
+          <tr><td class="q">needs_human_review</td>
+            <td class="num">75%</td><td class="num">74%</td>
+            <td class="num strong-num">84%</td><td class="num">70%</td>
+            <td class="num" style="color:var(--neg)">&minus;9,8</td>
+            <td class="num">&minus;18,0 a 0,0</td><td class="num">3%</td>
+            <td><span class="pill neg">LR vence</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="col">
+    <p>
+      <b><code>has_subquery</code> é a primeira vitória sólida do Laya neste
+      estudo:</b> 95% contra 80% da regressão e 58% do baseline, IC90 longe de
+      zero, consistente em 100% dos splits. É também a única pergunta já robusta
+      à paráfrase e que passa no teste de negação &mdash; três evidências apontando
+      para o mesmo lugar.
+    </p>
+    <p>
+      Repare no que aconteceu com <code>has_window_function</code>: o ensemble
+      (87%) fica <em>abaixo</em> da redação sortuda (95%). Esse é o preço
+      honesto &mdash; você troca um número que não teria como saber escolher por um
+      que dá para implantar.
+    </p>
+    <p>
+      <b>Custo:</b> 8,1 s por script contra 2,3 s, porque são 24 chamadas em vez
+      de 6. Para as 99 queries: 13 minutos contra 4.
+    </p>
+  </div>
+
+  <div class="call">
+    <span class="tag">A tensão que fecha o discovery</span>
+    <p>
+      O Laya <b>consegue</b> ler uma descrição comprimida de SQL e responder uma
+      pergunta estrutural de forma confiável. Isso é capacidade real, e eu não
+      teria encontrado sem as quatro validações.
+    </p>
+    <p>
+      Mas <code>has_subquery</code> é exatamente a pergunta que o
+      <code>sqlglot</code> responde com 100% de acurácia em milissegundos, e cujo
+      valor o cartão já entrega de bandeja. <b>A capacidade é real; o valor de
+      negócio, não.</b> E na única pergunta que exigiria julgamento de verdade, o
+      modelo continua abaixo do baseline e perde para a regressão &mdash; com ou
+      sem ensemble. Agregar não cria sinal onde não há.
     </p>
   </div>
 </section>

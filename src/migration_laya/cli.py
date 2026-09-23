@@ -811,6 +811,62 @@ def cmd_variants(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_ensemble(args: argparse.Namespace) -> int:
+    """Compare single wordings against aggregations over several paraphrases."""
+    import json
+
+    from . import ensemble as ens
+
+    docs = {}
+    for path in _state_files(args.state_dir):
+        doc = yaml.safe_load(path.read_text(encoding="utf-8"))
+        if doc.get("name"):
+            docs[doc["name"]] = doc
+
+    run_dir = Path(args.runs_dir) / args.run_id
+    raw = {}
+    for path in sorted((run_dir / "raw").glob("*.json")):
+        answer = json.loads(path.read_text(encoding="utf-8"))
+        raw[answer.get("origin") or answer["script_id"]] = answer
+    if not raw:
+        print(f"no raw answers in {run_dir}/raw", file=sys.stderr)
+        return 2
+
+    any_answer = next(iter(raw.values())).get("answers") or {}
+    rows = []
+    for question in args.questions:
+        keys = sorted(k for k in any_answer if k.startswith(question + "_p"))
+        if len(keys) < 2:
+            continue
+        row = ens.analyse(raw, docs, question, keys)
+        if row:
+            row["verdict"] = ens.verdict(row)
+            rows.append(row)
+    if not rows:
+        print("no question had several paraphrases in this run", file=sys.stderr)
+        return 2
+
+    census_mod.write_yaml({"run_id": args.run_id, "results": rows},
+                          run_dir / "ensemble.yml")
+
+    print(f"  {'pergunta':22}{'paraf.':>7}{'AUC pior':>10}{'AUC melhor':>12}"
+          f"{'amplitude':>11}{'media':>8}{'ENSEMBLE':>10}{'hold-out':>10}  leitura")
+    for r in rows:
+        agg = r["aggregated"]["mean"]
+        ho = agg.get("holdout_accuracy")
+        print(f"  {r['question']:22}{r['n_paraphrases']:>7}"
+              f"{r['single_auc_min']:>10.2f}{r['single_auc_max']:>12.2f}"
+              f"{r['single_auc_spread']:>11.2f}{r['single_auc_mean']:>8.2f}"
+              f"{agg['auc']:>10.2f}"
+              f"{(f'{ho:.0%}' if ho is not None else '-'):>10}  {r['verdict']}")
+    print()
+    print("  AUC melhor = oraculo: escolhido com o gabarito na mao, teto e nao estrategia.")
+    print("  ENSEMBLE   = media de P(true) entre as parafrases; nao olha o gabarito.")
+    print()
+    print(f"wrote {run_dir}/ensemble.yml")
+    return 0
+
+
 def cmd_features(args: argparse.Namespace) -> int:
     """Print the extracted features for one file — the manual-audit tool."""
     f = extract_features(args.path)
@@ -919,6 +975,16 @@ def build_parser() -> argparse.ArgumentParser:
                    default=["has_subquery", "has_window_function",
                             "multi_source", "needs_human_review"])
     v.set_defaults(func=cmd_variants)
+
+    e = sub.add_parser("ensemble",
+                       help="single wordings vs aggregation over paraphrases")
+    e.add_argument("--run-id", required=True)
+    e.add_argument("--runs-dir", default="runs")
+    e.add_argument("--state-dir", default="state")
+    e.add_argument("--questions", nargs="*",
+                   default=["has_subquery", "has_window_function",
+                            "multi_source", "needs_human_review"])
+    e.set_defaults(func=cmd_ensemble)
 
     f = sub.add_parser("features", help="dump features for one SQL file")
     f.add_argument("path")

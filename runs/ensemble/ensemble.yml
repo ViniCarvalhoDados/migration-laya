@@ -1,0 +1,170 @@
+run_id: ensemble
+results:
+- question: has_subquery
+  n: 99
+  n_paraphrases: 6
+  gold_positive_rate: 0.5758
+  single:
+    has_subquery_p1:
+      auc: 0.9515
+      mean_p_true: 0.4409
+    has_subquery_p2:
+      auc: 0.8494
+      mean_p_true: 0.8287
+    has_subquery_p3:
+      auc: 0.7675
+      mean_p_true: 0.7347
+    has_subquery_p4:
+      auc: 0.8977
+      mean_p_true: 0.5063
+    has_subquery_p5:
+      auc: 0.9812
+      mean_p_true: 0.7488
+    has_subquery_p6:
+      auc: 0.9992
+      mean_p_true: 0.5696
+  single_auc_min: 0.7675
+  single_auc_max: 0.9992
+  single_auc_mean: 0.9078
+  single_auc_spread: 0.2317
+  aggregated:
+    mean:
+      auc: 0.9962
+      accuracy_at_half: 0.8081
+      holdout_accuracy: 0.9538
+    median:
+      auc: 0.9967
+      accuracy_at_half: 0.8283
+      holdout_accuracy: 0.9599
+    trimmed:
+      auc: 0.9975
+      accuracy_at_half: 0.8182
+      holdout_accuracy: 0.9582
+  oracle_auc: 0.9992
+  verdict: agregar resolve
+- question: has_window_function
+  n: 99
+  n_paraphrases: 6
+  gold_positive_rate: 0.1515
+  single:
+    has_window_function_p1:
+      auc: 0.9921
+      mean_p_true: 0.1588
+    has_window_function_p2:
+      auc: 0.4246
+      mean_p_true: 0.185
+    has_window_function_p3:
+      auc: 0.6722
+      mean_p_true: 0.2699
+    has_window_function_p4:
+      auc: 0.8865
+      mean_p_true: 0.2195
+    has_window_function_p5:
+      auc: 0.7873
+      mean_p_true: 0.1704
+    has_window_function_p6:
+      auc: 0.9183
+      mean_p_true: 0.2978
+  single_auc_min: 0.4246
+  single_auc_max: 0.9921
+  single_auc_mean: 0.7802
+  single_auc_spread: 0.5675
+  aggregated:
+    mean:
+      auc: 0.9119
+      accuracy_at_half: 0.8586
+      holdout_accuracy: 0.8838
+    median:
+      auc: 0.9317
+      accuracy_at_half: 0.8687
+      holdout_accuracy: 0.8616
+    trimmed:
+      auc: 0.9214
+      accuracy_at_half: 0.8687
+      holdout_accuracy: 0.8785
+  oracle_auc: 0.9921
+  verdict: agregar ajuda
+- question: multi_source
+  n: 99
+  n_paraphrases: 6
+  gold_positive_rate: 0.7879
+  single:
+    multi_source_p1:
+      auc: 0.8797
+      mean_p_true: 0.674
+    multi_source_p2:
+      auc: 0.5482
+      mean_p_true: 0.8241
+    multi_source_p3:
+      auc: 0.8651
+      mean_p_true: 0.6387
+    multi_source_p4:
+      auc: 0.58
+      mean_p_true: 0.2582
+    multi_source_p5:
+      auc: 0.8956
+      mean_p_true: 0.7117
+    multi_source_p6:
+      auc: 0.6401
+      mean_p_true: 0.7575
+  single_auc_min: 0.5482
+  single_auc_max: 0.8956
+  single_auc_mean: 0.7348
+  single_auc_spread: 0.3474
+  aggregated:
+    mean:
+      auc: 0.862
+      accuracy_at_half: 0.8182
+      holdout_accuracy: 0.7996
+    median:
+      auc: 0.8639
+      accuracy_at_half: 0.8283
+      holdout_accuracy: 0.7992
+    trimmed:
+      auc: 0.8773
+      accuracy_at_half: 0.8182
+      holdout_accuracy: 0.8302
+  oracle_auc: 0.8956
+  verdict: agregar ajuda
+- question: needs_human_review
+  n: 99
+  n_paraphrases: 6
+  gold_positive_rate: 0.697
+  single:
+    needs_human_review_p1:
+      auc: 0.2181
+      mean_p_true: 0.6027
+    needs_human_review_p2:
+      auc: 0.3527
+      mean_p_true: 0.2269
+    needs_human_review_p3:
+      auc: 0.4048
+      mean_p_true: 0.2749
+    needs_human_review_p4:
+      auc: 0.1527
+      mean_p_true: 0.9086
+    needs_human_review_p5:
+      auc: 0.3771
+      mean_p_true: 0.1871
+    needs_human_review_p6:
+      auc: 0.1952
+      mean_p_true: 0.1245
+  single_auc_min: 0.1527
+  single_auc_max: 0.4048
+  single_auc_mean: 0.2834
+  single_auc_spread: 0.2521
+  aggregated:
+    mean:
+      auc: 0.2415
+      accuracy_at_half: 0.303
+      holdout_accuracy: 0.7397
+    median:
+      auc: 0.3771
+      accuracy_at_half: 0.303
+      holdout_accuracy: 0.685
+    trimmed:
+      auc: 0.2937
+      accuracy_at_half: 0.303
+      holdout_accuracy: 0.7163
+  oracle_auc: 0.4048
+  verdict: agregar nao ajuda

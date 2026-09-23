@@ -1,0 +1,297 @@
+{
+  "script_id": "script_18",
+  "origin": "query86",
+  "answers": {
+    "has_subquery_p1": {
+      "question": "has_subquery_p1",
+      "type": "noul",
+      "value": 0.1968,
+      "label": "false",
+      "reported_confidence": 0.8032,
+      "max_probability": 0.8032,
+      "probabilities": {
+        "true": 0.1968,
+        "false": 0.8032
+      }
+    },
+    "has_subquery_p2": {
+      "question": "has_subquery_p2",
+      "type": "noul",
+      "value": 0.6987,
+      "label": "true",
+      "reported_confidence": 0.6987,
+      "max_probability": 0.6987,
+      "probabilities": {
+        "true": 0.6987,
+        "false": 0.3013
+      }
+    },
+    "has_subquery_p3": {
+      "question": "has_subquery_p3",
+      "type": "noul",
+      "value": 0.6418,
+      "label": "true",
+      "reported_confidence": 0.6418,
+      "max_probability": 0.6418,
+      "probabilities": {
+        "true": 0.6418,
+        "false": 0.3582
+      }
+    },
+    "has_subquery_p4": {
+      "question": "has_subquery_p4",
+      "type": "noul",
+      "value": 0.335,
+      "label": "false",
+      "reported_confidence": 0.665,
+      "max_probability": 0.665,
+      "probabilities": {
+        "true": 0.335,
+        "false": 0.665
+      }
+    },
+    "has_subquery_p5": {
+      "question": "has_subquery_p5",
+      "type": "noul",
+      "value": 0.3929,
+      "label": "false",
+      "reported_confidence": 0.6071,
+      "max_probability": 0.6071,
+      "probabilities": {
+        "true": 0.3929,
+        "false": 0.6071
+      }
+    },
+    "has_subquery_p6": {
+      "question": "has_subquery_p6",
+      "type": "noul",
+      "value": 0.299,
+      "label": "false",
+      "reported_confidence": 0.701,
+      "max_probability": 0.701,
+      "probabilities": {
+        "true": 0.299,
+        "false": 0.701
+      }
+    },
+    "has_window_function_p1": {
+      "question": "has_window_function_p1",
+      "type": "noul",
+      "value": 0.3943,
+      "label": "false",
+      "reported_confidence": 0.6057,
+      "max_probability": 0.6057,
+      "probabilities": {
+        "true": 0.3943,
+        "false": 0.6057
+      }
+    },
+    "has_window_function_p2": {
+      "question": "has_window_function_p2",
+      "type": "noul",
+      "value": 0.1275,
+      "label": "false",
+      "reported_confidence": 0.8725,
+      "max_probability": 0.8725,
+      "probabilities": {
+        "true": 0.1275,
+        "false": 0.8725
+      }
+    },
+    "has_window_function_p3": {
+      "question": "has_window_function_p3",
+      "type": "noul",
+      "value": 0.2287,
+      "label": "false",
+      "reported_confidence": 0.7713,
+      "max_probability": 0.7713,
+      "probabilities": {
+        "true": 0.2287,
+        "false": 0.7713
+      }
+    },
+    "has_window_function_p4": {
+      "question": "has_window_function_p4",
+      "type": "noul",
+      "value": 0.24,
+      "label": "false",
+      "reported_confidence": 0.76,
+      "max_probability": 0.76,
+      "probabilities": {
+        "true": 0.24,
+        "false": 0.76
+      }
+    },
+    "has_window_function_p5": {
+      "question": "has_window_function_p5",
+      "type": "noul",
+      "value": 0.1219,
+      "label": "false",
+      "reported_confidence": 0.8781,
+      "max_probability": 0.8781,
+      "probabilities": {
+        "true": 0.1219,
+        "false": 0.8781
+      }
+    },
+    "has_window_function_p6": {
+      "question": "has_window_function_p6",
+      "type": "noul",
+      "value": 0.3577,
+      "label": "false",
+      "reported_confidence": 0.6423,
+      "max_probability": 0.6423,
+      "probabilities": {
+        "true": 0.3577,
+        "false": 0.6423
+      }
+    },
+    "multi_source_p1": {
+      "question": "multi_source_p1",
+      "type": "noul",
+      "value": 0.508,
+      "label": "true",
+      "reported_confidence": 0.508,
+      "max_probability": 0.508,
+      "probabilities": {
+        "true": 0.508,
+        "false": 0.492
+      }
+    },
+    "multi_source_p2": {
+      "question": "multi_source_p2",
+      "type": "noul",
+      "value": 0.7763,
+      "label": "true",
+      "reported_confidence": 0.7763,
+      "max_probability": 0.7763,
+      "probabilities": {
+        "true": 0.7763,
+        "false": 0.2237
+      }
+    },
+    "multi_source_p3": {
+      "question": "multi_source_p3",
+      "type": "noul",
+      "value": 0.3782,
+      "label": "false",
+      "reported_confidence": 0.6218,
+      "max_probability": 0.6218,
+      "probabilities": {
+        "true": 0.3782,
+        "false": 0.6218
+      }
+    },
+    "multi_source_p4": {
+      "question": "multi_source_p4",
+      "type": "noul",
+      "value": 0.2768,
+      "label": "false",
+      "reported_confidence": 0.7232,
+      "max_probability": 0.7232,
+      "probabilities": {
+        "true": 0.2768,
+        "false": 0.7232
+      }
+    },
+    "multi_source_p5": {
+      "question": "multi_source_p5",
+      "type": "noul",
+      "value": 0.5506,
+      "label": "true",
+      "reported_confidence": 0.5506,
+      "max_probability": 0.5506,
+      "probabilities": {
+        "true": 0.5506,
+        "false": 0.4494
+      }
+    },
+    "multi_source_p6": {
+      "question": "multi_source_p6",
+      "type": "noul",
+      "value": 0.7472,
+      "label": "true",
+      "reported_confidence": 0.7472,
+      "max_probability": 0.7472,
+      "probabilities": {
+        "true": 0.7472,
+        "false": 0.2528
+      }
+    },
+    "needs_human_review_p1": {
+      "question": "needs_human_review_p1",
+      "type": "noul",
+      "value": 0.4346,
+      "label": "false",
+      "reported_confidence": 0.5654,
+      "max_probability": 0.5654,
+      "probabilities": {
+        "true": 0.4346,
+        "false": 0.5654
+      }
+    },
+    "needs_human_review_p2": {
+      "question": "needs_human_review_p2",
+      "type": "noul",
+      "value": 0.2227,
+      "label": "false",
+      "reported_confidence": 0.7773,
+      "max_probability": 0.7773,
+      "probabilities": {
+        "true": 0.2227,
+        "false": 0.7773
+      }
+    },
+    "needs_human_review_p3": {
+      "question": "needs_human_review_p3",
+      "type": "noul",
+      "value": 0.1307,
+      "label": "false",
+      "reported_confidence": 0.8693,
+      "max_probability": 0.8693,
+      "probabilities": {
+        "true": 0.1307,
+        "false": 0.8693
+      }
+    },
+    "needs_human_review_p4": {
+      "question": "needs_human_review_p4",
+      "type": "noul",
+      "value": 0.9227,
+      "label": "true",
+      "reported_confidence": 0.9227,
+      "max_probability": 0.9227,
+      "probabilities": {
+        "true": 0.9227,
+        "false": 0.0773
+      }
+    },
+    "needs_human_review_p5": {
+      "question": "needs_human_review_p5",
+      "type": "noul",
+      "value": 0.1756,
+      "label": "false",
+      "reported_confidence": 0.8244,
+      "max_probability": 0.8244,
+      "probabilities": {
+        "true": 0.1756,
+        "false": 0.8244
+      }
+    },
+    "needs_human_review_p6": {
+      "question": "needs_human_review_p6",
+      "type": "noul",
+      "value": 0.1038,
+      "label": "false",
+      "reported_confidence": 0.8962,
+      "max_probability": 0.8962,
+      "probabilities": {
+        "true": 0.1038,
+        "false": 0.8962
+      }
+    }
+  },
+  "input_tokens": 3820,
+  "elapsed_ms": 8202.6,
+  "ms_per_question": 341.8
+}

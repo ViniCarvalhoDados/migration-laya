@@ -1,0 +1,111 @@
+# Six paraphrases per question, asked in one call per script.
+#
+# The variants probe found that rewording a question moves its AUC by 0.28 on
+# average and by 0.57 in the worst case — which means every single-wording
+# result in this study, good or bad, is within the noise of how the sentence
+# happened to be phrased. This asks whether averaging over paraphrases recovers
+# a usable signal without having to guess the lucky wording.
+#
+# These are PARAPHRASES, not variations on the question. Each one has the same
+# truth conditions as p1 against the same gold label — if a rewrite changed what
+# was being asked, disagreement between them would measure ambiguity rather than
+# wording sensitivity, and the experiment would prove nothing. They differ in
+# vocabulary, register, length, and whether they name the SQL construct or
+# describe its effect.
+#
+# Pre-registered read: an ensemble (mean of P(true) across the six) is not
+# fitted to gold, so it is honest. "Best single paraphrase" IS chosen on gold
+# and is reported only as an oracle ceiling.
+
+# ---- has_subquery: an inline subquery; a CTE alone does not count -----------
+has_subquery_p1:
+  type: noul
+  instructions: "Does this script contain an inline subquery - a SELECT inside a
+    FROM, WHERE, IN or EXISTS clause? A WITH/CTE alone does not count."
+has_subquery_p2:
+  type: noul
+  instructions: "Is one query expression nested inside another one here, not
+    counting any common table expression?"
+has_subquery_p3:
+  type: noul
+  instructions: "Apart from CTEs, is there a SELECT written inside another SELECT?"
+has_subquery_p4:
+  type: noul
+  instructions: "Does this query use a derived table or a subquery in its
+    predicates, leaving WITH clauses aside?"
+has_subquery_p5:
+  type: noul
+  instructions: "Ignoring WITH clauses, does this statement nest one query
+    inside another?"
+has_subquery_p6:
+  type: noul
+  instructions: "Is there at least one subselect in this SQL, outside of any
+    common table expression?"
+
+# ---- has_window_function: any OVER clause ----------------------------------
+has_window_function_p1:
+  type: noul
+  instructions: "Does this script use an analytic window function with an OVER clause?"
+has_window_function_p2:
+  type: noul
+  instructions: "Is there an OVER clause anywhere in this query?"
+has_window_function_p3:
+  type: noul
+  instructions: "Does this statement compute anything with a windowed aggregate?"
+has_window_function_p4:
+  type: noul
+  instructions: "Are analytic functions such as RANK, ROW_NUMBER or a windowed
+    SUM used here?"
+has_window_function_p5:
+  type: noul
+  instructions: "Does this SQL partition rows into windows to compute a value
+    for each row?"
+has_window_function_p6:
+  type: noul
+  instructions: "Is a window specification present in this script?"
+
+# ---- multi_source: four or more distinct base tables -----------------------
+multi_source_p1:
+  type: noul
+  instructions: "Does this script read from four or more distinct source tables?"
+multi_source_p2:
+  type: noul
+  instructions: "Is the count of different base tables in this query at least four?"
+multi_source_p3:
+  type: noul
+  instructions: "Does this statement bring together at least four separate tables?"
+multi_source_p4:
+  type: noul
+  instructions: "Are there four or more distinct tables named in the FROM and
+    JOIN clauses?"
+multi_source_p5:
+  type: noul
+  instructions: "Does this query touch four or more different tables?"
+multi_source_p6:
+  type: noul
+  instructions: "Counting each table only once, does this script use at least
+    four of them?"
+
+# ---- needs_human_review: judgement a converter cannot make safely ----------
+needs_human_review_p1:
+  type: noul
+  instructions: "Must a human engineer review this script's logic before migrating it?"
+needs_human_review_p2:
+  type: noul
+  instructions: "Does migrating this script require a judgement call that an
+    automated converter cannot safely make?"
+needs_human_review_p3:
+  type: noul
+  instructions: "Would an automatic SQL converter be unsafe to trust on this
+    script without someone checking it?"
+needs_human_review_p4:
+  type: noul
+  instructions: "Should a person check this script's semantics before it is
+    ported to another engine?"
+needs_human_review_p5:
+  type: noul
+  instructions: "Is there a risk that migrating this script automatically would
+    silently change its results?"
+needs_human_review_p6:
+  type: noul
+  instructions: "Does this script need human judgement to be migrated correctly?"

@@ -96,7 +96,7 @@ gold:
   source: deterministic+claude
 latency:
   estimated_ms: 1718.5
-  measured_ms: 4503.5
-  ms_per_question: 375.3
-  input_tokens: 1852
+  measured_ms: 8035.9
+  ms_per_question: 334.8
+  input_tokens: 3700
   device: cpu
