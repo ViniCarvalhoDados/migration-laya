@@ -2,6 +2,8 @@
 
 99 scripts · 6 perguntas · modelo `convaiinnovations/laya` em `cpu`
 
+**Input:** evidence card (~100 tokens derivados do AST).
+
 > **Aviso emitido pelo próprio runtime ao carregar o checkpoint:**
 >
 > ``huggingface_hub` cache-system uses symlinks by default to efficiently store duplicated files but your machine does not support them in C:\Users\Vinicius\.cache\huggingface\hub\models--convaiinnovations--laya. Caching files will still work but in a degraded version that might require more space on your disk. This warning can be disabled by setting the `HF_HUB_DISABLE_SYMLINKS_WARNING` environment variable. For more details, see https://huggingface.co/docs/huggingface_hub/how-to-cache#limitations.
@@ -387,9 +389,22 @@ errada.
 > é maior que o acaso; p alto significa que o ganho (ou a perda) é ruído.
 
 > ⚠️ **O melhor limiar foi ajustado nos mesmos 99 pontos em que é medido.**
-> É um teto otimista, não uma configuração implantável — serve só para
-> separar *o modelo não sabe* de *o corte está no lugar errado*. Um número
-> defensável exigiria ajustar em treino e medir em hold-out.
+> É um teto otimista. A tabela seguinte é a versão implantável.
+
+
+**Limiar validado em hold-out** — divisões estratificadas repetidas, corte
+escolhido só na metade de treino e medido só na de teste:
+
+| pergunta | acc @0,5 | acc hold-out | p05–p95 | limiar mediano | ganho sobre 0,5 | teto otimista | hindsight |
+|---|---|---|---|---|---|---|---|
+| `has_subquery` | 80% | **86%** | 80%–90% | 0.36 | +6% | 89% | +3% |
+| `has_window_function` | 88% | **95%** | 92%–98% | 0.21 | +7% | 97% | +2% |
+| `multi_source` | 77% | **79%** | 72%–84% | 0.41 | +3% | 84% | +4% |
+| `needs_human_review` | 54% | **75%** | 70%–80% | 0.73 | +22% | 78% | +3% |
+
+> **hindsight** = quanto do ganho aparente era escolha com o gabarito
+> na mão. Poucos pontos significa que a calibração sobrevive ao
+> hold-out; muitos significariam que o limiar ótimo era sorte.
 
 > Todos os limiares ótimos caem **abaixo de 0.5**: o modelo subestima
 > P(true) de forma sistemática — é o aviso de temperatura inválida do
@@ -729,105 +744,105 @@ Extrapolando para as 99 queries do corpus: ~226 s de inferência em CPU.
 
 | script | estimado (ms) | medido (ms) | erro |
 |---|---|---|---|
-| `script_01` | 1969 | 2082 | +6% |
-| `script_02` | 1687 | 2249 | +33% |
-| `script_03` | 1687 | 2273 | +35% |
-| `script_04` | 1687 | 2092 | +24% |
-| `script_05` | 1687 | 2099 | +24% |
-| `script_06` | 1687 | 2238 | +33% |
-| `script_07` | 1718 | 2344 | +36% |
-| `script_08` | 1718 | 2240 | +30% |
-| `script_09` | 1718 | 2259 | +31% |
-| `script_10` | 1760 | 2349 | +33% |
-| `script_11` | 1718 | 2254 | +31% |
-| `script_12` | 1760 | 2322 | +32% |
-| `script_13` | 1760 | 2285 | +30% |
-| `script_14` | 1781 | 2310 | +30% |
-| `script_15` | 1687 | 2149 | +27% |
-| `script_16` | 1687 | 2062 | +22% |
-| `script_17` | 1687 | 2026 | +20% |
-| `script_18` | 1812 | 2304 | +27% |
-| `script_19` | 1823 | 2213 | +21% |
-| `script_20` | 1823 | 2176 | +19% |
-| `script_21` | 1948 | 2505 | +29% |
-| `script_22` | 1687 | 2154 | +28% |
-| `script_23` | 2031 | 2255 | +11% |
-| `script_24` | 1927 | 2319 | +20% |
-| `script_25` | 1781 | 2169 | +22% |
-| `script_26` | 1812 | 2311 | +28% |
-| `script_27` | 1927 | 2341 | +21% |
-| `script_28` | 1885 | 2360 | +25% |
-| `script_29` | 1927 | 2293 | +19% |
-| `script_30` | 1781 | 2209 | +24% |
-| `script_31` | 1948 | 2556 | +31% |
-| `script_32` | 1823 | 2249 | +23% |
-| `script_33` | 1865 | 2335 | +25% |
-| `script_34` | 1760 | 2224 | +26% |
-| `script_35` | 1854 | 2264 | +22% |
-| `script_36` | 1885 | 2449 | +30% |
-| `script_37` | 1823 | 2240 | +23% |
-| `script_38` | 1969 | 2140 | +9% |
-| `script_39` | 1844 | 2230 | +21% |
-| `script_40` | 2000 | 2172 | +9% |
-| `script_41` | 1885 | 2321 | +23% |
-| `script_42` | 1885 | 2330 | +24% |
-| `script_43` | 1927 | 2300 | +19% |
-| `script_44` | 1844 | 2204 | +20% |
-| `script_45` | 1687 | 2160 | +28% |
-| `script_46` | 1760 | 2296 | +30% |
-| `script_47` | 1844 | 2249 | +22% |
-| `script_48` | 1844 | 2263 | +23% |
-| `script_49` | 1823 | 2228 | +22% |
-| `script_50` | 1760 | 2301 | +31% |
-| `script_51` | 1885 | 2398 | +27% |
-| `script_52` | 1718 | 2240 | +30% |
-| `script_53` | 1948 | 2513 | +29% |
-| `script_54` | 1781 | 2255 | +27% |
-| `script_55` | 1844 | 2242 | +22% |
-| `script_56` | 1687 | 2138 | +27% |
-| `script_57` | 1948 | 2514 | +29% |
-| `script_58` | 1687 | 2180 | +29% |
-| `script_59` | 1687 | 2180 | +29% |
-| `script_60` | 2031 | 2034 | +0% |
-| `script_61` | 1823 | 2265 | +24% |
-| `script_62` | 1823 | 2229 | +22% |
-| `script_63` | 1781 | 2181 | +22% |
-| `script_64` | 1844 | 2247 | +22% |
-| `script_65` | 1844 | 2280 | +24% |
-| `script_66` | 2011 | 2498 | +24% |
-| `script_67` | 1781 | 2255 | +27% |
-| `script_68` | 2115 | 2198 | +4% |
-| `script_69` | 2136 | 2110 | -1% |
-| `script_70` | 1781 | 2195 | +23% |
-| `script_71` | 1823 | 2288 | +26% |
-| `script_72` | 1885 | 2293 | +22% |
-| `script_73` | 1979 | 2506 | +27% |
-| `script_74` | 1927 | 2378 | +23% |
-| `script_75` | 1718 | 2229 | +30% |
-| `script_76` | 1854 | 2267 | +22% |
-| `script_77` | 1823 | 2217 | +22% |
-| `script_78` | 1781 | 2217 | +24% |
-| `script_79` | 1927 | 2490 | +29% |
-| `script_80` | 1927 | 2326 | +21% |
-| `script_81` | 1781 | 2232 | +25% |
-| `script_82` | 1927 | 2362 | +23% |
-| `script_83` | 1760 | 2271 | +29% |
-| `script_84` | 1885 | 2384 | +26% |
-| `script_85` | 1948 | 2390 | +23% |
-| `script_86` | 2188 | 2105 | -4% |
-| `script_87` | 1844 | 2226 | +21% |
-| `script_88` | 1927 | 2362 | +23% |
-| `script_89` | 1844 | 2275 | +23% |
-| `script_90` | 2104 | 2153 | +2% |
-| `script_91` | 1844 | 2256 | +22% |
-| `script_92` | 1896 | 2408 | +27% |
-| `script_93` | 1948 | 2371 | +22% |
-| `script_94` | 1948 | 2324 | +19% |
-| `script_95` | 1948 | 2322 | +19% |
-| `script_96` | 2386 | 2452 | +3% |
-| `script_97` | 1948 | 2392 | +23% |
-| `script_98` | 1896 | 2386 | +26% |
-| `script_99` | 1896 | 2356 | +24% |
+| `script_01` | 1969 | 4060 | +106% |
+| `script_02` | 1687 | 3863 | +129% |
+| `script_03` | 1687 | 3828 | +127% |
+| `script_04` | 1687 | 3831 | +127% |
+| `script_05` | 1687 | 3880 | +130% |
+| `script_06` | 1687 | 3965 | +135% |
+| `script_07` | 1718 | 4149 | +141% |
+| `script_08` | 1718 | 4065 | +137% |
+| `script_09` | 1718 | 3997 | +133% |
+| `script_10` | 1760 | 4131 | +135% |
+| `script_11` | 1718 | 4179 | +143% |
+| `script_12` | 1760 | 4516 | +157% |
+| `script_13` | 1760 | 4508 | +156% |
+| `script_14` | 1781 | 6019 | +238% |
+| `script_15` | 1687 | 6449 | +282% |
+| `script_16` | 1687 | 4193 | +149% |
+| `script_17` | 1687 | 4178 | +148% |
+| `script_18` | 1812 | 4012 | +121% |
+| `script_19` | 1823 | 5622 | +208% |
+| `script_20` | 1823 | 3448 | +89% |
+| `script_21` | 1948 | 4143 | +113% |
+| `script_22` | 1687 | 3486 | +107% |
+| `script_23` | 2031 | 4388 | +116% |
+| `script_24` | 1927 | 6132 | +218% |
+| `script_25` | 1781 | 5746 | +223% |
+| `script_26` | 1812 | 5190 | +186% |
+| `script_27` | 1927 | 4516 | +134% |
+| `script_28` | 1885 | 9497 | +404% |
+| `script_29` | 1927 | 6552 | +240% |
+| `script_30` | 1781 | 5713 | +221% |
+| `script_31` | 1948 | 4137 | +112% |
+| `script_32` | 1823 | 6542 | +259% |
+| `script_33` | 1865 | 6212 | +233% |
+| `script_34` | 1760 | 6500 | +269% |
+| `script_35` | 1854 | 6551 | +253% |
+| `script_36` | 1885 | 6114 | +224% |
+| `script_37` | 1823 | 6488 | +256% |
+| `script_38` | 1969 | 6487 | +229% |
+| `script_39` | 1844 | 6552 | +255% |
+| `script_40` | 2000 | 5970 | +198% |
+| `script_41` | 1885 | 4621 | +145% |
+| `script_42` | 1885 | 4356 | +131% |
+| `script_43` | 1927 | 6549 | +240% |
+| `script_44` | 1844 | 6620 | +259% |
+| `script_45` | 1687 | 4677 | +177% |
+| `script_46` | 1760 | 6573 | +273% |
+| `script_47` | 1844 | 6362 | +245% |
+| `script_48` | 1844 | 6584 | +257% |
+| `script_49` | 1823 | 5006 | +175% |
+| `script_50` | 1760 | 6540 | +272% |
+| `script_51` | 1885 | 6545 | +247% |
+| `script_52` | 1718 | 6549 | +281% |
+| `script_53` | 1948 | 5745 | +195% |
+| `script_54` | 1781 | 6523 | +266% |
+| `script_55` | 1844 | 6611 | +259% |
+| `script_56` | 1687 | 6267 | +271% |
+| `script_57` | 1948 | 4966 | +155% |
+| `script_58` | 1687 | 6253 | +271% |
+| `script_59` | 1687 | 5029 | +198% |
+| `script_60` | 2031 | 6018 | +196% |
+| `script_61` | 1823 | 5213 | +186% |
+| `script_62` | 1823 | 6018 | +230% |
+| `script_63` | 1781 | 6107 | +243% |
+| `script_64` | 1844 | 6050 | +228% |
+| `script_65` | 1844 | 6026 | +227% |
+| `script_66` | 2011 | 6131 | +205% |
+| `script_67` | 1781 | 7713 | +333% |
+| `script_68` | 2115 | 6144 | +190% |
+| `script_69` | 2136 | 5978 | +180% |
+| `script_70` | 1781 | 6006 | +237% |
+| `script_71` | 1823 | 6082 | +234% |
+| `script_72` | 1885 | 6074 | +222% |
+| `script_73` | 1979 | 6013 | +204% |
+| `script_74` | 1927 | 6044 | +214% |
+| `script_75` | 1718 | 6094 | +255% |
+| `script_76` | 1854 | 6039 | +226% |
+| `script_77` | 1823 | 18002 | +888% |
+| `script_78` | 1781 | 12090 | +579% |
+| `script_79` | 1927 | 6144 | +219% |
+| `script_80` | 1927 | 6155 | +219% |
+| `script_81` | 1781 | 6055 | +240% |
+| `script_82` | 1927 | 6054 | +214% |
+| `script_83` | 1760 | 6116 | +247% |
+| `script_84` | 1885 | 6110 | +224% |
+| `script_85` | 1948 | 6046 | +210% |
+| `script_86` | 2188 | 9146 | +318% |
+| `script_87` | 1844 | 11873 | +544% |
+| `script_88` | 1927 | 6167 | +220% |
+| `script_89` | 1844 | 6071 | +229% |
+| `script_90` | 2104 | 24053 | +1043% |
+| `script_91` | 1844 | 10653 | +478% |
+| `script_92` | 1896 | 11870 | +526% |
+| `script_93` | 1948 | 6509 | +234% |
+| `script_94` | 1948 | 6529 | +235% |
+| `script_95` | 1948 | 6524 | +235% |
+| `script_96` | 2386 | 19550 | +719% |
+| `script_97` | 1948 | 12997 | +567% |
+| `script_98` | 1896 | 9341 | +393% |
+| `script_99` | 1896 | 10026 | +429% |
 
 > O modelo de custo foi ajustado com texto sintético e subestima os cards
 > reais de forma consistente; serve para dimensionar um lote, não para SLA.

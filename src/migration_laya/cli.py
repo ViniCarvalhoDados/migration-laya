@@ -764,6 +764,53 @@ def cmd_compare(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_variants(args: argparse.Namespace) -> int:
+    """Report how much each answer moves when the question is reworded."""
+    import json
+
+    from . import variants as probe
+
+    docs = {}
+    for path in _state_files(args.state_dir):
+        doc = yaml.safe_load(path.read_text(encoding="utf-8"))
+        if doc.get("name"):
+            docs[doc["name"]] = doc
+
+    run_dir = Path(args.runs_dir) / args.run_id
+    raw = {}
+    for path in sorted((run_dir / "raw").glob("*.json")):
+        answer = json.loads(path.read_text(encoding="utf-8"))
+        raw[answer.get("origin") or answer["script_id"]] = answer
+    if not raw:
+        print(f"no raw answers in {run_dir}/raw", file=sys.stderr)
+        return 2
+
+    rows = probe.analyse(raw, docs, args.questions)
+    if not rows:
+        print("no question had all three variants in this run", file=sys.stderr)
+        return 2
+    summary = probe.summarise(rows)
+    census_mod.write_yaml({"run_id": args.run_id, "summary": summary,
+                           "results": rows}, run_dir / "variants.yml")
+
+    print(f"  {'pergunta':22}{'v1':>7}{'v2':>7}{'|d|':>7}"
+          f"{'v3 previsto':>13}{'v3 obtido':>11}  negacao")
+    for r in rows:
+        neg = r.get("negation", {})
+        print(f"  {r['question']:22}{r['v1']['auc']:>7.2f}{r['v2']['auc']:>7.2f}"
+              f"{r.get('paraphrase_shift', 0):>7.2f}"
+              f"{neg.get('predicted_auc', 0):>13.2f}{neg.get('observed_auc', 0):>11.2f}"
+              f"  {'inverteu' if neg.get('inverted') else 'NAO inverteu'}")
+    print()
+    print(f"  deslocamento medio por reescrita: {summary['mean_paraphrase_shift']:.2f} AUC"
+          f"  (max {summary['max_paraphrase_shift']:.2f})")
+    print(f"  inverteram sob negacao: {summary['inverted_under_negation']}"
+          f"/{summary['inverted_under_negation'] + summary['failed_to_invert']}")
+    print()
+    print(f"wrote {run_dir}/variants.yml")
+    return 0
+
+
 def cmd_features(args: argparse.Namespace) -> int:
     """Print the extracted features for one file — the manual-audit tool."""
     f = extract_features(args.path)
@@ -863,6 +910,15 @@ def build_parser() -> argparse.ArgumentParser:
     cmp_.add_argument("--runs-dir", default="runs")
     cmp_.add_argument("--state-dir", default="state")
     cmp_.set_defaults(func=cmd_compare)
+
+    v = sub.add_parser("variants", help="prompt-sensitivity and negation probe")
+    v.add_argument("--run-id", required=True)
+    v.add_argument("--runs-dir", default="runs")
+    v.add_argument("--state-dir", default="state")
+    v.add_argument("--questions", nargs="*",
+                   default=["has_subquery", "has_window_function",
+                            "multi_source", "needs_human_review"])
+    v.set_defaults(func=cmd_variants)
 
     f = sub.add_parser("features", help="dump features for one SQL file")
     f.add_argument("path")

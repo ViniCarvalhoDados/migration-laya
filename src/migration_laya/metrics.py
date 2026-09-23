@@ -367,6 +367,7 @@ def binary_diagnostics(decisions: list[dict], question: str) -> dict:
         "baseline": round(sum(baseline_correct) / len(enriched), 4),
         "mcnemar": mcnemar(model_correct, baseline_correct),
         "best_threshold": best_threshold(enriched),
+        "holdout": threshold_holdout(enriched),
     }
 
 def best_threshold(outcomes: list[dict]) -> dict:
@@ -397,3 +398,70 @@ def best_threshold(outcomes: list[dict]) -> dict:
                         "threshold": round(threshold, 4),
                         "inverted": inverted}
     return best
+
+
+def threshold_holdout(outcomes: list[dict], *, repeats: int = 500,
+                      seed: int = 42, train_fraction: float = 0.5) -> dict:
+    """Fit the decision threshold on one half, score it on the other.
+
+    `best_threshold` reports what the cut-off *could* buy if chosen with
+    hindsight; it is fitted and scored on the same rows, so it is an upper
+    bound. This is the deployable version: repeated stratified splits, the
+    threshold chosen only on the training half, accuracy measured only on the
+    held-out half. The gap between the two numbers is how much of the
+    "calibration fixes it" story was hindsight.
+
+    Stratified so that a split cannot land with one class missing from a half,
+    which at n=99 with a 15% positive rate is otherwise common.
+    """
+    import random
+
+    scored = [o for o in outcomes if o.get("score") is not None]
+    positives = [o for o in scored if o["gold_bool"]]
+    negatives = [o for o in scored if not o["gold_bool"]]
+    if len(positives) < 4 or len(negatives) < 4:
+        return {}
+
+    rng = random.Random(seed)
+    test_accuracies, chosen = [], []
+
+    for _ in range(repeats):
+        train, test = [], []
+        for group in (positives, negatives):
+            shuffled = list(group)
+            rng.shuffle(shuffled)
+            cut = max(2, round(len(shuffled) * train_fraction))
+            train.extend(shuffled[:cut])
+            test.extend(shuffled[cut:])
+        if not test:
+            continue
+
+        fitted = best_threshold(train)
+        threshold, inverted = fitted["threshold"], fitted["inverted"]
+        hits = sum(
+            ((o["score"] >= threshold) != inverted) == o["gold_bool"] for o in test
+        )
+        test_accuracies.append(hits / len(test))
+        chosen.append(threshold)
+
+    if not test_accuracies:
+        return {}
+
+    ordered = sorted(test_accuracies)
+    mean = sum(ordered) / len(ordered)
+    default = sum((o["score"] >= 0.5) == o["gold_bool"] for o in scored) / len(scored)
+    optimistic = best_threshold(scored)
+
+    return {
+        "repeats": len(ordered),
+        "test_accuracy_mean": round(mean, 4),
+        "test_accuracy_p05": round(ordered[int(0.05 * len(ordered))], 4),
+        "test_accuracy_p95": round(ordered[min(len(ordered) - 1, int(0.95 * len(ordered)))], 4),
+        "threshold_median": round(sorted(chosen)[len(chosen) // 2], 4),
+        "threshold_spread": [round(min(chosen), 4), round(max(chosen), 4)],
+        "accuracy_at_half": round(default, 4),
+        "optimistic_accuracy": optimistic["accuracy"],
+        # How much of the apparent gain was hindsight rather than signal.
+        "hindsight_gap": round(optimistic["accuracy"] - mean, 4),
+        "gain_over_default": round(mean - default, 4),
+    }

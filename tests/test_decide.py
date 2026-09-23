@@ -435,3 +435,50 @@ def test_best_threshold_is_flagged_as_fitted_on_its_own_data():
     doc = " ".join((metrics.best_threshold.__doc__ or "").split())
     assert "OPTIMISTIC UPPER BOUND" in doc
     assert "hold-out" in doc
+
+
+# --- held-out threshold ------------------------------------------------------
+
+def _points(scores_and_golds):
+    return [{"score": s, "gold_bool": g, "gradable": True}
+            for s, g in scores_and_golds]
+
+
+def test_holdout_is_not_more_optimistic_than_the_fitted_bound():
+    """The whole point: the in-sample best threshold is a ceiling the held-out
+    number must sit under."""
+    rng = __import__("random").Random(3)
+    points = _points([(rng.random(), rng.random() > 0.5) for _ in range(120)])
+    result = metrics.threshold_holdout(points, repeats=60, seed=1)
+    assert result["test_accuracy_mean"] <= result["optimistic_accuracy"] + 1e-9
+    assert result["hindsight_gap"] >= -1e-9
+
+
+def test_holdout_on_pure_noise_lands_near_chance():
+    """Noise has no threshold to find. If this scored high, the split leaked."""
+    rng = __import__("random").Random(11)
+    points = _points([(rng.random(), rng.random() > 0.5) for _ in range(200)])
+    result = metrics.threshold_holdout(points, repeats=120, seed=5)
+    assert result["test_accuracy_mean"] < 0.70
+
+
+def test_holdout_recovers_a_genuinely_separable_threshold():
+    points = _points([(0.1 + i * 0.004, i >= 100) for i in range(200)])
+    result = metrics.threshold_holdout(points, repeats=60, seed=5)
+    assert result["test_accuracy_mean"] > 0.95
+    assert result["hindsight_gap"] < 0.05
+
+
+def test_holdout_reports_the_spread_across_splits():
+    points = _points([(0.2 + i * 0.003, i >= 90) for i in range(180)])
+    result = metrics.threshold_holdout(points, repeats=60, seed=2)
+    assert result["test_accuracy_p05"] <= result["test_accuracy_mean"]
+    assert result["test_accuracy_mean"] <= result["test_accuracy_p95"]
+    lo, hi = result["threshold_spread"]
+    assert lo <= result["threshold_median"] <= hi
+
+
+def test_holdout_declines_when_a_class_is_too_small():
+    """At n=99 with a 15% positive rate a split can strand a class; below the
+    floor the function returns nothing rather than a fragile number."""
+    assert metrics.threshold_holdout(_points([(0.5, True)] * 3 + [(0.1, False)] * 40)) == {}

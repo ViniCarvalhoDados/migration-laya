@@ -281,7 +281,7 @@
     <span><b>99</b> queries</span>
     <span><b>99/99</b> parseadas</span>
     <span><b>594</b> decisões avaliadas</span>
-    <span><b>139</b> testes</span>
+    <span><b>150</b> testes</span>
     <span><b>2,3 s</b> por script (CPU)</span>
   </div>
 </header>
@@ -773,6 +773,160 @@ flowchart TB
       disparou em 80.
     </figcaption>
   </figure>
+</section>
+
+<!-- ===================== VALIDACOES ===================== -->
+<section id="validacoes">
+  <div class="sec-head col">
+    <p class="eyebrow">Rodada 2 · validações</p>
+    <h2>O limiar sobrevive. A redação, não.</h2>
+  </div>
+
+  <div class="col">
+    <p>
+      Duas validações depois da auditoria. A primeira foi boa para o Laya; a
+      segunda desfez a primeira.
+    </p>
+    <h3>O limiar calibrado sobrevive ao hold-out</h3>
+    <p>
+      O "melhor limiar" que eu reportava era ajustado nos mesmos 99 pontos.
+      Refazendo com divisões estratificadas repetidas — corte escolhido só no
+      treino, medido só no teste — o gap de <em>hindsight</em> fica em 2 a 4
+      pontos. A calibração é real.
+    </p>
+    <p>
+      Isso me obrigou a corrigir a comparação com a regressão logística, que eu
+      tinha feito de forma injusta: comparei o Laya no corte fixo de 0,5 contra
+      uma LR cujas probabilidades já saem calibradas do ajuste. Pareado — mesmos
+      splits, os dois ajustados só no treino:
+    </p>
+  </div>
+
+  <div class="plate">
+    <div class="plate-head">
+      <span>Laya calibrado vs regressão logística · 200 splits pareados</span>
+      <span class="mono">sem p-valor: as metades de teste se sobrepõem</span>
+    </div>
+    <div class="plate-body scroll">
+      <table>
+        <thead><tr>
+          <th>pergunta</th><th class="num">Laya</th><th class="num">LR</th>
+          <th class="num">baseline</th><th class="num">diferença</th>
+          <th class="num">IC90</th><th class="num">splits Laya&gt;LR</th><th>leitura</th>
+        </tr></thead>
+        <tbody>
+          <tr><td class="q">has_window_function</td>
+            <td class="num strong-num">95%</td><td class="num">83%</td><td class="num">85%</td>
+            <td class="num strong-num">+11,4</td><td class="num">+6,0 a +18,0</td>
+            <td class="num strong-num">100%</td>
+            <td><span class="pill pos">Laya vence</span></td></tr>
+          <tr><td class="q">has_subquery</td>
+            <td class="num">86%</td><td class="num">80%</td><td class="num">58%</td>
+            <td class="num">+5,4</td><td class="num">−4,0 a +16,0</td><td class="num">76%</td>
+            <td><span class="pill flat">dentro do ruído</span></td></tr>
+          <tr><td class="q">multi_source</td>
+            <td class="num">79%</td><td class="num">77%</td><td class="num">79%</td>
+            <td class="num">+2,8</td><td class="num">−8,0 a +12,0</td><td class="num">63%</td>
+            <td><span class="pill flat">dentro do ruído</span></td></tr>
+          <tr><td class="q">needs_human_review</td>
+            <td class="num">75%</td><td class="num strong-num">84%</td><td class="num">70%</td>
+            <td class="num" style="color:var(--neg)">−8,8</td>
+            <td class="num">−16,0 a 0,0</td><td class="num">3%</td>
+            <td><span class="pill neg">LR vence</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="col">
+    <h3>Quanto disso é só a redação da pergunta?</h3>
+    <p>
+      Cada pergunta feita de três formas <b>na mesma chamada</b>, para que
+      variância entre execuções não virasse efeito de redação: <code>v1</code> a
+      do estudo, <code>v2</code> a mesma coisa com outro vocabulário,
+      <code>v3</code> <b>negada</b>. A previsão foi registrada antes do run: um
+      modelo que <em>lê</em> deveria inverter, AUC(v3) ≈ 1 − AUC(v1).
+    </p>
+  </div>
+
+  <div class="plate">
+    <div class="plate-head"><span>Sensibilidade à formulação · teste de negação</span></div>
+    <div class="plate-body scroll">
+      <table>
+        <thead><tr>
+          <th>pergunta</th><th class="num">v1 estudo</th><th class="num">v2 reescrita</th>
+          <th class="num">|Δ| AUC</th><th class="num">v3 previsto</th>
+          <th class="num">v3 obtido</th><th>negação</th>
+        </tr></thead>
+        <tbody>
+          <tr><td class="q">has_subquery</td>
+            <td class="num strong-num">0,95</td><td class="num">0,85</td>
+            <td class="num">0,10</td><td class="num">0,05</td><td class="num">0,05</td>
+            <td><span class="pill pos">inverteu</span></td></tr>
+          <tr><td class="q">has_window_function</td>
+            <td class="num strong-num">0,99</td>
+            <td class="num" style="color:var(--neg)">0,42</td>
+            <td class="num strong-num" style="color:var(--neg)">0,57</td>
+            <td class="num">0,01</td><td class="num">0,47</td>
+            <td><span class="pill neg">não inverteu</span></td></tr>
+          <tr><td class="q">multi_source</td>
+            <td class="num strong-num">0,88</td><td class="num">0,55</td>
+            <td class="num">0,33</td><td class="num">0,12</td><td class="num">0,19</td>
+            <td><span class="pill pos">inverteu</span></td></tr>
+          <tr><td class="q">needs_human_review</td>
+            <td class="num">0,22</td><td class="num">0,35</td>
+            <td class="num">0,13</td><td class="num">0,78</td><td class="num">0,14</td>
+            <td><span class="pill neg">não inverteu</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="strip">
+    <div class="metric">
+      <div class="metric-lab">deslocamento médio</div>
+      <div class="metric-val neg">0,28</div>
+      <div class="metric-sub">de AUC, só por reescrever</div>
+    </div>
+    <div class="metric">
+      <div class="metric-lab">pior caso</div>
+      <div class="metric-val neg">0,99 → 0,42</div>
+      <div class="metric-sub">has_window_function</div>
+    </div>
+    <div class="metric">
+      <div class="metric-lab">inverteram sob negação</div>
+      <div class="metric-val neg">2 / 4</div>
+      <div class="metric-sub">metade ignora a negação</div>
+    </div>
+    <div class="metric">
+      <div class="metric-lab">robusta aos dois testes</div>
+      <div class="metric-val">1 / 4</div>
+      <div class="metric-sub">só has_subquery</div>
+    </div>
+  </div>
+
+  <div class="call neg">
+    <span class="tag">Isto desfaz a validação anterior</span>
+    <p>
+      <code>has_window_function</code> era a única pergunta em que o Laya batia a
+      regressão de forma consistente — e é justamente a <b>mais frágil</b>.
+      Trocar <em>"Does this script use an analytic window function with an OVER
+      clause?"</em> por <em>"Is there an OVER clause anywhere in this query?"</em>
+      leva o AUC de <b>0,99 para 0,42</b>, abaixo do acaso. E ela não inverte sob
+      negação, ou seja, não estava lendo a pergunta.
+    </p>
+    <p>
+      A única que passa nos dois testes é <code>has_subquery</code> — que é
+      exatamente aquela em que Laya e regressão empatam.
+    </p>
+    <p>
+      <b>A conclusão inteira deste estudo cabe dentro do ruído de formulação.</b>
+      Se eu tivesse escrito a <code>v2</code> como redação principal, as quatro
+      perguntas teriam parecido próximas do acaso — e eu teria concluído "o
+      checkpoint não serve" com a mesma convicção com que antes concluí o
+      contrário.
+    </p>
+  </div>
 </section>
 
 <!-- ===================== AUDITORIA ===================== -->

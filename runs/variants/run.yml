@@ -1,0 +1,52 @@
+run_id: variants
+model: convaiinnovations/laya
+device: cpu
+load_seconds: 7.057
+n_scripts: 99
+n_questions: 12
+purpose_ablated: true
+source: card
+runtime_warnings:
+- 'laya: this checkpoint ships invalid temperatures or values outside [0.5, 5]; using choice:11+=0.10058280825614929
+  -> 0.5. Treat confidence from the affected entries as uncalibrated.'
+questions:
+  has_subquery_v1:
+    type: noul
+    instructions: Does this script contain an inline subquery - a SELECT inside a FROM, WHERE, IN or EXISTS
+      clause? A WITH/CTE alone does not count.
+  has_subquery_v2:
+    type: noul
+    instructions: Is one query expression nested inside another one here, not counting any common table
+      expression?
+  has_subquery_v3:
+    type: noul
+    instructions: Is this script free of inline subqueries, using only top-level queries and common table
+      expressions?
+  has_window_function_v1:
+    type: noul
+    instructions: Does this script use an analytic window function with an OVER clause?
+  has_window_function_v2:
+    type: noul
+    instructions: Is there an OVER clause anywhere in this query?
+  has_window_function_v3:
+    type: noul
+    instructions: Is this script free of analytic window functions?
+  multi_source_v1:
+    type: noul
+    instructions: Does this script read from four or more distinct source tables?
+  multi_source_v2:
+    type: noul
+    instructions: Is the count of different base tables in this query at least four?
+  multi_source_v3:
+    type: noul
+    instructions: Does this script read from three or fewer distinct source tables?
+  needs_human_review_v1:
+    type: noul
+    instructions: Must a human engineer review this script's logic before migrating it?
+  needs_human_review_v2:
+    type: noul
+    instructions: Does migrating this script require a judgement call that an automated converter cannot
+      safely make?
+  needs_human_review_v3:
+    type: noul
+    instructions: Can this script be migrated automatically, with no person checking its logic?

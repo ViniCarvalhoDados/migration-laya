@@ -1,0 +1,88 @@
+run_id: variants
+summary:
+  questions: 4
+  mean_paraphrase_shift: 0.2839
+  max_paraphrase_shift: 0.5675
+  inverted_under_negation: 2
+  failed_to_invert: 2
+results:
+- question: has_subquery
+  n: 99
+  gold_positive_rate: 0.5758
+  v1:
+    auc: 0.9515
+    mean_p_true: 0.4409
+    accuracy_at_half: 0.798
+  v2:
+    auc: 0.8494
+    mean_p_true: 0.8287
+    accuracy_at_half: 0.596
+  v3:
+    auc: 0.0526
+    mean_p_true: 0.8783
+    accuracy_at_half: 0.5758
+  paraphrase_shift: 0.1021
+  negation:
+    predicted_auc: 0.0485
+    observed_auc: 0.0526
+    inverted: true
+- question: has_window_function
+  n: 99
+  gold_positive_rate: 0.1515
+  v1:
+    auc: 0.9921
+    mean_p_true: 0.1588
+    accuracy_at_half: 0.8788
+  v2:
+    auc: 0.4246
+    mean_p_true: 0.185
+    accuracy_at_half: 0.8283
+  v3:
+    auc: 0.4742
+    mean_p_true: 0.8084
+    accuracy_at_half: 0.1515
+  paraphrase_shift: 0.5675
+  negation:
+    predicted_auc: 0.0079
+    observed_auc: 0.4742
+    inverted: false
+- question: multi_source
+  n: 99
+  gold_positive_rate: 0.7879
+  v1:
+    auc: 0.8797
+    mean_p_true: 0.674
+    accuracy_at_half: 0.7677
+  v2:
+    auc: 0.5482
+    mean_p_true: 0.8241
+    accuracy_at_half: 0.798
+  v3:
+    auc: 0.1877
+    mean_p_true: 0.7344
+    accuracy_at_half: 0.7172
+  paraphrase_shift: 0.3315
+  negation:
+    predicted_auc: 0.1203
+    observed_auc: 0.1877
+    inverted: true
+- question: needs_human_review
+  n: 99
+  gold_positive_rate: 0.697
+  v1:
+    auc: 0.2181
+    mean_p_true: 0.6027
+    accuracy_at_half: 0.5354
+  v2:
+    auc: 0.3527
+    mean_p_true: 0.2269
+    accuracy_at_half: 0.3131
+  v3:
+    auc: 0.1415
+    mean_p_true: 0.7883
+    accuracy_at_half: 0.6667
+  paraphrase_shift: 0.1346
+  negation:
+    predicted_auc: 0.7819
+    observed_auc: 0.1415
+    inverted: false

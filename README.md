@@ -186,6 +186,74 @@ Isso reverte minha própria recomendação anterior — "mandar SQL em vez do
 cartão" era a hipótese certa a testar e o resultado foi negativo. O cartão não
 era uma muleta; era o que tornava a tarefa legível para este modelo.
 
+### Validação 2 · o limiar calibrado sobrevive ao hold-out
+
+O "melhor limiar" que eu reportava era ajustado nos mesmos 99 pontos. Refiz com
+divisões estratificadas repetidas — corte escolhido só no treino, medido só no
+teste:
+
+| pergunta | acc @0,5 | **hold-out** | p05–p95 | limiar mediano | hindsight |
+|---|---|---|---|---|---|
+| `has_window_function` | 88% | **95%** | 92–98% | 0,21 | +2 pts |
+| `has_subquery` | 80% | **86%** | 80–90% | 0,36 | +3 pts |
+| `multi_source` | 77% | **79%** | 72–84% | 0,41 | +4 pts |
+| `needs_human_review` | 54% | **75%** | 70–80% | 0,73 (inv.) | +3 pts |
+
+O gap de hindsight é de 2 a 4 pontos: **a calibração sobrevive**. E isso me
+obriga a corrigir a comparação com a regressão logística, que eu tinha feito de
+forma injusta — comparei o Laya no corte fixo de 0,5 contra uma LR cujas
+probabilidades já saem calibradas do ajuste.
+
+Refazendo pareado (mesmos splits, os dois ajustados só no treino, 200 repetições):
+
+| pergunta | Laya | LR | baseline | diferença | IC90 | splits Laya&gt;LR |
+|---|---|---|---|---|---|---|
+| `has_window_function` | **95%** | 83% | 85% | **+11,4 pts** | +6,0 a +18,0 | **100%** |
+| `has_subquery` | 86% | 80% | 58% | +5,4 pts | −4,0 a +16,0 | 76% |
+| `multi_source` | 79% | 77% | 79% | +2,8 pts | −8,0 a +12,0 | 63% |
+| `needs_human_review` | 75% | **84%** | 70% | **−8,8 pts** | −16,0 a 0,0 | 3% |
+
+Só duas diferenças são consistentes (IC90 sem cruzar zero): `has_window_function`
+a favor do Laya e `needs_human_review` a favor da LR. **Com calibração, o Laya
+vence a regressão numa pergunta** — o que não acontecia na leitura anterior.
+
+> Sem p-valor aqui de propósito: as 200 metades de teste se sobrepõem, então um
+> teste pareado clássico seria anticonservador. A dispersão entre splits é o
+> número honesto.
+
+### Validação 3 · quanto disso é a redação da pergunta?
+
+Cada pergunta feita de três formas, **na mesma chamada** (para que variância
+entre runs não vire efeito de redação): `v1` a do estudo, `v2` a mesma coisa com
+outro vocabulário, `v3` **negada**. A previsão foi registrada em
+`config/questions_variants.yml` antes do run: um modelo que *lê* deveria
+inverter, AUC(v3) ≈ 1 − AUC(v1).
+
+| pergunta | v1 | v2 | \|Δ\| | v3 previsto | v3 obtido | negação |
+|---|---|---|---|---|---|---|
+| `has_subquery` | 0,95 | 0,85 | 0,10 | 0,05 | 0,05 | **inverteu** |
+| `has_window_function` | 0,99 | **0,42** | **0,57** | 0,01 | 0,47 | **não inverteu** |
+| `multi_source` | 0,88 | 0,55 | 0,33 | 0,12 | 0,19 | **inverteu** |
+| `needs_human_review` | 0,22 | 0,35 | 0,13 | 0,78 | 0,14 | **não inverteu** |
+
+**Deslocamento médio por reescrita: 0,28 de AUC. Máximo: 0,57.**
+
+Isso derruba o achado da validação 2. `has_window_function` era a única pergunta
+em que o Laya batia a regressão de forma consistente (+11,4 pts, 100% dos
+splits) — e é justamente a **mais frágil**: trocar *"Does this script use an
+analytic window function with an OVER clause?"* por *"Is there an OVER clause
+anywhere in this query?"* leva o AUC de **0,99 para 0,42**, abaixo do acaso. E
+ela não inverte sob negação, ou seja, não estava lendo a pergunta.
+
+A única que se sustenta nos dois testes é `has_subquery`: robusta à paráfrase
+(0,95 → 0,85) e inverte corretamente sob negação. É também aquela em que Laya e
+LR empatam.
+
+> **A conclusão inteira deste estudo cabe dentro do ruído de formulação.** Se eu
+> tivesse escrito a `v2` como redação principal, as quatro perguntas teriam
+> parecido próximas do acaso e eu teria concluído "o checkpoint não serve" — com
+> a mesma convicção.
+
 ### O que o experimento **não** pode concluir
 
 - **A rubrica não mede dificuldade de migração.** Ela tem **rho = 0.82 com
@@ -228,8 +296,8 @@ produz.
 2. ~~Mandar SQL, não o cartão.~~ **Testado, e é pior** — ver a seção acima.
    AUC despenca para ~0.6 e 81% dos scripts caem em `ESCALATE`. Um modelo
    afinado em código (não este) seria outra conversa.
-3. **Testar outras formulações de prompt.** Reformular uma única pergunta levou
-   o AUC de 0.84 a 0.95; só uma formulação foi testada por pergunta.
+3. ~~Testar outras formulações de prompt.~~ **Feito** (`mlaya variants`), e é o
+   achado mais forte: 0,28 de AUC de deslocamento médio por reescrita.
 4. Só então, fine-tune.
 
 ### O que faria o estudo valer
@@ -341,7 +409,7 @@ mlaya compare full99 sql99              # head-to-head sobre o mesmo gabarito
 Auditoria e testes:
 
 ```bash
-pytest                                   # 139 testes
+pytest                                   # 150 testes
 mlaya census --verify                    # falha se alguma das 99 não parsear
 mlaya features corpus/tpcds/query23.sql  # dump de features para conferência manual
 mlaya card --check                       # valida orçamento sem escrever

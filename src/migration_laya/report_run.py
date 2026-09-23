@@ -182,9 +182,28 @@ def render(run: dict, decisions: list[dict], docs: dict, sample: dict,
       "> **McNemar p** testa se a diferença para o baseline de classe majoritária\n"
       "> é maior que o acaso; p alto significa que o ganho (ou a perda) é ruído.\n")
     a("> ⚠️ **O melhor limiar foi ajustado nos mesmos 99 pontos em que é medido.**\n"
-      "> É um teto otimista, não uma configuração implantável — serve só para\n"
-      "> separar *o modelo não sabe* de *o corte está no lugar errado*. Um número\n"
-      "> defensável exigiria ajustar em treino e medir em hold-out.\n")
+      "> É um teto otimista. A tabela seguinte é a versão implantável.\n")
+
+    holdout_rows = []
+    for key in VERIFIABLE + ("needs_human_review",):
+        diag = metrics.binary_diagnostics(decisions, key)
+        if diag.get("holdout"):
+            holdout_rows.append((key, diag["holdout"]))
+    if holdout_rows:
+        a("\n**Limiar validado em hold-out** — divisões estratificadas repetidas, "
+          "corte\nescolhido só na metade de treino e medido só na de teste:\n")
+        a("| pergunta | acc @0,5 | acc hold-out | p05–p95 | limiar mediano | "
+          "ganho sobre 0,5 | teto otimista | hindsight |")
+        a("|---|---|---|---|---|---|---|---|")
+        for key, h in holdout_rows:
+            a(f"| `{key}` | {h['accuracy_at_half']:.0%} | "
+              f"**{h['test_accuracy_mean']:.0%}** | "
+              f"{h['test_accuracy_p05']:.0%}–{h['test_accuracy_p95']:.0%} | "
+              f"{h['threshold_median']:.2f} | {h['gain_over_default']:+.0%} | "
+              f"{h['optimistic_accuracy']:.0%} | {h['hindsight_gap']:+.0%} |")
+        a("\n> **hindsight** = quanto do ganho aparente era escolha com o gabarito\n"
+          "> na mão. Poucos pontos significa que a calibração sobrevive ao\n"
+          "> hold-out; muitos significariam que o limiar ótimo era sorte.\n")
     a("> Todos os limiares ótimos caem **abaixo de 0.5**: o modelo subestima\n"
       "> P(true) de forma sistemática — é o aviso de temperatura inválida do\n"
       "> checkpoint aparecendo em números.\n")

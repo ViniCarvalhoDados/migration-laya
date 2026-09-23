@@ -1,0 +1,70 @@
+# Prompt-sensitivity probe: the same four binary questions asked three ways.
+#
+# All twelve go in ONE call per script, so run-to-run variance cannot be
+# mistaken for a wording effect — the only thing that differs between variants
+# is the sentence.
+#
+# The three variants per question are chosen to separate reading from matching:
+#
+#   v1  the wording used in the main study
+#   v2  same meaning, different vocabulary — deliberately avoids the words that
+#       appear in the evidence card, to test lexical overlap
+#   v3  NEGATED. A model that reads the question should roughly invert:
+#       AUC(v3) ~= 1 - AUC(v1). A model that is pattern-matching on keywords
+#       will answer v3 the same way it answered v1, and AUC(v3) will stay on
+#       the same side of 0.5.
+#
+# The v3 prediction is pre-registered here, before the run.
+
+has_subquery_v1:
+  type: noul
+  instructions: "Does this script contain an inline subquery - a SELECT inside a
+    FROM, WHERE, IN or EXISTS clause? A WITH/CTE alone does not count."
+
+has_subquery_v2:
+  type: noul
+  instructions: "Is one query expression nested inside another one here, not
+    counting any common table expression?"
+
+has_subquery_v3:
+  type: noul
+  instructions: "Is this script free of inline subqueries, using only top-level
+    queries and common table expressions?"
+
+has_window_function_v1:
+  type: noul
+  instructions: "Does this script use an analytic window function with an OVER clause?"
+
+has_window_function_v2:
+  type: noul
+  instructions: "Is there an OVER clause anywhere in this query?"
+
+has_window_function_v3:
+  type: noul
+  instructions: "Is this script free of analytic window functions?"
+
+multi_source_v1:
+  type: noul
+  instructions: "Does this script read from four or more distinct source tables?"
+
+multi_source_v2:
+  type: noul
+  instructions: "Is the count of different base tables in this query at least four?"
+
+multi_source_v3:
+  type: noul
+  instructions: "Does this script read from three or fewer distinct source tables?"
+
+needs_human_review_v1:
+  type: noul
+  instructions: "Must a human engineer review this script's logic before migrating it?"
+
+needs_human_review_v2:
+  type: noul
+  instructions: "Does migrating this script require a judgement call that an
+    automated converter cannot safely make?"
+
+needs_human_review_v3:
+  type: noul
+  instructions: "Can this script be migrated automatically, with no person
+    checking its logic?"
