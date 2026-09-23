@@ -1,0 +1,47 @@
+device: cpu
+model: convaiinnovations/laya
+n_questions: 6
+load_seconds: 5.758
+context_limit_per_question: 512
+card_sizes_overflowing_context: []
+samples:
+- card_tokens: 50
+  input_tokens_total: 565
+  tokens_per_question: 94
+  fits_context: true
+  ms_median: 1539.1
+  ms_min: 1529.7
+  ms_max: 1544.2
+  ms_per_question: 256.5
+- card_tokens: 100
+  input_tokens_total: 823
+  tokens_per_question: 137
+  fits_context: true
+  ms_median: 2027.3
+  ms_min: 2009.2
+  ms_max: 2032.3
+  ms_per_question: 337.9
+- card_tokens: 200
+  input_tokens_total: 1333
+  tokens_per_question: 222
+  fits_context: true
+  ms_median: 3027.4
+  ms_min: 3027.1
+  ms_max: 3029.2
+  ms_per_question: 504.6
+- card_tokens: 380
+  input_tokens_total: 2251
+  tokens_per_question: 375
+  fits_context: true
+  ms_median: 4974.0
+  ms_min: 4970.3
+  ms_max: 5006.0
+  ms_per_question: 829.0
+model_fit:
+  ms_per_card_token: 10.4305
+  intercept_ms: 988.4
+  n_questions: 6
+  formula: estimated_ms = intercept_ms + ms_per_card_token * card_tokens (for 6 questions, cpu)
+warnings:
+- 'laya: this checkpoint ships invalid temperatures or values outside [0.5, 5]; using choice:11+=0.10058280825614929
+  -> 0.5. Treat confidence from the affected entries as uncalibrated.'

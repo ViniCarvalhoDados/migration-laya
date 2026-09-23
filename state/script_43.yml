@@ -1,0 +1,96 @@
+id: script_43
+name: query44
+source_path: repos/legacy/scripts/script_43_query44.sql
+origin: tpc-ds query44
+dialect: spark
+selected_because:
+- stratified fill (medium, 5pts)
+evidence_card:
+  purpose: null
+  structure: 1 statement in the file. Reads 2 source tables, joined in a mesh shape with 0 join predicates.
+    Uses 8 subqueries and 2 window functions. No CTE, set operation or CASE expression. 2 subqueries correlated
+    with the outer query. Nests 4 levels deep.
+  facts: lines=50 statements=1 sources=2 joins=0 widest_join=3 subqueries=8 correlated=2 ctes=0 window_fns=2
+    set_ops=0 case_exprs=0 nesting=4
+  approx_tokens: 90
+features:
+  parse_ok: true
+  parse_dialect: spark
+  loc: 51
+  loc_code: 50
+  chars: 2201
+  statements: 1
+  cte_count: 0
+  cte_max_depth: 0
+  subquery_count: 8
+  scalar_subquery_count: 2
+  correlated_subquery_count: 2
+  derived_table_count: 6
+  max_nesting_depth: 4
+  scope_count: 9
+  window_function_count: 2
+  distinct_window_specs: 2
+  aggregate_count: 8
+  has_having: true
+  has_distinct: false
+  has_order_by: true
+  source_tables: 2
+  table_references: 6
+  cte_references: 0
+  set_operation_count: 0
+  union_all_count: 0
+  intersect_except_count: 0
+  case_expression_count: 0
+  case_max_branches: 0
+  graph_nodes: 2
+  graph_edges: 0
+  graph_density: 0.0
+  graph_components: 2
+  graph_max_degree: 0
+  graph_max_scope_sources: 3
+  graph_max_scope_edges: 3
+  graph_max_scope_degree: 2
+  graph_shape: mesh
+  implicit_joins: 3
+  explicit_joins: 0
+  cross_join_risk: 0
+  unresolved_predicates: 0
+  distinct_sources:
+  - item
+  - store_sales
+  distinct_aggregates:
+  - avg
+  - rank
+  nonportable_markers: []
+corpus_percentile:
+  rubric_points: 47
+  loc_code: 62
+  source_tables: 4
+  subquery_count: 97
+  cte_count: 70
+  graph_edges: 6
+  graph_max_scope_sources: 38
+categories_to_verify:
+- migration_complexity
+- rewrite_strategy
+- has_subquery
+- has_window_function
+- multi_source
+- needs_human_review
+gold:
+  migration_complexity: medium
+  rubric_points: 5
+  has_subquery: true
+  has_window_function: true
+  multi_source: false
+  rewrite_strategy: redesign
+  needs_human_review: true
+  rationale: Two structurally identical derived-table trees, each computing a RANK over the same aggregate,
+    joined back together on that rank. One pass with two window functions replaces the whole construction.
+  source: deterministic+claude
+latency:
+  estimated_ms: 1927.1
+  measured_ms: 6548.8
+  ms_per_question: 1091.5
+  input_tokens: 3072
+  device: cpu

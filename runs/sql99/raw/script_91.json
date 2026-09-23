@@ -1,0 +1,96 @@
+{
+  "script_id": "script_91",
+  "origin": "query4",
+  "answers": {
+    "migration_complexity": {
+      "question": "migration_complexity",
+      "type": "score",
+      "value": 1.1869,
+      "label": "moderate - joins or subqueries need restructuring",
+      "reported_confidence": 0.2322,
+      "max_probability": 0.6459,
+      "probabilities": {
+        "trivial - only dialect syntax needs changing": 0.0836,
+        "moderate - joins or subqueries need restructuring": 0.6459,
+        "high - logic must be redesigned and validated in depth": 0.2705
+      },
+      "n_windows": 2,
+      "aggregation": "max"
+    },
+    "rewrite_strategy": {
+      "question": "rewrite_strategy",
+      "type": "choice",
+      "value": "refactor",
+      "label": "refactor",
+      "reported_confidence": 0.0533,
+      "max_probability": 0.3987,
+      "probabilities": {
+        "lift_and_shift": 0.2734,
+        "refactor": 0.3987,
+        "redesign": 0.1475,
+        "manual_rewrite": 0.1804
+      },
+      "n_windows": 2,
+      "aggregation": "most_confident"
+    },
+    "has_subquery": {
+      "question": "has_subquery",
+      "type": "noul",
+      "value": 1.0,
+      "label": "true",
+      "reported_confidence": 1.0,
+      "max_probability": 1.0,
+      "probabilities": {
+        "true": 1.0,
+        "false": 0.0
+      },
+      "n_windows": 2,
+      "aggregation": "max"
+    },
+    "has_window_function": {
+      "question": "has_window_function",
+      "type": "noul",
+      "value": 1.0,
+      "label": "true",
+      "reported_confidence": 1.0,
+      "max_probability": 1.0,
+      "probabilities": {
+        "true": 1.0,
+        "false": 0.0
+      },
+      "n_windows": 2,
+      "aggregation": "max"
+    },
+    "multi_source": {
+      "question": "multi_source",
+      "type": "noul",
+      "value": 0.9547,
+      "label": "true",
+      "reported_confidence": 0.9547,
+      "max_probability": 0.9547,
+      "probabilities": {
+        "true": 0.9547,
+        "false": 0.0453
+      },
+      "n_windows": 2,
+      "aggregation": "max"
+    },
+    "needs_human_review": {
+      "question": "needs_human_review",
+      "type": "noul",
+      "value": 0.9604,
+      "label": "true",
+      "reported_confidence": 0.9604,
+      "max_probability": 0.9604,
+      "probabilities": {
+        "true": 0.9604,
+        "false": 0.0396
+      },
+      "n_windows": 2,
+      "aggregation": "max"
+    }
+  },
+  "input_tokens": 4950,
+  "elapsed_ms": 10652.6,
+  "ms_per_question": 1775.4
+}

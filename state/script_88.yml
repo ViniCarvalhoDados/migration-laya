@@ -1,0 +1,100 @@
+id: script_88
+name: query24
+source_path: repos/legacy/scripts/script_88_query24.sql
+origin: tpc-ds query24
+dialect: spark
+selected_because:
+- stratified fill (high, 11pts)
+evidence_card:
+  purpose: null
+  structure: 2 statements in the file. Reads 6 source tables, joined in a snowflake shape with 5 join
+    predicates. Uses 2 CTEs and 2 subqueries. No window function, set operation or CASE expression. 2
+    subqueries correlated with the outer query. Nests 1 level deep.
+  facts: lines=94 statements=2 sources=6 joins=5 widest_join=6 subqueries=2 correlated=2 ctes=2 window_fns=0
+    set_ops=0 case_exprs=0 nesting=1
+  approx_tokens: 90
+features:
+  parse_ok: true
+  parse_dialect: spark
+  loc: 95
+  loc_code: 94
+  chars: 3059
+  statements: 2
+  cte_count: 2
+  cte_max_depth: 1
+  subquery_count: 2
+  scalar_subquery_count: 2
+  correlated_subquery_count: 2
+  derived_table_count: 0
+  max_nesting_depth: 1
+  scope_count: 6
+  window_function_count: 0
+  distinct_window_specs: 0
+  aggregate_count: 8
+  has_having: true
+  has_distinct: false
+  has_order_by: false
+  source_tables: 6
+  table_references: 12
+  cte_references: 4
+  set_operation_count: 0
+  union_all_count: 0
+  intersect_except_count: 0
+  case_expression_count: 0
+  case_max_branches: 0
+  graph_nodes: 6
+  graph_edges: 5
+  graph_density: 0.3333
+  graph_components: 1
+  graph_max_degree: 4
+  graph_max_scope_sources: 6
+  graph_max_scope_edges: 5
+  graph_max_scope_degree: 4
+  graph_shape: snowflake
+  implicit_joins: 10
+  explicit_joins: 0
+  cross_join_risk: 0
+  unresolved_predicates: 2
+  distinct_sources:
+  - customer
+  - customer_address
+  - item
+  - store
+  - store_returns
+  - store_sales
+  distinct_aggregates:
+  - avg
+  - sum
+  nonportable_markers: []
+corpus_percentile:
+  rubric_points: 90
+  loc_code: 88
+  source_tables: 85
+  subquery_count: 80
+  cte_count: 88
+  graph_edges: 74
+  graph_max_scope_sources: 94
+categories_to_verify:
+- migration_complexity
+- rewrite_strategy
+- has_subquery
+- has_window_function
+- multi_source
+- needs_human_review
+gold:
+  migration_complexity: high
+  rubric_points: 11
+  has_subquery: true
+  has_window_function: false
+  multi_source: true
+  rewrite_strategy: refactor
+  needs_human_review: true
+  rationale: Two statements in one file sharing the same CTE definitions, with an aggregate over the CTE
+    compared against itself. The statements cannot be converted independently.
+  source: deterministic+claude
+latency:
+  estimated_ms: 1927.1
+  measured_ms: 6166.8
+  ms_per_question: 1027.8
+  input_tokens: 3072
+  device: cpu

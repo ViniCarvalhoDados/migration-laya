@@ -1,0 +1,97 @@
+id: script_10
+name: query20
+source_path: repos/legacy/scripts/script_10_query20.sql
+origin: tpc-ds query20
+dialect: spark
+selected_because:
+- stratified fill (low, 2pts)
+evidence_card:
+  purpose: null
+  structure: '1 statement in the file. Reads 3 source tables, joined in a star shape with 2 join predicates.
+    Uses 1 window function. No CTE, subquery, set operation or CASE expression. Engine-specific syntax:
+    interval_arithmetic.'
+  facts: lines=29 statements=1 sources=3 joins=2 widest_join=3 subqueries=0 correlated=0 ctes=0 window_fns=1
+    set_ops=0 case_exprs=0 nesting=0
+  approx_tokens: 74
+features:
+  parse_ok: true
+  parse_dialect: spark
+  loc: 30
+  loc_code: 29
+  chars: 1018
+  statements: 1
+  cte_count: 0
+  cte_max_depth: 0
+  subquery_count: 0
+  scalar_subquery_count: 0
+  correlated_subquery_count: 0
+  derived_table_count: 0
+  max_nesting_depth: 0
+  scope_count: 1
+  window_function_count: 1
+  distinct_window_specs: 1
+  aggregate_count: 4
+  has_having: false
+  has_distinct: false
+  has_order_by: true
+  source_tables: 3
+  table_references: 3
+  cte_references: 0
+  set_operation_count: 0
+  union_all_count: 0
+  intersect_except_count: 0
+  case_expression_count: 0
+  case_max_branches: 0
+  graph_nodes: 3
+  graph_edges: 2
+  graph_density: 0.6667
+  graph_components: 1
+  graph_max_degree: 2
+  graph_max_scope_sources: 3
+  graph_max_scope_edges: 2
+  graph_max_scope_degree: 2
+  graph_shape: star
+  implicit_joins: 2
+  explicit_joins: 0
+  cross_join_risk: 0
+  unresolved_predicates: 0
+  distinct_sources:
+  - catalog_sales
+  - date_dim
+  - item
+  distinct_aggregates:
+  - sum
+  nonportable_markers:
+  - interval_arithmetic
+corpus_percentile:
+  rubric_points: 13
+  loc_code: 26
+  source_tables: 21
+  subquery_count: 42
+  cte_count: 70
+  graph_edges: 28
+  graph_max_scope_sources: 38
+categories_to_verify:
+- migration_complexity
+- rewrite_strategy
+- has_subquery
+- has_window_function
+- multi_source
+- needs_human_review
+gold:
+  migration_complexity: low
+  rubric_points: 2
+  has_subquery: false
+  has_window_function: true
+  multi_source: false
+  rewrite_strategy: lift_and_shift
+  needs_human_review: false
+  rationale: A single ratio-to-report window function over a star join. The OVER clause is portable and
+    the surrounding query is flat.
+  source: deterministic+claude
+latency:
+  estimated_ms: 1760.3
+  measured_ms: 4549.9
+  ms_per_question: 758.3
+  input_tokens: 2076
+  device: cpu

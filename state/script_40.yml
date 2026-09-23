@@ -1,0 +1,101 @@
+id: script_40
+name: query40
+source_path: repos/legacy/scripts/script_40_query40.sql
+origin: tpc-ds query40
+dialect: spark
+selected_because:
+- stratified fill (medium, 5pts)
+evidence_card:
+  purpose: Compares catalog sales net of refunds before and after a fixed pivot date, by warehouse state
+    and item.
+  structure: '1 statement in the file. Reads 5 source tables, joined in a star shape with 4 join predicates.
+    Uses 2 CASE expressions. No CTE, subquery, window function or set operation. Engine-specific syntax:
+    interval_arithmetic.'
+  facts: lines=34 statements=1 sources=5 joins=4 widest_join=5 subqueries=0 correlated=0 ctes=0 window_fns=0
+    set_ops=0 case_exprs=2 nesting=0
+  approx_tokens: 97
+features:
+  parse_ok: true
+  parse_dialect: spark
+  loc: 35
+  loc_code: 34
+  chars: 1575
+  statements: 1
+  cte_count: 0
+  cte_max_depth: 0
+  subquery_count: 0
+  scalar_subquery_count: 0
+  correlated_subquery_count: 0
+  derived_table_count: 0
+  max_nesting_depth: 0
+  scope_count: 1
+  window_function_count: 0
+  distinct_window_specs: 0
+  aggregate_count: 2
+  has_having: false
+  has_distinct: false
+  has_order_by: true
+  source_tables: 5
+  table_references: 5
+  cte_references: 0
+  set_operation_count: 0
+  union_all_count: 0
+  intersect_except_count: 0
+  case_expression_count: 2
+  case_max_branches: 1
+  graph_nodes: 5
+  graph_edges: 4
+  graph_density: 0.4
+  graph_components: 1
+  graph_max_degree: 4
+  graph_max_scope_sources: 5
+  graph_max_scope_edges: 4
+  graph_max_scope_degree: 4
+  graph_shape: star
+  implicit_joins: 3
+  explicit_joins: 1
+  cross_join_risk: 0
+  unresolved_predicates: 0
+  distinct_sources:
+  - catalog_returns
+  - catalog_sales
+  - date_dim
+  - item
+  - warehouse
+  distinct_aggregates:
+  - sum
+  nonportable_markers:
+  - interval_arithmetic
+corpus_percentile:
+  rubric_points: 47
+  loc_code: 34
+  source_tables: 69
+  subquery_count: 42
+  cte_count: 70
+  graph_edges: 65
+  graph_max_scope_sources: 82
+categories_to_verify:
+- migration_complexity
+- rewrite_strategy
+- has_subquery
+- has_window_function
+- multi_source
+- needs_human_review
+gold:
+  migration_complexity: medium
+  rubric_points: 5
+  has_subquery: false
+  has_window_function: false
+  multi_source: true
+  rewrite_strategy: refactor
+  needs_human_review: true
+  rationale: Mixes an explicit LEFT OUTER JOIN with comma-style implicit joins in the same FROM clause,
+    which several engines either reject or associate differently. Combined with INTERVAL date arithmetic
+    and COALESCE over the outer-join side, the null semantics need checking rather than assuming.
+  source: deterministic+claude
+latency:
+  estimated_ms: 2000.2
+  measured_ms: 5969.8
+  ms_per_question: 995.0
+  input_tokens: 2706
+  device: cpu

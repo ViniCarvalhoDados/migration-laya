@@ -1,0 +1,628 @@
+run_id: abl_com
+confidence_bands:
+  high: 0.85
+  medium: 0.6
+decisions:
+- script_id: script_01
+  outcome: HUMAN_REVIEW
+  reasons:
+  - 'has_subquery: correct but only 68% confident'
+  - 'has_window_function: correct but only 72% confident'
+  - 'multi_source: correct but only 74% confident'
+  - 'migration_complexity: medium vs gold low — one band apart'
+  questions:
+  - question: migration_complexity
+    gold: low
+    predicted: medium
+    agree: false
+    gradable: true
+    confidence: 0.5488
+    confidence_band: low
+    verifiable: false
+    band_gap: 1
+  - question: rewrite_strategy
+    gold: lift_and_shift
+    predicted: refactor
+    agree: false
+    gradable: true
+    confidence: 0.5751
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: false
+    predicted: false
+    agree: true
+    gradable: true
+    confidence: 0.6806
+    confidence_band: medium
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: false
+    predicted: false
+    agree: true
+    gradable: true
+    confidence: 0.7153
+    confidence_band: medium
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: false
+    predicted: false
+    agree: true
+    gradable: true
+    confidence: 0.7443
+    confidence_band: medium
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: false
+    predicted: false
+    agree: true
+    gradable: true
+    confidence: 0.5892
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 2387.4
+- script_id: script_23
+  outcome: HUMAN_REVIEW
+  reasons:
+  - 'has_subquery: wrong but only 53% confident'
+  - 'has_window_function: correct but only 80% confident'
+  - 'multi_source: correct but only 85% confident'
+  - 'migration_complexity: medium vs gold low — one band apart'
+  questions:
+  - question: migration_complexity
+    gold: low
+    predicted: medium
+    agree: false
+    gradable: true
+    confidence: 0.5045
+    confidence_band: low
+    verifiable: false
+    band_gap: 1
+  - question: rewrite_strategy
+    gold: lift_and_shift
+    predicted: refactor
+    agree: false
+    gradable: true
+    confidence: 0.5189
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.5335
+    confidence_band: low
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: false
+    predicted: false
+    agree: true
+    gradable: true
+    confidence: 0.7967
+    confidence_band: medium
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.8461
+    confidence_band: medium
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: true
+    predicted: false
+    agree: false
+    gradable: true
+    confidence: 0.6379
+    confidence_band: medium
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 2554.7
+- script_id: script_38
+  outcome: HUMAN_REVIEW
+  reasons:
+  - 'has_subquery: correct but only 69% confident'
+  - 'has_window_function: correct but only 80% confident'
+  - 'multi_source: wrong but only 60% confident'
+  questions:
+  - question: migration_complexity
+    gold: medium
+    predicted: medium
+    agree: true
+    gradable: true
+    confidence: 0.5878
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: rewrite_strategy
+    gold: refactor
+    predicted: refactor
+    agree: true
+    gradable: true
+    confidence: 0.5524
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: false
+    predicted: false
+    agree: true
+    gradable: true
+    confidence: 0.6938
+    confidence_band: medium
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: false
+    predicted: false
+    agree: true
+    gradable: true
+    confidence: 0.7952
+    confidence_band: medium
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: true
+    predicted: false
+    agree: false
+    gradable: true
+    confidence: 0.6045
+    confidence_band: medium
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: true
+    predicted: false
+    agree: false
+    gradable: true
+    confidence: 0.5435
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 2401.6
+- script_id: script_40
+  outcome: HUMAN_REVIEW
+  reasons:
+  - 'has_subquery: correct but only 74% confident'
+  - 'multi_source: correct but only 82% confident'
+  questions:
+  - question: migration_complexity
+    gold: medium
+    predicted: medium
+    agree: true
+    gradable: true
+    confidence: 0.5721
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: rewrite_strategy
+    gold: refactor
+    predicted: refactor
+    agree: true
+    gradable: true
+    confidence: 0.5567
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: false
+    predicted: false
+    agree: true
+    gradable: true
+    confidence: 0.7363
+    confidence_band: medium
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: false
+    predicted: false
+    agree: true
+    gradable: true
+    confidence: 0.8544
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.8216
+    confidence_band: medium
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: true
+    predicted: false
+    agree: false
+    gradable: true
+    confidence: 0.8022
+    confidence_band: medium
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 2480.8
+- script_id: script_60
+  outcome: HUMAN_REVIEW
+  reasons:
+  - 'has_subquery: correct but only 61% confident'
+  - 'has_window_function: correct but only 77% confident'
+  - 'multi_source: wrong but only 54% confident'
+  questions:
+  - question: migration_complexity
+    gold: medium
+    predicted: medium
+    agree: true
+    gradable: true
+    confidence: 0.47
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: rewrite_strategy
+    gold: lift_and_shift
+    predicted: refactor
+    agree: false
+    gradable: true
+    confidence: 0.4878
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: false
+    predicted: false
+    agree: true
+    gradable: true
+    confidence: 0.6085
+    confidence_band: medium
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: false
+    predicted: false
+    agree: true
+    gradable: true
+    confidence: 0.7735
+    confidence_band: medium
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: true
+    predicted: false
+    agree: false
+    gradable: true
+    confidence: 0.5362
+    confidence_band: low
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: false
+    predicted: false
+    agree: true
+    gradable: true
+    confidence: 0.5779
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 2452.2
+- script_id: script_68
+  outcome: HUMAN_REVIEW
+  reasons:
+  - 'has_subquery: correct but only 66% confident'
+  - 'has_window_function: wrong but only 76% confident'
+  - 'multi_source: correct but only 85% confident'
+  questions:
+  - question: migration_complexity
+    gold: medium
+    predicted: medium
+    agree: true
+    gradable: true
+    confidence: 0.5768
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: rewrite_strategy
+    gold: refactor
+    predicted: refactor
+    agree: true
+    gradable: true
+    confidence: 0.5537
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: false
+    predicted: false
+    agree: true
+    gradable: true
+    confidence: 0.6609
+    confidence_band: medium
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: true
+    predicted: false
+    agree: false
+    gradable: true
+    confidence: 0.763
+    confidence_band: medium
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.8464
+    confidence_band: medium
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.6231
+    confidence_band: medium
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 2539.3
+- script_id: script_69
+  outcome: HUMAN_REVIEW
+  reasons:
+  - 'has_subquery: correct but only 62% confident'
+  - 'multi_source: correct but only 50% confident'
+  - 'migration_complexity: medium vs gold high — one band apart'
+  questions:
+  - question: migration_complexity
+    gold: high
+    predicted: medium
+    agree: false
+    gradable: true
+    confidence: 0.5429
+    confidence_band: low
+    verifiable: false
+    band_gap: 1
+  - question: rewrite_strategy
+    gold: lift_and_shift
+    predicted: refactor
+    agree: false
+    gradable: true
+    confidence: 0.5542
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.6218
+    confidence_band: medium
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: false
+    predicted: false
+    agree: true
+    gradable: true
+    confidence: 0.876
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.5009
+    confidence_band: low
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: false
+    predicted: false
+    agree: true
+    gradable: true
+    confidence: 0.6087
+    confidence_band: medium
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 2487.0
+- script_id: script_86
+  outcome: HUMAN_REVIEW
+  reasons:
+  - 'has_subquery: correct but only 76% confident'
+  - 'multi_source: correct but only 72% confident'
+  - 'migration_complexity: medium vs gold high — one band apart'
+  questions:
+  - question: migration_complexity
+    gold: high
+    predicted: medium
+    agree: false
+    gradable: true
+    confidence: 0.5712
+    confidence_band: low
+    verifiable: false
+    band_gap: 1
+  - question: rewrite_strategy
+    gold: redesign
+    predicted: refactor
+    agree: false
+    gradable: true
+    confidence: 0.5011
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: false
+    predicted: false
+    agree: true
+    gradable: true
+    confidence: 0.7569
+    confidence_band: medium
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: false
+    predicted: false
+    agree: true
+    gradable: true
+    confidence: 0.8632
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.7156
+    confidence_band: medium
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: true
+    predicted: false
+    agree: false
+    gradable: true
+    confidence: 0.536
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 2554.9
+- script_id: script_90
+  outcome: HUMAN_REVIEW
+  reasons:
+  - 'has_subquery: correct but only 72% confident'
+  - 'has_window_function: correct but only 80% confident'
+  - 'multi_source: wrong but only 50% confident'
+  - 'migration_complexity: medium vs gold high — one band apart'
+  questions:
+  - question: migration_complexity
+    gold: high
+    predicted: medium
+    agree: false
+    gradable: true
+    confidence: 0.5752
+    confidence_band: low
+    verifiable: false
+    band_gap: 1
+  - question: rewrite_strategy
+    gold: refactor
+    predicted: refactor
+    agree: true
+    gradable: true
+    confidence: 0.3794
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.7163
+    confidence_band: medium
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: false
+    predicted: false
+    agree: true
+    gradable: true
+    confidence: 0.8033
+    confidence_band: medium
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: true
+    predicted: false
+    agree: false
+    gradable: true
+    confidence: 0.5012
+    confidence_band: low
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: true
+    predicted: false
+    agree: false
+    gradable: true
+    confidence: 0.6506
+    confidence_band: medium
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 2389.1
+- script_id: script_96
+  outcome: HUMAN_REVIEW
+  reasons:
+  - 'has_subquery: correct but only 80% confident'
+  - 'has_window_function: correct but only 81% confident'
+  - 'multi_source: correct but only 85% confident'
+  - 'migration_complexity: medium vs gold high — one band apart'
+  questions:
+  - question: migration_complexity
+    gold: high
+    predicted: medium
+    agree: false
+    gradable: true
+    confidence: 0.7223
+    confidence_band: medium
+    verifiable: false
+    band_gap: 1
+  - question: rewrite_strategy
+    gold: redesign
+    predicted: refactor
+    agree: false
+    gradable: true
+    confidence: 0.542
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.7952
+    confidence_band: medium
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: false
+    predicted: false
+    agree: true
+    gradable: true
+    confidence: 0.8124
+    confidence_band: medium
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.8456
+    confidence_band: medium
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.5593
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 2825.0

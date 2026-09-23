@@ -1,0 +1,99 @@
+id: script_58
+name: query85
+source_path: repos/legacy/scripts/script_58_query85.sql
+origin: tpc-ds query85
+dialect: spark
+selected_because:
+- stratified fill (medium, 6pts)
+evidence_card:
+  purpose: null
+  structure: 1 statement in the file. Reads 7 source tables, joined in a snowflake shape with 6 join predicates.
+    No CTE, subquery, window function, set operation or CASE expression.
+  facts: lines=51 statements=1 sources=7 joins=6 widest_join=7 subqueries=0 correlated=0 ctes=0 window_fns=0
+    set_ops=0 case_exprs=0 nesting=0
+  approx_tokens: 67
+features:
+  parse_ok: true
+  parse_dialect: spark
+  loc: 52
+  loc_code: 51
+  chars: 2358
+  statements: 1
+  cte_count: 0
+  cte_max_depth: 0
+  subquery_count: 0
+  scalar_subquery_count: 0
+  correlated_subquery_count: 0
+  derived_table_count: 0
+  max_nesting_depth: 0
+  scope_count: 1
+  window_function_count: 0
+  distinct_window_specs: 0
+  aggregate_count: 6
+  has_having: false
+  has_distinct: false
+  has_order_by: true
+  source_tables: 7
+  table_references: 8
+  cte_references: 0
+  set_operation_count: 0
+  union_all_count: 0
+  intersect_except_count: 0
+  case_expression_count: 0
+  case_max_branches: 0
+  graph_nodes: 7
+  graph_edges: 6
+  graph_density: 0.2857
+  graph_components: 1
+  graph_max_degree: 4
+  graph_max_scope_sources: 7
+  graph_max_scope_edges: 6
+  graph_max_scope_degree: 4
+  graph_shape: snowflake
+  implicit_joins: 7
+  explicit_joins: 0
+  cross_join_risk: 0
+  unresolved_predicates: 0
+  distinct_sources:
+  - customer_address
+  - customer_demographics
+  - date_dim
+  - reason
+  - web_page
+  - web_returns
+  - web_sales
+  distinct_aggregates:
+  - avg
+  nonportable_markers: []
+corpus_percentile:
+  rubric_points: 69
+  loc_code: 63
+  source_tables: 93
+  subquery_count: 42
+  cte_count: 70
+  graph_edges: 87
+  graph_max_scope_sources: 97
+categories_to_verify:
+- migration_complexity
+- rewrite_strategy
+- has_subquery
+- has_window_function
+- multi_source
+- needs_human_review
+gold:
+  migration_complexity: medium
+  rubric_points: 6
+  has_subquery: false
+  has_window_function: false
+  multi_source: true
+  rewrite_strategy: refactor
+  needs_human_review: true
+  rationale: The filter is several OR-ed blocks that each repeat the same join predicates. Translated
+    literally the bad plan comes along; it is normally restructured into UNION branches first.
+  source: deterministic+claude
+latency:
+  estimated_ms: 1687.2
+  measured_ms: 6253.4
+  ms_per_question: 1042.2
+  input_tokens: 3072
+  device: cpu

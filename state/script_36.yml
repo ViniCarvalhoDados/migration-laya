@@ -1,0 +1,101 @@
+id: script_36
+name: query67
+source_path: repos/legacy/scripts/script_36_query67.sql
+origin: tpc-ds query67
+dialect: tsql
+selected_because:
+- stratified fill (medium, 5pts)
+evidence_card:
+  purpose: null
+  structure: '1 statement in the file. Reads 4 source tables, joined in a star shape with 3 join predicates.
+    Uses 2 subqueries and 1 window function. No CTE, set operation or CASE expression. Nests 2 levels
+    deep. Engine-specific syntax: rollup, select_top, requires_dialect:tsql.'
+  facts: lines=41 statements=1 sources=4 joins=3 widest_join=4 subqueries=2 correlated=0 ctes=0 window_fns=1
+    set_ops=0 case_exprs=0 nesting=2
+  approx_tokens: 86
+features:
+  parse_ok: true
+  parse_dialect: tsql
+  loc: 42
+  loc_code: 41
+  chars: 1215
+  statements: 1
+  cte_count: 0
+  cte_max_depth: 0
+  subquery_count: 2
+  scalar_subquery_count: 0
+  correlated_subquery_count: 0
+  derived_table_count: 2
+  max_nesting_depth: 2
+  scope_count: 3
+  window_function_count: 1
+  distinct_window_specs: 1
+  aggregate_count: 2
+  has_having: false
+  has_distinct: false
+  has_order_by: true
+  source_tables: 4
+  table_references: 4
+  cte_references: 0
+  set_operation_count: 0
+  union_all_count: 0
+  intersect_except_count: 0
+  case_expression_count: 0
+  case_max_branches: 0
+  graph_nodes: 4
+  graph_edges: 3
+  graph_density: 0.5
+  graph_components: 1
+  graph_max_degree: 3
+  graph_max_scope_sources: 4
+  graph_max_scope_edges: 3
+  graph_max_scope_degree: 3
+  graph_shape: star
+  implicit_joins: 3
+  explicit_joins: 0
+  cross_join_risk: 0
+  unresolved_predicates: 0
+  distinct_sources:
+  - date_dim
+  - item
+  - store
+  - store_sales
+  distinct_aggregates:
+  - rank
+  - sum
+  nonportable_markers:
+  - rollup
+  - select_top
+  - requires_dialect:tsql
+corpus_percentile:
+  rubric_points: 47
+  loc_code: 46
+  source_tables: 45
+  subquery_count: 80
+  cte_count: 70
+  graph_edges: 53
+  graph_max_scope_sources: 69
+categories_to_verify:
+- migration_complexity
+- rewrite_strategy
+- has_subquery
+- has_window_function
+- multi_source
+- needs_human_review
+gold:
+  migration_complexity: medium
+  rubric_points: 5
+  has_subquery: true
+  has_window_function: true
+  multi_source: true
+  rewrite_strategy: refactor
+  needs_human_review: true
+  rationale: Combines T-SQL `SELECT TOP` with a wide ROLLUP and a RANK window. The dialect change is mechanical,
+    but the grouping-set output feeding a window function is not.
+  source: deterministic+claude
+latency:
+  estimated_ms: 1885.4
+  measured_ms: 6114.3
+  ms_per_question: 1019.1
+  input_tokens: 2772
+  device: cpu

@@ -1,0 +1,870 @@
+# Blind gold labels for the two judgement questions, written by Claude after
+# reading each SQL file and BEFORE any Laya call was made. Recorded here as a
+# separate, reviewable artefact so a human can disagree with a specific call
+# without touching the deterministic labels.
+#
+# Keyed by the ORIGIN query name, not by the sequential script id: the id is
+# assigned by the sampler and shifts whenever the sample size changes, which
+# would silently attach a judgement to the wrong script.
+#
+# `purpose` is the only part of the evidence card an LLM writes; the rest is
+# generated from the AST.
+#
+# Rule applied for `needs_human_review`: true when migrating requires a decision
+# a converter cannot make safely — semantics that differ across engines
+# (ROLLUP/GROUPING null handling, interval arithmetic), an anti-pattern that
+# should be rewritten rather than translated, or a multi-fact join whose results
+# must be revalidated. Mechanical translation alone is false.
+
+query42:
+  purpose: >-
+    Ranks total store sales revenue by item category for one calendar month,
+    restricted to the products of a single item manager.
+  rewrite_strategy: lift_and_shift
+  needs_human_review: false
+  rationale: >-
+    Three-table star join, one SUM, plain ANSI syntax and no subqueries. Nothing
+    here behaves differently on a cloud warehouse; a syntax-level conversion is
+    enough.
+
+query27:
+  purpose: >-
+    Averages quantity, list price, coupon amount and sale price for one customer
+    demographic segment in one state, subtotalled by item and state.
+  rewrite_strategy: lift_and_shift
+  needs_human_review: true
+  rationale: >-
+    Mechanically simple five-table star join, but GROUP BY ROLLUP with an
+    explicit GROUPING() flag is the one part that does not travel unchanged:
+    engines differ on how subtotal rows and their NULLs surface, so the output
+    needs revalidating even though the SQL itself converts cleanly.
+
+query13:
+  purpose: >-
+    Averages store sale quantity, price and wholesale cost for narrow
+    combinations of customer demographics, household size, address state and
+    profit range.
+  rewrite_strategy: refactor
+  needs_human_review: true
+  rationale: >-
+    No subqueries and no window functions, but the filter is two large
+    OR-of-AND blocks that repeat the same join predicates inside every branch.
+    Translating it literally carries the bad plan across; it is normally
+    restructured into UNION branches or a disjunctive normal form first.
+
+query40:
+  purpose: >-
+    Compares catalog sales net of refunds before and after a fixed pivot date,
+    by warehouse state and item.
+  rewrite_strategy: refactor
+  needs_human_review: true
+  rationale: >-
+    Mixes an explicit LEFT OUTER JOIN with comma-style implicit joins in the
+    same FROM clause, which several engines either reject or associate
+    differently. Combined with INTERVAL date arithmetic and COALESCE over the
+    outer-join side, the null semantics need checking rather than assuming.
+
+query47:
+  purpose: >-
+    Flags month-store-brand combinations whose sales deviate more than ten
+    percent from their yearly average, alongside the previous and next month.
+  rewrite_strategy: refactor
+  needs_human_review: true
+  rationale: >-
+    Self-joins the same CTE three times on rank+1 and rank-1 to emulate LAG and
+    LEAD. A faithful translation preserves an expensive anti-pattern the target
+    engine supports natively, so this should be rewritten rather than converted.
+
+query25:
+  purpose: >-
+    Reports peak store sale profit, store return loss and catalog sale profit
+    per item and store, matching returns and later catalog purchases to the
+    original sale.
+  rewrite_strategy: lift_and_shift
+  needs_human_review: false
+  rationale: >-
+    A wide eight-way join using three aliases of the date dimension, but it is
+    plain ANSI throughout with no subqueries, windows or set operations. Width
+    is not the same as migration risk here.
+
+query76:
+  purpose: >-
+    Counts and totals sales whose demographic or warehouse key is missing,
+    across the store, web and catalog channels, by year, quarter and category.
+  rewrite_strategy: lift_and_shift
+  needs_human_review: false
+  rationale: >-
+    Scores high on structure because of the three-branch UNION ALL inside a
+    derived table, but every branch is the same simple three-table join and the
+    syntax is portable. A useful case where high complexity does not imply a
+    hard migration.
+
+query64:
+  purpose: >-
+    Finds items bought in consecutive years by the same customer and compares
+    their price and quantity between the two years, with buyer address, income
+    band and demographics on both sides.
+  rewrite_strategy: redesign
+  needs_human_review: true
+  rationale: >-
+    An eighteen-source join carrying paired aliases of five different dimensions
+    (two date, two demographic, two household, two address, two income band),
+    feeding a self-join of the resulting CTE. The join graph, not the syntax, is
+    the migration cost; it has to be reasoned through rather than converted.
+
+query66:
+  purpose: >-
+    Pivots warehouse shipping sales and net revenue into one column per calendar
+    month for the web and catalog channels.
+  rewrite_strategy: refactor
+  needs_human_review: true
+  rationale: >-
+    Three hundred lines that are almost entirely forty-eight repeated CASE
+    expressions implementing a hand-rolled month pivot, doubled by a UNION ALL.
+    Target engines express this as a PIVOT in a fraction of the code; carrying
+    the CASE ladder across preserves a maintenance problem.
+
+query14:
+  purpose: >-
+    Totals sales and quantity for items sold through all three channels in the
+    same period, keeping only sales above the overall average, subtotalled by
+    channel, brand, class and category.
+  rewrite_strategy: redesign
+  needs_human_review: true
+  rationale: >-
+    Two statements in one file, four CTEs, chained INTERSECTs to find the common
+    item set, a correlated comparison against a UNION-derived average, and a
+    final ROLLUP. Several of these interact, so the pieces cannot be converted
+    independently and the result set must be validated end to end.
+
+# ---------------------------------------------------------------------------
+# The remaining 89 queries, added when the study was scaled from 10 to the full
+# corpus.
+#
+# BLINDING IS WEAKER HERE, and that must be said plainly: the original ten were
+# judged before Laya had ever run. These 89 were judged after a run over the
+# corpus already existed on disk. They were written from the SQL and the
+# deterministic census alone — `runs/full99/raw/` was not opened while writing
+# them — but that is a procedural claim, not the structural guarantee the first
+# ten have. Treat the two sets as separate evidence.
+#
+# No `purpose` field: the ablation (runs/r2 vs runs/ablation) found the
+# hand-written business summary made no measurable difference, so writing 89 of
+# them was not justified.
+#
+# `manual_rewrite` has zero instances across all 99 queries. That option can
+# therefore never be graded correct, and the model can never be penalised for
+# avoiding it — stated here so the confusion matrix is read with that in mind.
+# ---------------------------------------------------------------------------
+
+query55:
+  rewrite_strategy: lift_and_shift
+  needs_human_review: false
+  rationale: >-
+    Plain star join over a fact table and its dimensions, portable ANSI
+    syntax, no subqueries or set operations. A dialect-level conversion is the
+    whole job.
+
+query3:
+  rewrite_strategy: lift_and_shift
+  needs_human_review: false
+  rationale: >-
+    Plain star join over a fact table and its dimensions, portable ANSI
+    syntax, no subqueries or set operations. A dialect-level conversion is the
+    whole job.
+
+query52:
+  rewrite_strategy: lift_and_shift
+  needs_human_review: false
+  rationale: >-
+    Plain star join over a fact table and its dimensions, portable ANSI
+    syntax, no subqueries or set operations. A dialect-level conversion is the
+    whole job.
+
+query96:
+  rewrite_strategy: lift_and_shift
+  needs_human_review: false
+  rationale: >-
+    Plain star join over a fact table and its dimensions, portable ANSI
+    syntax, no subqueries or set operations. A dialect-level conversion is the
+    whole job.
+
+query7:
+  rewrite_strategy: lift_and_shift
+  needs_human_review: false
+  rationale: >-
+    Wide but flat: many dimensions hung off one fact table, still plain ANSI
+    with no subqueries, windows or set operations. Width is not migration
+    risk.
+
+query26:
+  rewrite_strategy: lift_and_shift
+  needs_human_review: false
+  rationale: >-
+    Wide but flat: many dimensions hung off one fact table, still plain ANSI
+    with no subqueries, windows or set operations. Width is not migration
+    risk.
+
+query84:
+  rewrite_strategy: lift_and_shift
+  needs_human_review: false
+  rationale: >-
+    Wide but flat: many dimensions hung off one fact table, still plain ANSI
+    with no subqueries, windows or set operations. Width is not migration
+    risk.
+
+query19:
+  rewrite_strategy: lift_and_shift
+  needs_human_review: false
+  rationale: >-
+    Wide but flat: many dimensions hung off one fact table, still plain ANSI
+    with no subqueries, windows or set operations. Width is not migration
+    risk.
+
+query91:
+  rewrite_strategy: lift_and_shift
+  needs_human_review: false
+  rationale: >-
+    Wide but flat: many dimensions hung off one fact table, still plain ANSI
+    with no subqueries, windows or set operations. Width is not migration
+    risk.
+
+query15:
+  rewrite_strategy: lift_and_shift
+  needs_human_review: false
+  rationale: >-
+    Star join whose only complication is a disjunctive filter. The OR does not
+    repeat join predicates, so it converts literally without carrying a bad
+    plan across.
+
+query37:
+  rewrite_strategy: lift_and_shift
+  needs_human_review: false
+  rationale: >-
+    Star join with INTERVAL date arithmetic. The arithmetic is engine-specific
+    but it is exactly what an automated transpiler rewrites reliably, so no
+    human decision is required.
+
+query82:
+  rewrite_strategy: lift_and_shift
+  needs_human_review: false
+  rationale: >-
+    Star join with INTERVAL date arithmetic. The arithmetic is engine-specific
+    but it is exactly what an automated transpiler rewrites reliably, so no
+    human decision is required.
+
+query98:
+  rewrite_strategy: lift_and_shift
+  needs_human_review: false
+  rationale: >-
+    A single ratio-to-report window function over a star join. The OVER clause
+    is portable and the surrounding query is flat.
+
+query12:
+  rewrite_strategy: lift_and_shift
+  needs_human_review: false
+  rationale: >-
+    A single ratio-to-report window function over a star join. The OVER clause
+    is portable and the surrounding query is flat.
+
+query20:
+  rewrite_strategy: lift_and_shift
+  needs_human_review: false
+  rationale: >-
+    A single ratio-to-report window function over a star join. The OVER clause
+    is portable and the surrounding query is flat.
+
+query89:
+  rewrite_strategy: lift_and_shift
+  needs_human_review: false
+  rationale: >-
+    Window average compared against the row value, with the division already
+    guarded by a CASE. Portable as written.
+
+query63:
+  rewrite_strategy: lift_and_shift
+  needs_human_review: false
+  rationale: >-
+    Window average compared against the row value, with the division already
+    guarded by a CASE. Portable as written.
+
+query53:
+  rewrite_strategy: lift_and_shift
+  needs_human_review: false
+  rationale: >-
+    Window average compared against the row value, with the division already
+    guarded by a CASE. Portable as written.
+
+query73:
+  rewrite_strategy: lift_and_shift
+  needs_human_review: false
+  rationale: >-
+    A derived table doing one aggregation, then joined to a dimension. Flat
+    and portable once the dialect is fixed.
+
+query34:
+  rewrite_strategy: lift_and_shift
+  needs_human_review: false
+  rationale: >-
+    A derived table doing one aggregation, then joined to a dimension. Flat
+    and portable once the dialect is fixed.
+
+query68:
+  rewrite_strategy: lift_and_shift
+  needs_human_review: false
+  rationale: >-
+    A derived table doing one aggregation, then joined to a dimension. Flat
+    and portable once the dialect is fixed.
+
+query46:
+  rewrite_strategy: lift_and_shift
+  needs_human_review: false
+  rationale: >-
+    A derived table doing one aggregation, then joined to a dimension. Flat
+    and portable once the dialect is fixed.
+
+query79:
+  rewrite_strategy: lift_and_shift
+  needs_human_review: false
+  rationale: >-
+    A derived table doing one aggregation, then joined to a dimension. Flat
+    and portable once the dialect is fixed.
+
+query71:
+  rewrite_strategy: lift_and_shift
+  needs_human_review: false
+  rationale: >-
+    A derived table doing one aggregation, then joined to a dimension. Flat
+    and portable once the dialect is fixed.
+
+query90:
+  rewrite_strategy: lift_and_shift
+  needs_human_review: false
+  rationale: >-
+    Two independent one-row aggregates cross-joined to form a ratio. The
+    cartesian product is intentional and harmless; the SQL is portable.
+
+query61:
+  rewrite_strategy: lift_and_shift
+  needs_human_review: false
+  rationale: >-
+    Two independent one-row aggregates cross-joined to form a ratio. The
+    cartesian product is intentional and harmless; the SQL is portable.
+
+query29:
+  rewrite_strategy: lift_and_shift
+  needs_human_review: false
+  rationale: >-
+    Three fact tables joined through repeated aliases of the date dimension.
+    Wide and easy to mis-transcribe, but plain ANSI throughout with no
+    construct that behaves differently on the target.
+
+query22:
+  rewrite_strategy: lift_and_shift
+  needs_human_review: true
+  rationale: >-
+    GROUP BY ROLLUP. The syntax converts cleanly, but engines differ in how
+    subtotal rows and their NULLs surface, so the result set has to be
+    revalidated even though the SQL does not change much.
+
+query18:
+  rewrite_strategy: lift_and_shift
+  needs_human_review: true
+  rationale: >-
+    GROUP BY ROLLUP. The syntax converts cleanly, but engines differ in how
+    subtotal rows and their NULLs surface, so the result set has to be
+    revalidated even though the SQL does not change much.
+
+query21:
+  rewrite_strategy: lift_and_shift
+  needs_human_review: true
+  rationale: >-
+    Computes a ratio between two integer sums. Engines disagree on whether
+    that is integer or decimal division, which silently changes every value in
+    the result.
+
+query17:
+  rewrite_strategy: lift_and_shift
+  needs_human_review: true
+  rationale: >-
+    Divides STDDEV_SAMP by AVG across three fact tables. Both the
+    sample-vs-population convention and the behaviour on a single row differ
+    between engines, so the numbers must be compared against the source.
+
+query43:
+  rewrite_strategy: refactor
+  needs_human_review: true
+  rationale: >-
+    A hand-rolled pivot built from a ladder of CASE expressions inside SUM.
+    Target engines express this as PIVOT in a fraction of the code; carrying
+    the ladder across preserves a maintenance problem, and the ELSE NULL /
+    ELSE 0 choice changes the result.
+
+query59:
+  rewrite_strategy: refactor
+  needs_human_review: true
+  rationale: >-
+    A hand-rolled pivot built from a ladder of CASE expressions inside SUM.
+    Target engines express this as PIVOT in a fraction of the code; carrying
+    the ladder across preserves a maintenance problem, and the ELSE NULL /
+    ELSE 0 choice changes the result.
+
+query2:
+  rewrite_strategy: refactor
+  needs_human_review: true
+  rationale: >-
+    A hand-rolled pivot built from a ladder of CASE expressions inside SUM.
+    Target engines express this as PIVOT in a fraction of the code; carrying
+    the ladder across preserves a maintenance problem, and the ELSE NULL /
+    ELSE 0 choice changes the result.
+
+query50:
+  rewrite_strategy: refactor
+  needs_human_review: true
+  rationale: >-
+    Buckets rows by subtracting one surrogate date key from another. That
+    arithmetic only works while the keys stay dense and ordered, which is an
+    assumption the target model may not preserve — it should become real date
+    arithmetic.
+
+query62:
+  rewrite_strategy: refactor
+  needs_human_review: true
+  rationale: >-
+    Buckets rows by subtracting one surrogate date key from another. That
+    arithmetic only works while the keys stay dense and ordered, which is an
+    assumption the target model may not preserve — it should become real date
+    arithmetic.
+
+query99:
+  rewrite_strategy: refactor
+  needs_human_review: true
+  rationale: >-
+    Buckets rows by subtracting one surrogate date key from another. That
+    arithmetic only works while the keys stay dense and ordered, which is an
+    assumption the target model may not preserve — it should become real date
+    arithmetic.
+
+query93:
+  rewrite_strategy: refactor
+  needs_human_review: true
+  rationale: >-
+    A LEFT OUTER JOIN whose null-able side is then filtered in the WHERE
+    clause, which silently turns it back into an inner join. Whether that is
+    intended has to be settled by a person before it is converted.
+
+query97:
+  rewrite_strategy: refactor
+  needs_human_review: true
+  rationale: >-
+    FULL OUTER JOIN with CASE expressions counting which side is NULL. Not
+    every target supports FULL OUTER natively, and the null-counting logic is
+    the point of the query.
+
+query51:
+  rewrite_strategy: refactor
+  needs_human_review: true
+  rationale: >-
+    FULL OUTER JOIN with CASE expressions counting which side is NULL. Not
+    every target supports FULL OUTER natively, and the null-counting logic is
+    the point of the query.
+
+query78:
+  rewrite_strategy: refactor
+  needs_human_review: true
+  rationale: >-
+    Anti-join expressed as LEFT JOIN plus IS NULL, then divided through
+    COALESCE. Both the anti-join rewrite and the zero-substitution need
+    checking against the source results.
+
+query86:
+  rewrite_strategy: refactor
+  needs_human_review: true
+  rationale: >-
+    ROLLUP combined with GROUPING() flags feeding a RANK window that
+    partitions on those flags. The grouping-set semantics and the window
+    interact, so this needs restructuring and the output needs checking
+    against the source engine.
+
+query36:
+  rewrite_strategy: refactor
+  needs_human_review: true
+  rationale: >-
+    ROLLUP combined with GROUPING() flags feeding a RANK window that
+    partitions on those flags. The grouping-set semantics and the window
+    interact, so this needs restructuring and the output needs checking
+    against the source engine.
+
+query70:
+  rewrite_strategy: refactor
+  needs_human_review: true
+  rationale: >-
+    ROLLUP combined with GROUPING() flags feeding a RANK window that
+    partitions on those flags. The grouping-set semantics and the window
+    interact, so this needs restructuring and the output needs checking
+    against the source engine.
+
+query67:
+  rewrite_strategy: refactor
+  needs_human_review: true
+  rationale: >-
+    Combines T-SQL `SELECT TOP` with a wide ROLLUP and a RANK window. The
+    dialect change is mechanical, but the grouping-set output feeding a window
+    function is not.
+
+query32:
+  rewrite_strategy: refactor
+  needs_human_review: true
+  rationale: >-
+    Correlated scalar subquery in the predicate: the inner query is
+    re-evaluated per outer row and references the outer table. Target engines
+    express this as a window function or a pre-aggregated join, and
+    translating it literally preserves the per-row evaluation.
+
+query92:
+  rewrite_strategy: refactor
+  needs_human_review: true
+  rationale: >-
+    Correlated scalar subquery in the predicate: the inner query is
+    re-evaluated per outer row and references the outer table. Target engines
+    express this as a window function or a pre-aggregated join, and
+    translating it literally preserves the per-row evaluation.
+
+query6:
+  rewrite_strategy: refactor
+  needs_human_review: true
+  rationale: >-
+    Correlated scalar subquery in the predicate: the inner query is
+    re-evaluated per outer row and references the outer table. Target engines
+    express this as a window function or a pre-aggregated join, and
+    translating it literally preserves the per-row evaluation.
+
+query41:
+  rewrite_strategy: refactor
+  needs_human_review: true
+  rationale: >-
+    Correlated scalar subquery in the predicate: the inner query is
+    re-evaluated per outer row and references the outer table. Target engines
+    express this as a window function or a pre-aggregated join, and
+    translating it literally preserves the per-row evaluation.
+
+query1:
+  rewrite_strategy: refactor
+  needs_human_review: true
+  rationale: >-
+    A CTE compared against a correlated aggregate over itself. The
+    self-reference should become a window function rather than a second pass
+    over the same CTE.
+
+query30:
+  rewrite_strategy: refactor
+  needs_human_review: true
+  rationale: >-
+    A CTE compared against a correlated aggregate over itself. The
+    self-reference should become a window function rather than a second pass
+    over the same CTE.
+
+query81:
+  rewrite_strategy: refactor
+  needs_human_review: true
+  rationale: >-
+    A CTE compared against a correlated aggregate over itself. The
+    self-reference should become a window function rather than a second pass
+    over the same CTE.
+
+query24:
+  rewrite_strategy: refactor
+  needs_human_review: true
+  rationale: >-
+    Two statements in one file sharing the same CTE definitions, with an
+    aggregate over the CTE compared against itself. The statements cannot be
+    converted independently.
+
+query39:
+  rewrite_strategy: refactor
+  needs_human_review: true
+  rationale: >-
+    Two statements in one file sharing the same CTE definitions, with an
+    aggregate over the CTE compared against itself. The statements cannot be
+    converted independently.
+
+query48:
+  rewrite_strategy: refactor
+  needs_human_review: true
+  rationale: >-
+    The filter is several OR-ed blocks that each repeat the same join
+    predicates. Translated literally the bad plan comes along; it is normally
+    restructured into UNION branches first.
+
+query85:
+  rewrite_strategy: refactor
+  needs_human_review: true
+  rationale: >-
+    The filter is several OR-ed blocks that each repeat the same join
+    predicates. Translated literally the bad plan comes along; it is normally
+    restructured into UNION branches first.
+
+query45:
+  rewrite_strategy: refactor
+  needs_human_review: true
+  rationale: >-
+    An IN-subquery sitting inside an OR branch, which most planners cannot
+    turn into a semi-join. Needs restructuring rather than translation.
+
+query94:
+  rewrite_strategy: refactor
+  needs_human_review: true
+  rationale: >-
+    Correlated EXISTS and NOT EXISTS over the same table. The anti-join half
+    is where engines differ on NULL handling, so it should be rewritten as an
+    explicit anti-join and the row counts compared.
+
+query16:
+  rewrite_strategy: refactor
+  needs_human_review: true
+  rationale: >-
+    Correlated EXISTS and NOT EXISTS over the same table. The anti-join half
+    is where engines differ on NULL handling, so it should be rewritten as an
+    explicit anti-join and the row counts compared.
+
+query69:
+  rewrite_strategy: refactor
+  needs_human_review: true
+  rationale: >-
+    Correlated EXISTS and NOT EXISTS over the same table. The anti-join half
+    is where engines differ on NULL handling, so it should be rewritten as an
+    explicit anti-join and the row counts compared.
+
+query95:
+  rewrite_strategy: refactor
+  needs_human_review: true
+  rationale: >-
+    Correlated EXISTS and NOT EXISTS over the same table. The anti-join half
+    is where engines differ on NULL handling, so it should be rewritten as an
+    explicit anti-join and the row counts compared.
+
+query10:
+  rewrite_strategy: refactor
+  needs_human_review: true
+  rationale: >-
+    Correlated EXISTS wrapping an OR of two further EXISTS subqueries. The
+    nesting is what makes it expensive; it should be flattened into joins and
+    validated.
+
+query35:
+  rewrite_strategy: refactor
+  needs_human_review: true
+  rationale: >-
+    Correlated EXISTS wrapping an OR of two further EXISTS subqueries. The
+    nesting is what makes it expensive; it should be flattened into joins and
+    validated.
+
+query65:
+  rewrite_strategy: refactor
+  needs_human_review: true
+  rationale: >-
+    The same table is scanned several times by sibling subqueries that differ
+    only in a filter. One pass with conditional aggregation replaces all of
+    them, and carrying the repeated scans across wastes the migration.
+
+query28:
+  rewrite_strategy: refactor
+  needs_human_review: true
+  rationale: >-
+    The same table is scanned several times by sibling subqueries that differ
+    only in a filter. One pass with conditional aggregation replaces all of
+    them, and carrying the repeated scans across wastes the migration.
+
+query88:
+  rewrite_strategy: refactor
+  needs_human_review: true
+  rationale: >-
+    The same table is scanned several times by sibling subqueries that differ
+    only in a filter. One pass with conditional aggregation replaces all of
+    them, and carrying the repeated scans across wastes the migration.
+
+query57:
+  rewrite_strategy: refactor
+  needs_human_review: true
+  rationale: >-
+    Self-joins a CTE on rank+1 and rank-1 to emulate LAG and LEAD. A faithful
+    translation preserves an expensive anti-pattern the target engine supports
+    natively.
+
+query74:
+  rewrite_strategy: refactor
+  needs_human_review: true
+  rationale: >-
+    A CTE joined to itself several times to compare periods or channels, with
+    CASE-guarded ratios between the copies. The repeated passes should become
+    window functions.
+
+query11:
+  rewrite_strategy: refactor
+  needs_human_review: true
+  rationale: >-
+    A CTE joined to itself several times to compare periods or channels, with
+    CASE-guarded ratios between the copies. The repeated passes should become
+    window functions.
+
+query31:
+  rewrite_strategy: refactor
+  needs_human_review: true
+  rationale: >-
+    A CTE joined to itself several times to compare periods or channels, with
+    CASE-guarded ratios between the copies. The repeated passes should become
+    window functions.
+
+query38:
+  rewrite_strategy: refactor
+  needs_human_review: true
+  rationale: >-
+    Chained INTERSECT/EXCEPT over DISTINCT sets. Associativity and NULL
+    handling in set operations differ between engines, and the nesting here is
+    load-bearing.
+
+query87:
+  rewrite_strategy: refactor
+  needs_human_review: true
+  rationale: >-
+    Chained INTERSECT/EXCEPT over DISTINCT sets. Associativity and NULL
+    handling in set operations differ between engines, and the nesting here is
+    load-bearing.
+
+query8:
+  rewrite_strategy: refactor
+  needs_human_review: true
+  rationale: >-
+    Chained INTERSECT/EXCEPT over DISTINCT sets. Associativity and NULL
+    handling in set operations differ between engines, and the nesting here is
+    load-bearing.
+
+query75:
+  rewrite_strategy: refactor
+  needs_human_review: true
+  rationale: >-
+    Uses UNION rather than UNION ALL, so deduplication is part of the
+    semantics, over LEFT-joined sources with COALESCE. The dedup and the null
+    substitution both have to be preserved deliberately.
+
+query72:
+  rewrite_strategy: refactor
+  needs_human_review: true
+  rationale: >-
+    Mixes explicit JOIN and LEFT OUTER JOIN with comma-style implicit joins
+    across many sources. Engines associate that differently, and the
+    outer-join nulls flow into the aggregation.
+
+query58:
+  rewrite_strategy: refactor
+  needs_human_review: true
+  rationale: >-
+    CTEs whose filters depend on nested scalar subqueries resolving a date to
+    a week sequence. The nesting must be unwound before the CTEs can be
+    converted independently.
+
+query83:
+  rewrite_strategy: refactor
+  needs_human_review: true
+  rationale: >-
+    CTEs whose filters depend on nested scalar subqueries resolving a date to
+    a week sequence. The nesting must be unwound before the CTEs can be
+    converted independently.
+
+query54:
+  rewrite_strategy: refactor
+  needs_human_review: true
+  rationale: >-
+    A chain of CTEs where each feeds the next, ending in an integer cast over
+    a division. The cast truncates, so the segment boundaries depend on the
+    division semantics of the engine.
+
+query33:
+  rewrite_strategy: refactor
+  needs_human_review: true
+  rationale: >-
+    Three near-identical CTEs, one per sales channel, unioned and
+    re-aggregated. The duplication should collapse into one parameterised pass
+    rather than being translated three times.
+
+query60:
+  rewrite_strategy: refactor
+  needs_human_review: true
+  rationale: >-
+    Three near-identical CTEs, one per sales channel, unioned and
+    re-aggregated. The duplication should collapse into one parameterised pass
+    rather than being translated three times.
+
+query56:
+  rewrite_strategy: refactor
+  needs_human_review: true
+  rationale: >-
+    Three near-identical CTEs, one per sales channel, unioned and
+    re-aggregated. The duplication should collapse into one parameterised pass
+    rather than being translated three times.
+
+query44:
+  rewrite_strategy: redesign
+  needs_human_review: true
+  rationale: >-
+    Two structurally identical derived-table trees, each computing a RANK over
+    the same aggregate, joined back together on that rank. One pass with two
+    window functions replaces the whole construction.
+
+query9:
+  rewrite_strategy: redesign
+  needs_human_review: true
+  rationale: >-
+    A ladder of CASE expressions whose every branch is its own scalar subquery
+    over the same fact table — fifteen full scans to produce one row. This has
+    to be redesigned as a single conditional aggregation, not converted.
+
+query49:
+  rewrite_strategy: redesign
+  needs_human_review: true
+  rationale: >-
+    Union of per-channel branches, each combining an outer join, COALESCE,
+    explicit DECIMAL casts and two RANK windows. Precision, null substitution
+    and ranking all interact; the logic has to be rebuilt on the target's
+    numeric model.
+
+query5:
+  rewrite_strategy: redesign
+  needs_human_review: true
+  rationale: >-
+    Several CTEs per channel, each an outer join with COALESCE arithmetic,
+    unioned and then rolled up. Outer-join nulls, the union and the grouping
+    sets all feed each other, so the pieces cannot be migrated one at a time.
+
+query77:
+  rewrite_strategy: redesign
+  needs_human_review: true
+  rationale: >-
+    Several CTEs per channel, each an outer join with COALESCE arithmetic,
+    unioned and then rolled up. Outer-join nulls, the union and the grouping
+    sets all feed each other, so the pieces cannot be migrated one at a time.
+
+query80:
+  rewrite_strategy: redesign
+  needs_human_review: true
+  rationale: >-
+    Several CTEs per channel, each an outer join with COALESCE arithmetic,
+    unioned and then rolled up. Outer-join nulls, the union and the grouping
+    sets all feed each other, so the pieces cannot be migrated one at a time.
+
+query4:
+  rewrite_strategy: redesign
+  needs_human_review: true
+  rationale: >-
+    A union-backed CTE joined to itself once per year and channel, with
+    CASE-guarded ratio comparisons between the copies. The comparison logic
+    has to be rebuilt around window functions for the result to stay
+    defensible.
+
+query23:
+  rewrite_strategy: redesign
+  needs_human_review: true
+  rationale: >-
+    Multiple CTEs feeding correlated IN-subqueries, with a UNION ALL over the
+    result and two statements in the file. The parts interact, so the query
+    has to be reasoned through as a whole.

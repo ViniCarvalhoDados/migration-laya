@@ -1,0 +1,98 @@
+id: script_82
+name: query58
+source_path: repos/legacy/scripts/script_82_query58.sql
+origin: tpc-ds query58
+dialect: spark
+selected_because:
+- stratified fill (high, 9pts)
+evidence_card:
+  purpose: null
+  structure: 1 statement in the file. Reads 5 source tables, joined in a star shape with 6 join predicates.
+    Uses 3 CTEs and 6 subqueries. No window function, set operation or CASE expression. 6 subqueries correlated
+    with the outer query. Nests 3 levels deep.
+  facts: lines=71 statements=1 sources=5 joins=6 widest_join=3 subqueries=6 correlated=6 ctes=3 window_fns=0
+    set_ops=0 case_exprs=0 nesting=3
+  approx_tokens: 90
+features:
+  parse_ok: true
+  parse_dialect: spark
+  loc: 72
+  loc_code: 71
+  chars: 3280
+  statements: 1
+  cte_count: 3
+  cte_max_depth: 1
+  subquery_count: 6
+  scalar_subquery_count: 6
+  correlated_subquery_count: 6
+  derived_table_count: 0
+  max_nesting_depth: 3
+  scope_count: 10
+  window_function_count: 0
+  distinct_window_specs: 0
+  aggregate_count: 3
+  has_having: false
+  has_distinct: false
+  has_order_by: true
+  source_tables: 5
+  table_references: 15
+  cte_references: 3
+  set_operation_count: 0
+  union_all_count: 0
+  intersect_except_count: 0
+  case_expression_count: 0
+  case_max_branches: 0
+  graph_nodes: 5
+  graph_edges: 6
+  graph_density: 0.6
+  graph_components: 1
+  graph_max_degree: 3
+  graph_max_scope_sources: 3
+  graph_max_scope_edges: 2
+  graph_max_scope_degree: 2
+  graph_shape: star
+  implicit_joins: 8
+  explicit_joins: 0
+  cross_join_risk: 0
+  unresolved_predicates: 3
+  distinct_sources:
+  - catalog_sales
+  - date_dim
+  - item
+  - store_sales
+  - web_sales
+  distinct_aggregates:
+  - sum
+  nonportable_markers: []
+corpus_percentile:
+  rubric_points: 84
+  loc_code: 80
+  source_tables: 69
+  subquery_count: 95
+  cte_count: 97
+  graph_edges: 87
+  graph_max_scope_sources: 38
+categories_to_verify:
+- migration_complexity
+- rewrite_strategy
+- has_subquery
+- has_window_function
+- multi_source
+- needs_human_review
+gold:
+  migration_complexity: high
+  rubric_points: 9
+  has_subquery: true
+  has_window_function: false
+  multi_source: true
+  rewrite_strategy: refactor
+  needs_human_review: true
+  rationale: CTEs whose filters depend on nested scalar subqueries resolving a date to a week sequence.
+    The nesting must be unwound before the CTEs can be converted independently.
+  source: deterministic+claude
+latency:
+  estimated_ms: 1927.1
+  measured_ms: 6054.1
+  ms_per_question: 1009.0
+  input_tokens: 3072
+  device: cpu

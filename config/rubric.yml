@@ -1,0 +1,81 @@
+meta:
+  generated_by: mlaya census --emit-rubric
+  generated_on: '2026-09-23'
+  corpus: corpus/tpcds
+  n: 99
+  note: Thresholds are corpus percentiles, not hand-picked values. Regenerate when the corpus changes.
+  band_note: Cuts at <=4 / <=6 / rest, giving 31/37/31 scripts over n=99. Chosen as the split closest
+    to equal thirds, with the middle band spanning at least two score values.
+thresholds:
+- feature: loc_code
+  lower: 56
+  lower_from: p66=56
+  upper: 105
+  upper_from: p90=105
+- feature: source_tables
+  lower: 5
+  lower_from: p66=5
+  upper: 7
+  upper_from: p90=7
+- feature: subquery_count
+  lower: 1
+  lower_from: p50=1
+  upper: 4
+  upper_from: p90=4
+- feature: cte_count
+  lower: 1
+  lower_from: p50=0
+  upper: 3
+  upper_from: p90=3
+- feature: window_function_count
+  lower: 1
+  lower_from: p66=0
+- feature: set_operation_count
+  lower: 1
+  lower_from: p66=0
+  upper: 2
+  upper_from: p90=2
+- feature: max_nesting_depth
+  lower: 1
+  lower_from: p66=1
+- feature: case_expression_count
+  lower: 1
+  lower_from: p66=0
+  upper: 4
+  upper_from: p90=4
+- feature: join_graph.edges
+  lower: 5
+  lower_from: p66=5
+  upper: 7
+  upper_from: p90=7
+- feature: join_graph.max_degree
+  lower: 4
+  lower_from: p90=4
+- feature: join_graph.max_scope_sources
+  lower: 4
+  lower_from: p66=4
+  upper: 6
+  upper_from: p90=6
+flat_rules:
+  multi_statement: 1
+  cross_join_risk: 1
+  nonportable_syntax: 1
+  correlated_subquery: 1
+flat_rule_docs:
+  multi_statement: more than one statement in the file
+  cross_join_risk: a source in some scope joins to nothing
+  nonportable_syntax: engine-specific syntax detected
+  correlated_subquery: correlated subquery present
+bands:
+  low:
+  - 0
+  - 4
+  medium:
+  - 5
+  - 6
+  high:
+  - 7
+  - null
+confidence_bands:
+  high: 0.85
+  medium: 0.6

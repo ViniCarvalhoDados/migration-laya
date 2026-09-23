@@ -1,0 +1,99 @@
+id: script_81
+name: query61
+source_path: repos/legacy/scripts/script_81_query61.sql
+origin: tpc-ds query61
+dialect: spark
+selected_because:
+- stratified fill (high, 9pts)
+evidence_card:
+  purpose: null
+  structure: 1 statement in the file. Reads 7 source tables, joined in a snowflake shape with 6 join predicates.
+    Uses 2 subqueries. No CTE, window function, set operation or CASE expression. Nests 1 level deep.
+  facts: lines=46 statements=1 sources=7 joins=6 widest_join=7 subqueries=2 correlated=0 ctes=0 window_fns=0
+    set_ops=0 case_exprs=0 nesting=1
+  approx_tokens: 76
+features:
+  parse_ok: true
+  parse_dialect: spark
+  loc: 47
+  loc_code: 46
+  chars: 1754
+  statements: 1
+  cte_count: 0
+  cte_max_depth: 0
+  subquery_count: 2
+  scalar_subquery_count: 0
+  correlated_subquery_count: 0
+  derived_table_count: 2
+  max_nesting_depth: 1
+  scope_count: 3
+  window_function_count: 0
+  distinct_window_specs: 0
+  aggregate_count: 2
+  has_having: false
+  has_distinct: false
+  has_order_by: true
+  source_tables: 7
+  table_references: 13
+  cte_references: 0
+  set_operation_count: 0
+  union_all_count: 0
+  intersect_except_count: 0
+  case_expression_count: 0
+  case_max_branches: 0
+  graph_nodes: 7
+  graph_edges: 6
+  graph_density: 0.2857
+  graph_components: 1
+  graph_max_degree: 5
+  graph_max_scope_sources: 7
+  graph_max_scope_edges: 6
+  graph_max_scope_degree: 5
+  graph_shape: snowflake
+  implicit_joins: 12
+  explicit_joins: 0
+  cross_join_risk: 2
+  unresolved_predicates: 0
+  distinct_sources:
+  - customer
+  - customer_address
+  - date_dim
+  - item
+  - promotion
+  - store
+  - store_sales
+  distinct_aggregates:
+  - sum
+  nonportable_markers: []
+corpus_percentile:
+  rubric_points: 84
+  loc_code: 56
+  source_tables: 93
+  subquery_count: 80
+  cte_count: 70
+  graph_edges: 87
+  graph_max_scope_sources: 97
+categories_to_verify:
+- migration_complexity
+- rewrite_strategy
+- has_subquery
+- has_window_function
+- multi_source
+- needs_human_review
+gold:
+  migration_complexity: high
+  rubric_points: 9
+  has_subquery: true
+  has_window_function: false
+  multi_source: true
+  rewrite_strategy: lift_and_shift
+  needs_human_review: false
+  rationale: Two independent one-row aggregates cross-joined to form a ratio. The cartesian product is
+    intentional and harmless; the SQL is portable.
+  source: deterministic+claude
+latency:
+  estimated_ms: 1781.1
+  measured_ms: 6054.8
+  ms_per_question: 1009.1
+  input_tokens: 3072
+  device: cpu

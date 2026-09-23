@@ -1,0 +1,95 @@
+id: script_28
+name: query41
+source_path: repos/legacy/scripts/script_28_query41.sql
+origin: tpc-ds query41
+dialect: spark
+selected_because:
+- stratified fill (low, 4pts)
+evidence_card:
+  purpose: null
+  structure: 1 statement in the file. Reads 1 source table, joined in a single shape with 0 join predicates.
+    Uses 1 subquery. No CTE, window function, set operation or CASE expression. 1 subquery correlated
+    with the outer query. Nests 1 level deep.
+  facts: lines=65 statements=1 sources=1 joins=0 widest_join=1 subqueries=1 correlated=1 ctes=0 window_fns=0
+    set_ops=0 case_exprs=0 nesting=1
+  approx_tokens: 86
+features:
+  parse_ok: true
+  parse_dialect: spark
+  loc: 66
+  loc_code: 65
+  chars: 3804
+  statements: 1
+  cte_count: 0
+  cte_max_depth: 0
+  subquery_count: 1
+  scalar_subquery_count: 1
+  correlated_subquery_count: 1
+  derived_table_count: 0
+  max_nesting_depth: 1
+  scope_count: 2
+  window_function_count: 0
+  distinct_window_specs: 0
+  aggregate_count: 1
+  has_having: false
+  has_distinct: true
+  has_order_by: true
+  source_tables: 1
+  table_references: 2
+  cte_references: 0
+  set_operation_count: 0
+  union_all_count: 0
+  intersect_except_count: 0
+  case_expression_count: 0
+  case_max_branches: 0
+  graph_nodes: 1
+  graph_edges: 0
+  graph_density: 0.0
+  graph_components: 1
+  graph_max_degree: 0
+  graph_max_scope_sources: 1
+  graph_max_scope_edges: 0
+  graph_max_scope_degree: 0
+  graph_shape: single
+  implicit_joins: 0
+  explicit_joins: 0
+  cross_join_risk: 0
+  unresolved_predicates: 2
+  distinct_sources:
+  - item
+  distinct_aggregates:
+  - count
+  nonportable_markers: []
+corpus_percentile:
+  rubric_points: 31
+  loc_code: 75
+  source_tables: 2
+  subquery_count: 68
+  cte_count: 70
+  graph_edges: 6
+  graph_max_scope_sources: 2
+categories_to_verify:
+- migration_complexity
+- rewrite_strategy
+- has_subquery
+- has_window_function
+- multi_source
+- needs_human_review
+gold:
+  migration_complexity: low
+  rubric_points: 4
+  has_subquery: true
+  has_window_function: false
+  multi_source: false
+  rewrite_strategy: refactor
+  needs_human_review: true
+  rationale: 'Correlated scalar subquery in the predicate: the inner query is re-evaluated per outer row
+    and references the outer table. Target engines express this as a window function or a pre-aggregated
+    join, and translating it literally preserves the per-row evaluation.'
+  source: deterministic+claude
+latency:
+  estimated_ms: 1885.4
+  measured_ms: 9496.7
+  ms_per_question: 1582.8
+  input_tokens: 4392
+  device: cpu

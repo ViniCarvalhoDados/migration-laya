@@ -1,0 +1,99 @@
+id: script_94
+name: query56
+source_path: repos/legacy/scripts/script_94_query56.sql
+origin: tpc-ds query56
+dialect: spark
+selected_because:
+- stratified fill (high, 13pts)
+evidence_card:
+  purpose: null
+  structure: 1 statement in the file. Reads 6 source tables, joined in a star shape with 9 join predicates.
+    Uses 3 CTEs, 4 subqueries and 2 set operations. No window function or CASE expression. 3 subqueries
+    correlated with the outer query. Nests 3 levels deep.
+  facts: lines=67 statements=1 sources=6 joins=9 widest_join=4 subqueries=4 correlated=3 ctes=3 window_fns=0
+    set_ops=2 case_exprs=0 nesting=3
+  approx_tokens: 92
+features:
+  parse_ok: true
+  parse_dialect: spark
+  loc: 68
+  loc_code: 67
+  chars: 2405
+  statements: 1
+  cte_count: 3
+  cte_max_depth: 1
+  subquery_count: 4
+  scalar_subquery_count: 3
+  correlated_subquery_count: 3
+  derived_table_count: 1
+  max_nesting_depth: 3
+  scope_count: 12
+  window_function_count: 0
+  distinct_window_specs: 0
+  aggregate_count: 4
+  has_having: false
+  has_distinct: false
+  has_order_by: true
+  source_tables: 6
+  table_references: 15
+  cte_references: 3
+  set_operation_count: 2
+  union_all_count: 2
+  intersect_except_count: 0
+  case_expression_count: 0
+  case_max_branches: 0
+  graph_nodes: 6
+  graph_edges: 9
+  graph_density: 0.6
+  graph_components: 1
+  graph_max_degree: 3
+  graph_max_scope_sources: 4
+  graph_max_scope_edges: 3
+  graph_max_scope_degree: 3
+  graph_shape: star
+  implicit_joins: 9
+  explicit_joins: 0
+  cross_join_risk: 0
+  unresolved_predicates: 0
+  distinct_sources:
+  - catalog_sales
+  - customer_address
+  - date_dim
+  - item
+  - store_sales
+  - web_sales
+  distinct_aggregates:
+  - sum
+  nonportable_markers: []
+corpus_percentile:
+  rubric_points: 96
+  loc_code: 76
+  source_tables: 85
+  subquery_count: 91
+  cte_count: 97
+  graph_edges: 97
+  graph_max_scope_sources: 69
+categories_to_verify:
+- migration_complexity
+- rewrite_strategy
+- has_subquery
+- has_window_function
+- multi_source
+- needs_human_review
+gold:
+  migration_complexity: high
+  rubric_points: 13
+  has_subquery: true
+  has_window_function: false
+  multi_source: true
+  rewrite_strategy: refactor
+  needs_human_review: true
+  rationale: Three near-identical CTEs, one per sales channel, unioned and re-aggregated. The duplication
+    should collapse into one parameterised pass rather than being translated three times.
+  source: deterministic+claude
+latency:
+  estimated_ms: 1948.0
+  measured_ms: 6529.1
+  ms_per_question: 1088.2
+  input_tokens: 3072
+  device: cpu

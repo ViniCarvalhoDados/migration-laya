@@ -1,0 +1,104 @@
+id: script_83
+name: query72
+source_path: repos/legacy/scripts/script_83_query72.sql
+origin: tpc-ds query72
+dialect: spark
+selected_because:
+- stratified fill (high, 9pts)
+evidence_card:
+  purpose: null
+  structure: '1 statement in the file. Reads 9 source tables, joined in a mesh shape with 9 join predicates.
+    Uses 2 CASE expressions. No CTE, subquery, window function or set operation. Engine-specific syntax:
+    interval_arithmetic.'
+  facts: lines=48 statements=1 sources=9 joins=9 widest_join=9 subqueries=0 correlated=0 ctes=0 window_fns=0
+    set_ops=0 case_exprs=2 nesting=0
+  approx_tokens: 74
+features:
+  parse_ok: true
+  parse_dialect: spark
+  loc: 49
+  loc_code: 48
+  chars: 1742
+  statements: 1
+  cte_count: 0
+  cte_max_depth: 0
+  subquery_count: 0
+  scalar_subquery_count: 0
+  correlated_subquery_count: 0
+  derived_table_count: 0
+  max_nesting_depth: 0
+  scope_count: 1
+  window_function_count: 0
+  distinct_window_specs: 0
+  aggregate_count: 3
+  has_having: false
+  has_distinct: false
+  has_order_by: true
+  source_tables: 9
+  table_references: 11
+  cte_references: 0
+  set_operation_count: 0
+  union_all_count: 0
+  intersect_except_count: 0
+  case_expression_count: 2
+  case_max_branches: 1
+  graph_nodes: 9
+  graph_edges: 9
+  graph_density: 0.25
+  graph_components: 1
+  graph_max_degree: 7
+  graph_max_scope_sources: 9
+  graph_max_scope_edges: 9
+  graph_max_scope_degree: 7
+  graph_shape: mesh
+  implicit_joins: 0
+  explicit_joins: 10
+  cross_join_risk: 0
+  unresolved_predicates: 0
+  distinct_sources:
+  - catalog_returns
+  - catalog_sales
+  - customer_demographics
+  - date_dim
+  - household_demographics
+  - inventory
+  - item
+  - promotion
+  - warehouse
+  distinct_aggregates:
+  - count
+  - sum
+  nonportable_markers:
+  - interval_arithmetic
+corpus_percentile:
+  rubric_points: 84
+  loc_code: 59
+  source_tables: 97
+  subquery_count: 42
+  cte_count: 70
+  graph_edges: 97
+  graph_max_scope_sources: 99
+categories_to_verify:
+- migration_complexity
+- rewrite_strategy
+- has_subquery
+- has_window_function
+- multi_source
+- needs_human_review
+gold:
+  migration_complexity: high
+  rubric_points: 9
+  has_subquery: false
+  has_window_function: false
+  multi_source: true
+  rewrite_strategy: refactor
+  needs_human_review: true
+  rationale: Mixes explicit JOIN and LEFT OUTER JOIN with comma-style implicit joins across many sources.
+    Engines associate that differently, and the outer-join nulls flow into the aggregation.
+  source: deterministic+claude
+latency:
+  estimated_ms: 1760.3
+  measured_ms: 6116.0
+  ms_per_question: 1019.3
+  input_tokens: 3072
+  device: cpu

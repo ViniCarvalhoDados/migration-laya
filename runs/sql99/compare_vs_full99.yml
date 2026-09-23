@@ -1,0 +1,68 @@
+left: full99
+right: sql99
+n: 99
+results:
+- question: has_subquery
+  gold_positive_rate: 0.5758
+  structurally_global: false
+  full99:
+    accuracy: 0.798
+    auc: 0.9515
+    mean_p_true: 0.4409
+  sql99:
+    accuracy: 0.5758
+    auc: 0.5718
+    mean_p_true: 0.9657
+  mcnemar:
+    p_value: 0.00715
+    model_only: 20
+    baseline_only: 42
+    discordant: 62
+- question: has_window_function
+  gold_positive_rate: 0.1515
+  structurally_global: false
+  full99:
+    accuracy: 0.8788
+    auc: 0.9921
+    mean_p_true: 0.1588
+  sql99:
+    accuracy: 0.2828
+    auc: 0.6683
+    mean_p_true: 0.8031
+  mcnemar:
+    p_value: 0.0
+    model_only: 12
+    baseline_only: 71
+    discordant: 83
+- question: multi_source
+  gold_positive_rate: 0.7879
+  structurally_global: true
+  full99:
+    accuracy: 0.7677
+    auc: 0.8797
+    mean_p_true: 0.674
+  sql99:
+    accuracy: 0.7879
+    auc: 0.6068
+    mean_p_true: 0.9677
+  mcnemar:
+    p_value: 0.86005
+    model_only: 17
+    baseline_only: 15
+    discordant: 32
+- question: needs_human_review
+  gold_positive_rate: 0.697
+  structurally_global: false
+  full99:
+    accuracy: 0.5354
+    auc: 0.2181
+    mean_p_true: 0.6027
+  sql99:
+    accuracy: 0.7273
+    auc: 0.4978
+    mean_p_true: 0.8189
+  mcnemar:
+    p_value: 2.0e-05
+    model_only: 20
+    baseline_only: 1
+    discordant: 21

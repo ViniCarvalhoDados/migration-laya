@@ -1,0 +1,40 @@
+run_id: sql99
+model: convaiinnovations/laya
+device: cpu
+load_seconds: 6.905
+n_scripts: 99
+n_questions: 6
+purpose_ablated: false
+source: sql
+runtime_warnings:
+- 'laya: this checkpoint ships invalid temperatures or values outside [0.5, 5]; using choice:11+=0.10058280825614929
+  -> 0.5. Treat confidence from the affected entries as uncalibrated.'
+questions:
+  migration_complexity:
+    type: score
+    instructions: How hard is this SQL script to migrate to a modern cloud warehouse?
+    criteria:
+    - trivial - only dialect syntax needs changing
+    - moderate - joins or subqueries need restructuring
+    - high - logic must be redesigned and validated in depth
+  rewrite_strategy:
+    type: choice
+    instructions: Which migration strategy does this script require?
+    criteria:
+      lift_and_shift: runs as-is after dialect-level syntax fixes
+      refactor: needs joins, CTEs or subqueries restructured
+      redesign: logic must be redesigned for the target engine
+      manual_rewrite: too entangled for automated conversion
+  has_subquery:
+    type: noul
+    instructions: Does this script contain an inline subquery - a SELECT inside a FROM, WHERE, IN or EXISTS
+      clause? A WITH/CTE alone does not count.
+  has_window_function:
+    type: noul
+    instructions: Does this script use an analytic window function with an OVER clause?
+  multi_source:
+    type: noul
+    instructions: Does this script read from four or more distinct source tables?
+  needs_human_review:
+    type: noul
+    instructions: Must a human engineer review this script's logic before migrating it?

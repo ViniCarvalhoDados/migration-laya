@@ -1,0 +1,84 @@
+{
+  "script_id": "script_49",
+  "origin": "query87",
+  "answers": {
+    "migration_complexity": {
+      "question": "migration_complexity",
+      "type": "score",
+      "value": 1.1116,
+      "label": "moderate - joins or subqueries need restructuring",
+      "reported_confidence": 0.2774,
+      "max_probability": 0.7023,
+      "probabilities": {
+        "trivial - only dialect syntax needs changing": 0.093,
+        "moderate - joins or subqueries need restructuring": 0.7023,
+        "high - logic must be redesigned and validated in depth": 0.2047
+      }
+    },
+    "rewrite_strategy": {
+      "question": "rewrite_strategy",
+      "type": "choice",
+      "value": "refactor",
+      "label": "refactor",
+      "reported_confidence": 0.0218,
+      "max_probability": 0.3487,
+      "probabilities": {
+        "lift_and_shift": 0.2109,
+        "refactor": 0.3487,
+        "redesign": 0.1842,
+        "manual_rewrite": 0.2562
+      }
+    },
+    "has_subquery": {
+      "question": "has_subquery",
+      "type": "noul",
+      "value": 0.8547,
+      "label": "true",
+      "reported_confidence": 0.8547,
+      "max_probability": 0.8547,
+      "probabilities": {
+        "true": 0.8547,
+        "false": 0.1453
+      }
+    },
+    "has_window_function": {
+      "question": "has_window_function",
+      "type": "noul",
+      "value": 0.7877,
+      "label": "true",
+      "reported_confidence": 0.7877,
+      "max_probability": 0.7877,
+      "probabilities": {
+        "true": 0.7877,
+        "false": 0.2123
+      }
+    },
+    "multi_source": {
+      "question": "multi_source",
+      "type": "noul",
+      "value": 0.9934,
+      "label": "true",
+      "reported_confidence": 0.9934,
+      "max_probability": 0.9934,
+      "probabilities": {
+        "true": 0.9934,
+        "false": 0.0066
+      }
+    },
+    "needs_human_review": {
+      "question": "needs_human_review",
+      "type": "noul",
+      "value": 0.2733,
+      "label": "false",
+      "reported_confidence": 0.7267,
+      "max_probability": 0.7267,
+      "probabilities": {
+        "true": 0.2733,
+        "false": 0.7267
+      }
+    }
+  },
+  "input_tokens": 2232,
+  "elapsed_ms": 5006.2,
+  "ms_per_question": 834.4
+}

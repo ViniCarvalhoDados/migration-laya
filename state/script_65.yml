@@ -1,0 +1,99 @@
+id: script_65
+name: query57
+source_path: repos/legacy/scripts/script_65_query57.sql
+origin: tpc-ds query57
+dialect: spark
+selected_because:
+- stratified fill (medium, 6pts)
+evidence_card:
+  purpose: null
+  structure: 1 statement in the file. Reads 4 source tables, joined in a star shape with 3 join predicates.
+    Uses 2 CTEs, 2 window functions and 1 CASE expression. No subquery or set operation. Nests 1 level
+    deep.
+  facts: lines=65 statements=1 sources=4 joins=3 widest_join=4 subqueries=0 correlated=0 ctes=2 window_fns=2
+    set_ops=0 case_exprs=1 nesting=1
+  approx_tokens: 82
+features:
+  parse_ok: true
+  parse_dialect: spark
+  loc: 66
+  loc_code: 65
+  chars: 2402
+  statements: 1
+  cte_count: 2
+  cte_max_depth: 1
+  subquery_count: 0
+  scalar_subquery_count: 0
+  correlated_subquery_count: 0
+  derived_table_count: 0
+  max_nesting_depth: 1
+  scope_count: 3
+  window_function_count: 2
+  distinct_window_specs: 2
+  aggregate_count: 4
+  has_having: false
+  has_distinct: false
+  has_order_by: true
+  source_tables: 4
+  table_references: 4
+  cte_references: 4
+  set_operation_count: 0
+  union_all_count: 0
+  intersect_except_count: 0
+  case_expression_count: 1
+  case_max_branches: 1
+  graph_nodes: 4
+  graph_edges: 3
+  graph_density: 0.5
+  graph_components: 1
+  graph_max_degree: 3
+  graph_max_scope_sources: 4
+  graph_max_scope_edges: 3
+  graph_max_scope_degree: 3
+  graph_shape: star
+  implicit_joins: 5
+  explicit_joins: 0
+  cross_join_risk: 0
+  unresolved_predicates: 2
+  distinct_sources:
+  - call_center
+  - catalog_sales
+  - date_dim
+  - item
+  distinct_aggregates:
+  - avg
+  - rank
+  - sum
+  nonportable_markers: []
+corpus_percentile:
+  rubric_points: 69
+  loc_code: 75
+  source_tables: 45
+  subquery_count: 42
+  cte_count: 88
+  graph_edges: 53
+  graph_max_scope_sources: 69
+categories_to_verify:
+- migration_complexity
+- rewrite_strategy
+- has_subquery
+- has_window_function
+- multi_source
+- needs_human_review
+gold:
+  migration_complexity: medium
+  rubric_points: 6
+  has_subquery: false
+  has_window_function: true
+  multi_source: true
+  rewrite_strategy: refactor
+  needs_human_review: true
+  rationale: Self-joins a CTE on rank+1 and rank-1 to emulate LAG and LEAD. A faithful translation preserves
+    an expensive anti-pattern the target engine supports natively.
+  source: deterministic+claude
+latency:
+  estimated_ms: 1843.7
+  measured_ms: 6025.5
+  ms_per_question: 1004.2
+  input_tokens: 3072
+  device: cpu

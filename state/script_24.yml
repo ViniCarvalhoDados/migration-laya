@@ -1,0 +1,98 @@
+id: script_24
+name: query81
+source_path: repos/legacy/scripts/script_24_query81.sql
+origin: tpc-ds query81
+dialect: spark
+selected_because:
+- stratified fill (low, 4pts)
+evidence_card:
+  purpose: null
+  structure: 1 statement in the file. Reads 4 source tables, joined in a star shape with 2 join predicates.
+    Uses 1 CTE and 1 subquery. No window function, set operation or CASE expression. 1 subquery correlated
+    with the outer query. Nests 1 level deep.
+  facts: lines=54 statements=1 sources=4 joins=2 widest_join=3 subqueries=1 correlated=1 ctes=1 window_fns=0
+    set_ops=0 case_exprs=0 nesting=1
+  approx_tokens: 90
+features:
+  parse_ok: true
+  parse_dialect: spark
+  loc: 55
+  loc_code: 54
+  chars: 1877
+  statements: 1
+  cte_count: 1
+  cte_max_depth: 1
+  subquery_count: 1
+  scalar_subquery_count: 1
+  correlated_subquery_count: 1
+  derived_table_count: 0
+  max_nesting_depth: 1
+  scope_count: 3
+  window_function_count: 0
+  distinct_window_specs: 0
+  aggregate_count: 2
+  has_having: false
+  has_distinct: false
+  has_order_by: true
+  source_tables: 4
+  table_references: 5
+  cte_references: 2
+  set_operation_count: 0
+  union_all_count: 0
+  intersect_except_count: 0
+  case_expression_count: 0
+  case_max_branches: 0
+  graph_nodes: 4
+  graph_edges: 2
+  graph_density: 0.3333
+  graph_components: 2
+  graph_max_degree: 2
+  graph_max_scope_sources: 3
+  graph_max_scope_edges: 2
+  graph_max_scope_degree: 2
+  graph_shape: star
+  implicit_joins: 4
+  explicit_joins: 0
+  cross_join_risk: 0
+  unresolved_predicates: 2
+  distinct_sources:
+  - catalog_returns
+  - customer
+  - customer_address
+  - date_dim
+  distinct_aggregates:
+  - avg
+  - sum
+  nonportable_markers: []
+corpus_percentile:
+  rubric_points: 31
+  loc_code: 65
+  source_tables: 45
+  subquery_count: 68
+  cte_count: 79
+  graph_edges: 28
+  graph_max_scope_sources: 38
+categories_to_verify:
+- migration_complexity
+- rewrite_strategy
+- has_subquery
+- has_window_function
+- multi_source
+- needs_human_review
+gold:
+  migration_complexity: low
+  rubric_points: 4
+  has_subquery: true
+  has_window_function: false
+  multi_source: true
+  rewrite_strategy: refactor
+  needs_human_review: true
+  rationale: A CTE compared against a correlated aggregate over itself. The self-reference should become
+    a window function rather than a second pass over the same CTE.
+  source: deterministic+claude
+latency:
+  estimated_ms: 1927.1
+  measured_ms: 6131.7
+  ms_per_question: 1021.9
+  input_tokens: 3072
+  device: cpu

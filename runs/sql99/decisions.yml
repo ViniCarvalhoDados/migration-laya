@@ -1,0 +1,5984 @@
+run_id: sql99
+confidence_bands:
+  high: 0.85
+  medium: 0.6
+decisions:
+- script_id: script_01
+  outcome: ESCALATE
+  reasons:
+  - 'has_subquery: answered True at 90% but the AST says False'
+  - 'multi_source: answered True at 97% but the AST says False'
+  questions:
+  - question: migration_complexity
+    gold: low
+    predicted: medium
+    agree: false
+    gradable: true
+    confidence: 0.4902
+    confidence_band: low
+    verifiable: false
+    band_gap: 1
+  - question: rewrite_strategy
+    gold: lift_and_shift
+    predicted: redesign
+    agree: false
+    gradable: true
+    confidence: 0.3343
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.9024
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: false
+    predicted: false
+    agree: true
+    gradable: true
+    confidence: 0.765
+    confidence_band: medium
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.9683
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: false
+    predicted: false
+    agree: true
+    gradable: true
+    confidence: 0.7412
+    confidence_band: medium
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 3600.4
+- script_id: script_02
+  outcome: ESCALATE
+  reasons:
+  - 'has_subquery: answered True at 100% but the AST says False'
+  - 'multi_source: answered True at 96% but the AST says False'
+  questions:
+  - question: migration_complexity
+    gold: low
+    predicted: medium
+    agree: false
+    gradable: true
+    confidence: 0.6131
+    confidence_band: medium
+    verifiable: false
+    band_gap: 1
+  - question: rewrite_strategy
+    gold: lift_and_shift
+    predicted: lift_and_shift
+    agree: true
+    gradable: true
+    confidence: 0.4446
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 1.0
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: false
+    predicted: false
+    agree: true
+    gradable: true
+    confidence: 0.7591
+    confidence_band: medium
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.9631
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: false
+    predicted: false
+    agree: true
+    gradable: true
+    confidence: 0.6077
+    confidence_band: medium
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 2830.6
+- script_id: script_03
+  outcome: ESCALATE
+  reasons:
+  - 'has_subquery: answered True at 92% but the AST says False'
+  - 'multi_source: answered True at 94% but the AST says False'
+  questions:
+  - question: migration_complexity
+    gold: low
+    predicted: medium
+    agree: false
+    gradable: true
+    confidence: 0.5281
+    confidence_band: low
+    verifiable: false
+    band_gap: 1
+  - question: rewrite_strategy
+    gold: lift_and_shift
+    predicted: refactor
+    agree: false
+    gradable: true
+    confidence: 0.3196
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.9162
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: false
+    predicted: false
+    agree: true
+    gradable: true
+    confidence: 0.8255
+    confidence_band: medium
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.943
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: false
+    predicted: false
+    agree: true
+    gradable: true
+    confidence: 0.6766
+    confidence_band: medium
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 3374.2
+- script_id: script_04
+  outcome: ESCALATE
+  reasons:
+  - 'has_subquery: answered True at 94% but the AST says False'
+  - 'multi_source: answered True at 93% but the AST says False'
+  questions:
+  - question: migration_complexity
+    gold: low
+    predicted: medium
+    agree: false
+    gradable: true
+    confidence: 0.5755
+    confidence_band: low
+    verifiable: false
+    band_gap: 1
+  - question: rewrite_strategy
+    gold: lift_and_shift
+    predicted: refactor
+    agree: false
+    gradable: true
+    confidence: 0.3107
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.9407
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: false
+    predicted: false
+    agree: true
+    gradable: true
+    confidence: 0.8209
+    confidence_band: medium
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.928
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: false
+    predicted: false
+    agree: true
+    gradable: true
+    confidence: 0.8202
+    confidence_band: medium
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 3459.8
+- script_id: script_05
+  outcome: ESCALATE
+  reasons:
+  - 'has_subquery: answered True at 92% but the AST says False'
+  questions:
+  - question: migration_complexity
+    gold: low
+    predicted: medium
+    agree: false
+    gradable: true
+    confidence: 0.6272
+    confidence_band: medium
+    verifiable: false
+    band_gap: 1
+  - question: rewrite_strategy
+    gold: lift_and_shift
+    predicted: lift_and_shift
+    agree: true
+    gradable: true
+    confidence: 0.5054
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.9232
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: false
+    predicted: false
+    agree: true
+    gradable: true
+    confidence: 0.8662
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.9515
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.6312
+    confidence_band: medium
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 2932.3
+- script_id: script_06
+  outcome: ESCALATE
+  reasons:
+  - 'has_subquery: answered True at 95% but the AST says False'
+  questions:
+  - question: migration_complexity
+    gold: low
+    predicted: medium
+    agree: false
+    gradable: true
+    confidence: 0.6787
+    confidence_band: medium
+    verifiable: false
+    band_gap: 1
+  - question: rewrite_strategy
+    gold: lift_and_shift
+    predicted: refactor
+    agree: false
+    gradable: true
+    confidence: 0.3106
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.9471
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: false
+    predicted: false
+    agree: true
+    gradable: true
+    confidence: 0.8278
+    confidence_band: medium
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.9424
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: false
+    predicted: false
+    agree: true
+    gradable: true
+    confidence: 0.7781
+    confidence_band: medium
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 3709.0
+- script_id: script_07
+  outcome: ESCALATE
+  reasons:
+  - 'has_subquery: answered True at 90% but the AST says False'
+  questions:
+  - question: migration_complexity
+    gold: low
+    predicted: medium
+    agree: false
+    gradable: true
+    confidence: 0.6095
+    confidence_band: medium
+    verifiable: false
+    band_gap: 1
+  - question: rewrite_strategy
+    gold: lift_and_shift
+    predicted: refactor
+    agree: false
+    gradable: true
+    confidence: 0.4454
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.896
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.7124
+    confidence_band: medium
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.9512
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.7878
+    confidence_band: medium
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 3859.4
+- script_id: script_08
+  outcome: ESCALATE
+  reasons:
+  - 'has_subquery: answered True at 100% but the AST says False'
+  questions:
+  - question: migration_complexity
+    gold: low
+    predicted: medium
+    agree: false
+    gradable: true
+    confidence: 0.6406
+    confidence_band: medium
+    verifiable: false
+    band_gap: 1
+  - question: rewrite_strategy
+    gold: lift_and_shift
+    predicted: refactor
+    agree: false
+    gradable: true
+    confidence: 0.4398
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 1.0
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: false
+    predicted: false
+    agree: true
+    gradable: true
+    confidence: 0.7065
+    confidence_band: medium
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.9932
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.6021
+    confidence_band: medium
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 3303.4
+- script_id: script_09
+  outcome: ESCALATE
+  reasons:
+  - 'has_subquery: answered True at 100% but the AST says False'
+  - 'multi_source: answered True at 100% but the AST says False'
+  questions:
+  - question: migration_complexity
+    gold: low
+    predicted: medium
+    agree: false
+    gradable: true
+    confidence: 0.6889
+    confidence_band: medium
+    verifiable: false
+    band_gap: 1
+  - question: rewrite_strategy
+    gold: refactor
+    predicted: refactor
+    agree: true
+    gradable: true
+    confidence: 0.3753
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 1.0
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: false
+    predicted: false
+    agree: true
+    gradable: true
+    confidence: 0.6419
+    confidence_band: medium
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 1.0
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.9333
+    confidence_band: high
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 6526.3
+- script_id: script_10
+  outcome: ESCALATE
+  reasons:
+  - 'has_subquery: answered True at 94% but the AST says False'
+  - 'multi_source: answered True at 98% but the AST says False'
+  questions:
+  - question: migration_complexity
+    gold: low
+    predicted: medium
+    agree: false
+    gradable: true
+    confidence: 0.6605
+    confidence_band: medium
+    verifiable: false
+    band_gap: 1
+  - question: rewrite_strategy
+    gold: lift_and_shift
+    predicted: refactor
+    agree: false
+    gradable: true
+    confidence: 0.4684
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.939
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.822
+    confidence_band: medium
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.978
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.9028
+    confidence_band: high
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 4549.9
+- script_id: script_11
+  outcome: ESCALATE
+  reasons:
+  - 'has_subquery: answered True at 86% but the AST says False'
+  questions:
+  - question: migration_complexity
+    gold: low
+    predicted: medium
+    agree: false
+    gradable: true
+    confidence: 0.6001
+    confidence_band: medium
+    verifiable: false
+    band_gap: 1
+  - question: rewrite_strategy
+    gold: lift_and_shift
+    predicted: refactor
+    agree: false
+    gradable: true
+    confidence: 0.4467
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.865
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.8099
+    confidence_band: medium
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.9471
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.8659
+    confidence_band: high
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 3828.6
+- script_id: script_12
+  outcome: ESCALATE
+  reasons:
+  - 'has_subquery: answered True at 100% but the AST says False'
+  - 'multi_source: answered True at 100% but the AST says False'
+  questions:
+  - question: migration_complexity
+    gold: low
+    predicted: medium
+    agree: false
+    gradable: true
+    confidence: 0.5876
+    confidence_band: low
+    verifiable: false
+    band_gap: 1
+  - question: rewrite_strategy
+    gold: lift_and_shift
+    predicted: refactor
+    agree: false
+    gradable: true
+    confidence: 0.407
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 1.0
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.8755
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 1.0
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.9425
+    confidence_band: high
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 4515.9
+- script_id: script_13
+  outcome: ESCALATE
+  reasons:
+  - 'has_subquery: answered True at 94% but the AST says False'
+  - 'multi_source: answered True at 97% but the AST says False'
+  questions:
+  - question: migration_complexity
+    gold: low
+    predicted: medium
+    agree: false
+    gradable: true
+    confidence: 0.6435
+    confidence_band: medium
+    verifiable: false
+    band_gap: 1
+  - question: rewrite_strategy
+    gold: lift_and_shift
+    predicted: refactor
+    agree: false
+    gradable: true
+    confidence: 0.5198
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.9449
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.8959
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.9659
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.9078
+    confidence_band: high
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 4508.5
+- script_id: script_14
+  outcome: HUMAN_REVIEW
+  reasons:
+  - 'has_window_function: wrong but only 83% confident'
+  - 'migration_complexity: medium vs gold low — one band apart'
+  questions:
+  - question: migration_complexity
+    gold: low
+    predicted: medium
+    agree: false
+    gradable: true
+    confidence: 0.5692
+    confidence_band: low
+    verifiable: false
+    band_gap: 1
+  - question: rewrite_strategy
+    gold: refactor
+    predicted: lift_and_shift
+    agree: false
+    gradable: true
+    confidence: 0.3717
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.9733
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.8289
+    confidence_band: medium
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.9778
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.9143
+    confidence_band: high
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 6018.6
+- script_id: script_15
+  outcome: ESCALATE
+  reasons:
+  - 'has_subquery: answered True at 98% but the AST says False'
+  questions:
+  - question: migration_complexity
+    gold: low
+    predicted: medium
+    agree: false
+    gradable: true
+    confidence: 0.6062
+    confidence_band: medium
+    verifiable: false
+    band_gap: 1
+  - question: rewrite_strategy
+    gold: refactor
+    predicted: refactor
+    agree: true
+    gradable: true
+    confidence: 0.3496
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.9779
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.6779
+    confidence_band: medium
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 1.0
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.8448
+    confidence_band: medium
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 6448.9
+- script_id: script_16
+  outcome: ESCALATE
+  reasons:
+  - 'has_subquery: answered True at 92% but the AST says False'
+  questions:
+  - question: migration_complexity
+    gold: low
+    predicted: medium
+    agree: false
+    gradable: true
+    confidence: 0.6413
+    confidence_band: medium
+    verifiable: false
+    band_gap: 1
+  - question: rewrite_strategy
+    gold: lift_and_shift
+    predicted: refactor
+    agree: false
+    gradable: true
+    confidence: 0.381
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.9184
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: false
+    predicted: false
+    agree: true
+    gradable: true
+    confidence: 0.7445
+    confidence_band: medium
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.9136
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.6117
+    confidence_band: medium
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 4192.7
+- script_id: script_17
+  outcome: ESCALATE
+  reasons:
+  - 'has_subquery: answered True at 97% but the AST says False'
+  questions:
+  - question: migration_complexity
+    gold: low
+    predicted: medium
+    agree: false
+    gradable: true
+    confidence: 0.6166
+    confidence_band: medium
+    verifiable: false
+    band_gap: 1
+  - question: rewrite_strategy
+    gold: lift_and_shift
+    predicted: refactor
+    agree: false
+    gradable: true
+    confidence: 0.3914
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.9673
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: false
+    predicted: false
+    agree: true
+    gradable: true
+    confidence: 0.7807
+    confidence_band: medium
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.9212
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.5222
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 4177.8
+- script_id: script_18
+  outcome: ESCALATE
+  reasons:
+  - 'has_subquery: answered True at 100% but the AST says False'
+  - 'multi_source: answered True at 91% but the AST says False'
+  questions:
+  - question: migration_complexity
+    gold: low
+    predicted: medium
+    agree: false
+    gradable: true
+    confidence: 0.5758
+    confidence_band: low
+    verifiable: false
+    band_gap: 1
+  - question: rewrite_strategy
+    gold: refactor
+    predicted: refactor
+    agree: true
+    gradable: true
+    confidence: 0.3405
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.9992
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 1.0
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.9103
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.8902
+    confidence_band: high
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 4011.8
+- script_id: script_19
+  outcome: ESCALATE
+  reasons:
+  - 'has_subquery: answered True at 100% but the AST says False'
+  - 'has_window_function: answered True at 100% but the AST says False'
+  - 'multi_source: answered True at 100% but the AST says False'
+  questions:
+  - question: migration_complexity
+    gold: low
+    predicted: medium
+    agree: false
+    gradable: true
+    confidence: 0.6136
+    confidence_band: medium
+    verifiable: false
+    band_gap: 1
+  - question: rewrite_strategy
+    gold: refactor
+    predicted: refactor
+    agree: true
+    gradable: true
+    confidence: 0.4182
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 1.0
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 1.0
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 1.0
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.8946
+    confidence_band: high
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 5622.1
+- script_id: script_20
+  outcome: ESCALATE
+  reasons:
+  - 'multi_source: answered True at 94% but the AST says False'
+  questions:
+  - question: migration_complexity
+    gold: low
+    predicted: medium
+    agree: false
+    gradable: true
+    confidence: 0.5154
+    confidence_band: low
+    verifiable: false
+    band_gap: 1
+  - question: rewrite_strategy
+    gold: refactor
+    predicted: refactor
+    agree: true
+    gradable: true
+    confidence: 0.3265
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.9157
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.8382
+    confidence_band: medium
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.9389
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.5246
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 3448.4
+- script_id: script_21
+  outcome: ESCALATE
+  reasons:
+  - 'has_window_function: answered True at 86% but the AST says False'
+  - 'multi_source: answered True at 92% but the AST says False'
+  questions:
+  - question: migration_complexity
+    gold: low
+    predicted: medium
+    agree: false
+    gradable: true
+    confidence: 0.5548
+    confidence_band: low
+    verifiable: false
+    band_gap: 1
+  - question: rewrite_strategy
+    gold: refactor
+    predicted: redesign
+    agree: false
+    gradable: true
+    confidence: 0.4383
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.9444
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.865
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.9188
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.6204
+    confidence_band: medium
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 4142.7
+- script_id: script_22
+  outcome: ESCALATE
+  reasons:
+  - 'has_subquery: answered True at 95% but the AST says False'
+  questions:
+  - question: migration_complexity
+    gold: low
+    predicted: medium
+    agree: false
+    gradable: true
+    confidence: 0.7445
+    confidence_band: medium
+    verifiable: false
+    band_gap: 1
+  - question: rewrite_strategy
+    gold: lift_and_shift
+    predicted: refactor
+    agree: false
+    gradable: true
+    confidence: 0.3662
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.9491
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: false
+    predicted: false
+    agree: true
+    gradable: true
+    confidence: 0.8661
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.9995
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.7766
+    confidence_band: medium
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 3485.6
+- script_id: script_23
+  outcome: ESCALATE
+  reasons:
+  - 'has_subquery: answered True at 95% but the AST says False'
+  questions:
+  - question: migration_complexity
+    gold: low
+    predicted: medium
+    agree: false
+    gradable: true
+    confidence: 0.6161
+    confidence_band: medium
+    verifiable: false
+    band_gap: 1
+  - question: rewrite_strategy
+    gold: lift_and_shift
+    predicted: lift_and_shift
+    agree: true
+    gradable: true
+    confidence: 0.4524
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.9485
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: false
+    predicted: false
+    agree: true
+    gradable: true
+    confidence: 0.8588
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.8842
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.8369
+    confidence_band: medium
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 4388.3
+- script_id: script_24
+  outcome: ESCALATE
+  reasons:
+  - 'has_window_function: answered True at 92% but the AST says False'
+  questions:
+  - question: migration_complexity
+    gold: low
+    predicted: medium
+    agree: false
+    gradable: true
+    confidence: 0.5648
+    confidence_band: low
+    verifiable: false
+    band_gap: 1
+  - question: rewrite_strategy
+    gold: refactor
+    predicted: refactor
+    agree: true
+    gradable: true
+    confidence: 0.4065
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.9594
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.9216
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.9423
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.8352
+    confidence_band: medium
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 6131.7
+- script_id: script_25
+  outcome: ESCALATE
+  reasons:
+  - 'has_window_function: answered True at 95% but the AST says False'
+  questions:
+  - question: migration_complexity
+    gold: low
+    predicted: medium
+    agree: false
+    gradable: true
+    confidence: 0.5917
+    confidence_band: low
+    verifiable: false
+    band_gap: 1
+  - question: rewrite_strategy
+    gold: lift_and_shift
+    predicted: lift_and_shift
+    agree: true
+    gradable: true
+    confidence: 0.4122
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 1.0
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.9535
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 1.0
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.9187
+    confidence_band: high
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 5746.5
+- script_id: script_26
+  outcome: ESCALATE
+  reasons:
+  - 'has_subquery: answered True at 97% but the AST says False'
+  questions:
+  - question: migration_complexity
+    gold: low
+    predicted: medium
+    agree: false
+    gradable: true
+    confidence: 0.6276
+    confidence_band: medium
+    verifiable: false
+    band_gap: 1
+  - question: rewrite_strategy
+    gold: refactor
+    predicted: lift_and_shift
+    agree: false
+    gradable: true
+    confidence: 0.7436
+    confidence_band: medium
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.9652
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.9428
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.8857
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.7345
+    confidence_band: medium
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 5190.1
+- script_id: script_27
+  outcome: HUMAN_REVIEW
+  reasons:
+  - 'has_window_function: wrong but only 55% confident'
+  - 'migration_complexity: medium vs gold low — one band apart'
+  questions:
+  - question: migration_complexity
+    gold: low
+    predicted: medium
+    agree: false
+    gradable: true
+    confidence: 0.6011
+    confidence_band: medium
+    verifiable: false
+    band_gap: 1
+  - question: rewrite_strategy
+    gold: refactor
+    predicted: refactor
+    agree: true
+    gradable: true
+    confidence: 0.38
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.9248
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.5509
+    confidence_band: low
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.912
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.8231
+    confidence_band: medium
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 4515.5
+- script_id: script_28
+  outcome: ESCALATE
+  reasons:
+  - 'multi_source: answered True at 96% but the AST says False'
+  questions:
+  - question: migration_complexity
+    gold: low
+    predicted: medium
+    agree: false
+    gradable: true
+    confidence: 0.6702
+    confidence_band: medium
+    verifiable: false
+    band_gap: 1
+  - question: rewrite_strategy
+    gold: refactor
+    predicted: refactor
+    agree: true
+    gradable: true
+    confidence: 0.368
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.9529
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.6726
+    confidence_band: medium
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.9598
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.8897
+    confidence_band: high
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 9496.7
+- script_id: script_29
+  outcome: ESCALATE
+  reasons:
+  - 'has_window_function: answered True at 94% but the AST says False'
+  questions:
+  - question: migration_complexity
+    gold: low
+    predicted: medium
+    agree: false
+    gradable: true
+    confidence: 0.534
+    confidence_band: low
+    verifiable: false
+    band_gap: 1
+  - question: rewrite_strategy
+    gold: refactor
+    predicted: refactor
+    agree: true
+    gradable: true
+    confidence: 0.3515
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.9485
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.9393
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.9585
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.8547
+    confidence_band: high
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 6551.5
+- script_id: script_30
+  outcome: ESCALATE
+  reasons:
+  - 'has_window_function: answered True at 87% but the AST says False'
+  questions:
+  - question: migration_complexity
+    gold: low
+    predicted: medium
+    agree: false
+    gradable: true
+    confidence: 0.6115
+    confidence_band: medium
+    verifiable: false
+    band_gap: 1
+  - question: rewrite_strategy
+    gold: lift_and_shift
+    predicted: lift_and_shift
+    agree: true
+    gradable: true
+    confidence: 0.3307
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.9712
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.8682
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.9477
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.793
+    confidence_band: medium
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 5712.8
+- script_id: script_31
+  outcome: ESCALATE
+  reasons:
+  - 'multi_source: answered True at 90% but the AST says False'
+  questions:
+  - question: migration_complexity
+    gold: low
+    predicted: medium
+    agree: false
+    gradable: true
+    confidence: 0.5567
+    confidence_band: low
+    verifiable: false
+    band_gap: 1
+  - question: rewrite_strategy
+    gold: refactor
+    predicted: refactor
+    agree: true
+    gradable: true
+    confidence: 0.324
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.84
+    confidence_band: medium
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.7896
+    confidence_band: medium
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.8965
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: true
+    predicted: false
+    agree: false
+    gradable: true
+    confidence: 0.5859
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 4137.0
+- script_id: script_32
+  outcome: ESCALATE
+  reasons:
+  - 'has_window_function: answered True at 98% but the AST says False'
+  questions:
+  - question: migration_complexity
+    gold: medium
+    predicted: medium
+    agree: true
+    gradable: true
+    confidence: 0.6385
+    confidence_band: medium
+    verifiable: false
+    band_gap: 0
+  - question: rewrite_strategy
+    gold: lift_and_shift
+    predicted: refactor
+    agree: false
+    gradable: true
+    confidence: 0.4005
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 1.0
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.979
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 1.0
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.916
+    confidence_band: high
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 6542.0
+- script_id: script_33
+  outcome: HUMAN_REVIEW
+  reasons:
+  - 'has_window_function: wrong but only 83% confident'
+  questions:
+  - question: migration_complexity
+    gold: medium
+    predicted: medium
+    agree: true
+    gradable: true
+    confidence: 0.613
+    confidence_band: medium
+    verifiable: false
+    band_gap: 0
+  - question: rewrite_strategy
+    gold: lift_and_shift
+    predicted: refactor
+    agree: false
+    gradable: true
+    confidence: 0.3561
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 1.0
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.8273
+    confidence_band: medium
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.9661
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.8708
+    confidence_band: high
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 6212.1
+- script_id: script_34
+  outcome: ESCALATE
+  reasons:
+  - 'has_subquery: answered True at 92% but the AST says False'
+  questions:
+  - question: migration_complexity
+    gold: medium
+    predicted: medium
+    agree: true
+    gradable: true
+    confidence: 0.5887
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: rewrite_strategy
+    gold: refactor
+    predicted: refactor
+    agree: true
+    gradable: true
+    confidence: 0.2752
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.9182
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.7349
+    confidence_band: medium
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.9297
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.6823
+    confidence_band: medium
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 6500.2
+- script_id: script_35
+  outcome: ESCALATE
+  reasons:
+  - 'multi_source: answered True at 96% but the AST says False'
+  questions:
+  - question: migration_complexity
+    gold: medium
+    predicted: medium
+    agree: true
+    gradable: true
+    confidence: 0.5831
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: rewrite_strategy
+    gold: refactor
+    predicted: refactor
+    agree: true
+    gradable: true
+    confidence: 0.3178
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.9855
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 1.0
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.9567
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.9023
+    confidence_band: high
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 6550.6
+- script_id: script_36
+  outcome: AUTO
+  reasons:
+  - all 3 verifiable facts correct at >=85% and complexity band matches
+  questions:
+  - question: migration_complexity
+    gold: medium
+    predicted: medium
+    agree: true
+    gradable: true
+    confidence: 0.625
+    confidence_band: medium
+    verifiable: false
+    band_gap: 0
+  - question: rewrite_strategy
+    gold: refactor
+    predicted: refactor
+    agree: true
+    gradable: true
+    confidence: 0.3387
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 1.0
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.9685
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 1.0
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.8599
+    confidence_band: high
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 6114.3
+- script_id: script_37
+  outcome: ESCALATE
+  reasons:
+  - 'has_window_function: answered True at 93% but the AST says False'
+  questions:
+  - question: migration_complexity
+    gold: medium
+    predicted: medium
+    agree: true
+    gradable: true
+    confidence: 0.624
+    confidence_band: medium
+    verifiable: false
+    band_gap: 0
+  - question: rewrite_strategy
+    gold: lift_and_shift
+    predicted: refactor
+    agree: false
+    gradable: true
+    confidence: 0.3452
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 1.0
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.9283
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 1.0
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.9578
+    confidence_band: high
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 6487.5
+- script_id: script_38
+  outcome: ESCALATE
+  reasons:
+  - 'has_subquery: answered True at 94% but the AST says False'
+  - 'has_window_function: answered True at 95% but the AST says False'
+  questions:
+  - question: migration_complexity
+    gold: medium
+    predicted: medium
+    agree: true
+    gradable: true
+    confidence: 0.6264
+    confidence_band: medium
+    verifiable: false
+    band_gap: 0
+  - question: rewrite_strategy
+    gold: refactor
+    predicted: refactor
+    agree: true
+    gradable: true
+    confidence: 0.3342
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.9423
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.9474
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.9931
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.9187
+    confidence_band: high
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 6487.4
+- script_id: script_39
+  outcome: AUTO
+  reasons:
+  - all 3 verifiable facts correct at >=85% and complexity band matches
+  questions:
+  - question: migration_complexity
+    gold: medium
+    predicted: medium
+    agree: true
+    gradable: true
+    confidence: 0.6304
+    confidence_band: medium
+    verifiable: false
+    band_gap: 0
+  - question: rewrite_strategy
+    gold: lift_and_shift
+    predicted: refactor
+    agree: false
+    gradable: true
+    confidence: 0.359
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.922
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.9667
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.8949
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.8711
+    confidence_band: high
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 6552.1
+- script_id: script_40
+  outcome: ESCALATE
+  reasons:
+  - 'has_subquery: answered True at 95% but the AST says False'
+  - 'has_window_function: answered True at 96% but the AST says False'
+  questions:
+  - question: migration_complexity
+    gold: medium
+    predicted: medium
+    agree: true
+    gradable: true
+    confidence: 0.5678
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: rewrite_strategy
+    gold: refactor
+    predicted: lift_and_shift
+    agree: false
+    gradable: true
+    confidence: 0.3479
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.9528
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.9603
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 1.0
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.9669
+    confidence_band: high
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 5969.8
+- script_id: script_41
+  outcome: HUMAN_REVIEW
+  reasons:
+  - 'has_window_function: wrong but only 70% confident'
+  questions:
+  - question: migration_complexity
+    gold: medium
+    predicted: medium
+    agree: true
+    gradable: true
+    confidence: 0.5767
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: rewrite_strategy
+    gold: refactor
+    predicted: refactor
+    agree: true
+    gradable: true
+    confidence: 0.3716
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.9402
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.6962
+    confidence_band: medium
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.957
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.841
+    confidence_band: medium
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 4620.6
+- script_id: script_42
+  outcome: ESCALATE
+  reasons:
+  - 'has_window_function: answered True at 85% but the AST says False'
+  questions:
+  - question: migration_complexity
+    gold: medium
+    predicted: medium
+    agree: true
+    gradable: true
+    confidence: 0.4677
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: rewrite_strategy
+    gold: refactor
+    predicted: lift_and_shift
+    agree: false
+    gradable: true
+    confidence: 0.3592
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.965
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.8513
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 1.0
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.5677
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 4355.6
+- script_id: script_43
+  outcome: ESCALATE
+  reasons:
+  - 'multi_source: answered True at 100% but the AST says False'
+  questions:
+  - question: migration_complexity
+    gold: medium
+    predicted: medium
+    agree: true
+    gradable: true
+    confidence: 0.6035
+    confidence_band: medium
+    verifiable: false
+    band_gap: 0
+  - question: rewrite_strategy
+    gold: redesign
+    predicted: lift_and_shift
+    agree: false
+    gradable: true
+    confidence: 0.3551
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 1.0
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.8268
+    confidence_band: medium
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 1.0
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.8639
+    confidence_band: high
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 6548.8
+- script_id: script_44
+  outcome: AUTO
+  reasons:
+  - all 3 verifiable facts correct at >=85% and complexity band matches
+  questions:
+  - question: migration_complexity
+    gold: medium
+    predicted: medium
+    agree: true
+    gradable: true
+    confidence: 0.6518
+    confidence_band: medium
+    verifiable: false
+    band_gap: 0
+  - question: rewrite_strategy
+    gold: lift_and_shift
+    predicted: refactor
+    agree: false
+    gradable: true
+    confidence: 0.4208
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.915
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.9723
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.926
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.8854
+    confidence_band: high
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 6619.8
+- script_id: script_45
+  outcome: ESCALATE
+  reasons:
+  - 'has_subquery: answered True at 97% but the AST says False'
+  questions:
+  - question: migration_complexity
+    gold: medium
+    predicted: medium
+    agree: true
+    gradable: true
+    confidence: 0.5021
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: rewrite_strategy
+    gold: lift_and_shift
+    predicted: refactor
+    agree: false
+    gradable: true
+    confidence: 0.2863
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.9681
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: false
+    predicted: false
+    agree: true
+    gradable: true
+    confidence: 0.8181
+    confidence_band: medium
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 1.0
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.9277
+    confidence_band: high
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 4677.3
+- script_id: script_46
+  outcome: ESCALATE
+  reasons:
+  - 'has_subquery: answered True at 94% but the AST says False'
+  questions:
+  - question: migration_complexity
+    gold: medium
+    predicted: medium
+    agree: true
+    gradable: true
+    confidence: 0.6465
+    confidence_band: medium
+    verifiable: false
+    band_gap: 0
+  - question: rewrite_strategy
+    gold: refactor
+    predicted: refactor
+    agree: true
+    gradable: true
+    confidence: 0.337
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.9364
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.8103
+    confidence_band: medium
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.9807
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.819
+    confidence_band: medium
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 6572.6
+- script_id: script_47
+  outcome: HUMAN_REVIEW
+  reasons:
+  - 'has_window_function: correct but only 85% confident'
+  questions:
+  - question: migration_complexity
+    gold: medium
+    predicted: medium
+    agree: true
+    gradable: true
+    confidence: 0.5788
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: rewrite_strategy
+    gold: lift_and_shift
+    predicted: refactor
+    agree: false
+    gradable: true
+    confidence: 0.3011
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.9365
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.8492
+    confidence_band: medium
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.9999
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.9395
+    confidence_band: high
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 6362.4
+- script_id: script_48
+  outcome: ESCALATE
+  reasons:
+  - 'has_subquery: answered True at 99% but the AST says False'
+  - 'has_window_function: answered True at 97% but the AST says False'
+  questions:
+  - question: migration_complexity
+    gold: medium
+    predicted: medium
+    agree: true
+    gradable: true
+    confidence: 0.6438
+    confidence_band: medium
+    verifiable: false
+    band_gap: 0
+  - question: rewrite_strategy
+    gold: refactor
+    predicted: lift_and_shift
+    agree: false
+    gradable: true
+    confidence: 0.3424
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.9945
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.9657
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.8938
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.7802
+    confidence_band: medium
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 6584.3
+- script_id: script_49
+  outcome: HUMAN_REVIEW
+  reasons:
+  - 'has_window_function: wrong but only 79% confident'
+  questions:
+  - question: migration_complexity
+    gold: medium
+    predicted: medium
+    agree: true
+    gradable: true
+    confidence: 0.7023
+    confidence_band: medium
+    verifiable: false
+    band_gap: 0
+  - question: rewrite_strategy
+    gold: refactor
+    predicted: refactor
+    agree: true
+    gradable: true
+    confidence: 0.3487
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.8547
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.7877
+    confidence_band: medium
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.9934
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: true
+    predicted: false
+    agree: false
+    gradable: true
+    confidence: 0.7267
+    confidence_band: medium
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 5006.2
+- script_id: script_50
+  outcome: ESCALATE
+  reasons:
+  - 'has_subquery: answered True at 95% but the AST says False'
+  questions:
+  - question: migration_complexity
+    gold: medium
+    predicted: medium
+    agree: true
+    gradable: true
+    confidence: 0.5951
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: rewrite_strategy
+    gold: refactor
+    predicted: refactor
+    agree: true
+    gradable: true
+    confidence: 0.3193
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.947
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.8186
+    confidence_band: medium
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.925
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.6635
+    confidence_band: medium
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 6540.5
+- script_id: script_51
+  outcome: ESCALATE
+  reasons:
+  - 'has_window_function: answered True at 91% but the AST says False'
+  questions:
+  - question: migration_complexity
+    gold: medium
+    predicted: medium
+    agree: true
+    gradable: true
+    confidence: 0.5727
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: rewrite_strategy
+    gold: refactor
+    predicted: refactor
+    agree: true
+    gradable: true
+    confidence: 0.3584
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 1.0
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.9142
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 1.0
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.9541
+    confidence_band: high
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 6544.7
+- script_id: script_52
+  outcome: ESCALATE
+  reasons:
+  - 'has_subquery: answered True at 97% but the AST says False'
+  - 'has_window_function: answered True at 100% but the AST says False'
+  questions:
+  - question: migration_complexity
+    gold: medium
+    predicted: medium
+    agree: true
+    gradable: true
+    confidence: 0.6711
+    confidence_band: medium
+    verifiable: false
+    band_gap: 0
+  - question: rewrite_strategy
+    gold: lift_and_shift
+    predicted: refactor
+    agree: false
+    gradable: true
+    confidence: 0.3649
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.9658
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 1.0
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.9516
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.9592
+    confidence_band: high
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 6549.3
+- script_id: script_53
+  outcome: ESCALATE
+  reasons:
+  - 'has_window_function: answered True at 85% but the AST says False'
+  questions:
+  - question: migration_complexity
+    gold: medium
+    predicted: medium
+    agree: true
+    gradable: true
+    confidence: 0.5886
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: rewrite_strategy
+    gold: refactor
+    predicted: lift_and_shift
+    agree: false
+    gradable: true
+    confidence: 0.4196
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.955
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.8513
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.9421
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.8598
+    confidence_band: high
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 5745.1
+- script_id: script_54
+  outcome: ESCALATE
+  reasons:
+  - 'has_window_function: answered True at 89% but the AST says False'
+  questions:
+  - question: migration_complexity
+    gold: medium
+    predicted: medium
+    agree: true
+    gradable: true
+    confidence: 0.6523
+    confidence_band: medium
+    verifiable: false
+    band_gap: 0
+  - question: rewrite_strategy
+    gold: lift_and_shift
+    predicted: refactor
+    agree: false
+    gradable: true
+    confidence: 0.4705
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 1.0
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.8889
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 1.0
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 1.0
+    confidence_band: high
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 6523.4
+- script_id: script_55
+  outcome: ESCALATE
+  reasons:
+  - 'has_window_function: answered True at 95% but the AST says False'
+  - 'multi_source: answered True at 96% but the AST says False'
+  questions:
+  - question: migration_complexity
+    gold: medium
+    predicted: medium
+    agree: true
+    gradable: true
+    confidence: 0.6464
+    confidence_band: medium
+    verifiable: false
+    band_gap: 0
+  - question: rewrite_strategy
+    gold: refactor
+    predicted: refactor
+    agree: true
+    gradable: true
+    confidence: 0.4234
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 1.0
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.9534
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.958
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.7543
+    confidence_band: medium
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 6611.4
+- script_id: script_56
+  outcome: ESCALATE
+  reasons:
+  - 'has_subquery: answered True at 98% but the AST says False'
+  - 'has_window_function: answered True at 91% but the AST says False'
+  questions:
+  - question: migration_complexity
+    gold: medium
+    predicted: medium
+    agree: true
+    gradable: true
+    confidence: 0.5884
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: rewrite_strategy
+    gold: lift_and_shift
+    predicted: refactor
+    agree: false
+    gradable: true
+    confidence: 0.4047
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.9779
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.9119
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 1.0
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.9457
+    confidence_band: high
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 6267.2
+- script_id: script_57
+  outcome: HUMAN_REVIEW
+  reasons:
+  - 'has_window_function: wrong but only 64% confident'
+  questions:
+  - question: migration_complexity
+    gold: medium
+    predicted: medium
+    agree: true
+    gradable: true
+    confidence: 0.5762
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: rewrite_strategy
+    gold: refactor
+    predicted: lift_and_shift
+    agree: false
+    gradable: true
+    confidence: 0.3796
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.9627
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.6416
+    confidence_band: medium
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.9432
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.8998
+    confidence_band: high
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 4966.4
+- script_id: script_58
+  outcome: ESCALATE
+  reasons:
+  - 'has_subquery: answered True at 97% but the AST says False'
+  questions:
+  - question: migration_complexity
+    gold: medium
+    predicted: medium
+    agree: true
+    gradable: true
+    confidence: 0.5973
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: rewrite_strategy
+    gold: refactor
+    predicted: refactor
+    agree: true
+    gradable: true
+    confidence: 0.3555
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.9672
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.8271
+    confidence_band: medium
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.9784
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.9324
+    confidence_band: high
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 6253.4
+- script_id: script_59
+  outcome: ESCALATE
+  reasons:
+  - 'has_subquery: answered True at 100% but the AST says False'
+  - 'has_window_function: answered True at 96% but the AST says False'
+  questions:
+  - question: migration_complexity
+    gold: medium
+    predicted: medium
+    agree: true
+    gradable: true
+    confidence: 0.6675
+    confidence_band: medium
+    verifiable: false
+    band_gap: 0
+  - question: rewrite_strategy
+    gold: lift_and_shift
+    predicted: refactor
+    agree: false
+    gradable: true
+    confidence: 0.3854
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 1.0
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.959
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 1.0
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.9491
+    confidence_band: high
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 5029.2
+- script_id: script_60
+  outcome: ESCALATE
+  reasons:
+  - 'has_subquery: answered True at 100% but the AST says False'
+  - 'has_window_function: answered True at 86% but the AST says False'
+  questions:
+  - question: migration_complexity
+    gold: medium
+    predicted: medium
+    agree: true
+    gradable: true
+    confidence: 0.5928
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: rewrite_strategy
+    gold: lift_and_shift
+    predicted: refactor
+    agree: false
+    gradable: true
+    confidence: 0.4281
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 1.0
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.8598
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 1.0
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.9289
+    confidence_band: high
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 6018.5
+- script_id: script_61
+  outcome: ESCALATE
+  reasons:
+  - 'has_window_function: answered True at 93% but the AST says False'
+  questions:
+  - question: migration_complexity
+    gold: medium
+    predicted: high
+    agree: false
+    gradable: true
+    confidence: 0.4453
+    confidence_band: low
+    verifiable: false
+    band_gap: 1
+  - question: rewrite_strategy
+    gold: refactor
+    predicted: lift_and_shift
+    agree: false
+    gradable: true
+    confidence: 0.5489
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.9216
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.9287
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 1.0
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.8463
+    confidence_band: medium
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 5213.3
+- script_id: script_62
+  outcome: ESCALATE
+  reasons:
+  - 'has_window_function: answered True at 100% but the AST says False'
+  questions:
+  - question: migration_complexity
+    gold: medium
+    predicted: medium
+    agree: true
+    gradable: true
+    confidence: 0.6118
+    confidence_band: medium
+    verifiable: false
+    band_gap: 0
+  - question: rewrite_strategy
+    gold: lift_and_shift
+    predicted: refactor
+    agree: false
+    gradable: true
+    confidence: 0.3565
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 1.0
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 1.0
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 1.0
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.883
+    confidence_band: high
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 6017.5
+- script_id: script_63
+  outcome: ESCALATE
+  reasons:
+  - 'has_window_function: answered True at 90% but the AST says False'
+  questions:
+  - question: migration_complexity
+    gold: medium
+    predicted: medium
+    agree: true
+    gradable: true
+    confidence: 0.6197
+    confidence_band: medium
+    verifiable: false
+    band_gap: 0
+  - question: rewrite_strategy
+    gold: lift_and_shift
+    predicted: refactor
+    agree: false
+    gradable: true
+    confidence: 0.4045
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 1.0
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.9014
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 1.0
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.9686
+    confidence_band: high
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 6107.2
+- script_id: script_64
+  outcome: ESCALATE
+  reasons:
+  - 'has_subquery: answered True at 100% but the AST says False'
+  - 'has_window_function: answered True at 100% but the AST says False'
+  questions:
+  - question: migration_complexity
+    gold: medium
+    predicted: medium
+    agree: true
+    gradable: true
+    confidence: 0.5911
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: rewrite_strategy
+    gold: refactor
+    predicted: refactor
+    agree: true
+    gradable: true
+    confidence: 0.314
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 1.0
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 1.0
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.9998
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.6576
+    confidence_band: medium
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 6050.4
+- script_id: script_65
+  outcome: ESCALATE
+  reasons:
+  - 'has_subquery: answered True at 97% but the AST says False'
+  questions:
+  - question: migration_complexity
+    gold: medium
+    predicted: medium
+    agree: true
+    gradable: true
+    confidence: 0.565
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: rewrite_strategy
+    gold: refactor
+    predicted: refactor
+    agree: true
+    gradable: true
+    confidence: 0.4036
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.9658
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.8947
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.9874
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.8311
+    confidence_band: medium
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 6025.5
+- script_id: script_66
+  outcome: ESCALATE
+  reasons:
+  - 'multi_source: answered True at 91% but the AST says False'
+  questions:
+  - question: migration_complexity
+    gold: medium
+    predicted: medium
+    agree: true
+    gradable: true
+    confidence: 0.6052
+    confidence_band: medium
+    verifiable: false
+    band_gap: 0
+  - question: rewrite_strategy
+    gold: refactor
+    predicted: manual_rewrite
+    agree: false
+    gradable: true
+    confidence: 0.3168
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.9619
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 1.0
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.914
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.8924
+    confidence_band: high
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 6131.4
+- script_id: script_67
+  outcome: ESCALATE
+  reasons:
+  - 'has_window_function: answered True at 100% but the AST says False'
+  - 'multi_source: answered True at 100% but the AST says False'
+  questions:
+  - question: migration_complexity
+    gold: medium
+    predicted: medium
+    agree: true
+    gradable: true
+    confidence: 0.5994
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: rewrite_strategy
+    gold: refactor
+    predicted: refactor
+    agree: true
+    gradable: true
+    confidence: 0.5419
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.9411
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 1.0
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 1.0
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.9018
+    confidence_band: high
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 7712.6
+- script_id: script_68
+  outcome: ESCALATE
+  reasons:
+  - 'has_subquery: answered True at 98% but the AST says False'
+  questions:
+  - question: migration_complexity
+    gold: medium
+    predicted: medium
+    agree: true
+    gradable: true
+    confidence: 0.5905
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: rewrite_strategy
+    gold: refactor
+    predicted: refactor
+    agree: true
+    gradable: true
+    confidence: 0.3543
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.982
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 1.0
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 1.0
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.8627
+    confidence_band: high
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 6143.7
+- script_id: script_69
+  outcome: ESCALATE
+  reasons:
+  - 'has_window_function: answered True at 100% but the AST says False'
+  questions:
+  - question: migration_complexity
+    gold: high
+    predicted: medium
+    agree: false
+    gradable: true
+    confidence: 0.6223
+    confidence_band: medium
+    verifiable: false
+    band_gap: 1
+  - question: rewrite_strategy
+    gold: lift_and_shift
+    predicted: lift_and_shift
+    agree: true
+    gradable: true
+    confidence: 0.2776
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 1.0
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 1.0
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 1.0
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.9344
+    confidence_band: high
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 5978.2
+- script_id: script_70
+  outcome: ESCALATE
+  reasons:
+  - 'has_subquery: answered True at 100% but the AST says False'
+  - 'has_window_function: answered True at 91% but the AST says False'
+  questions:
+  - question: migration_complexity
+    gold: high
+    predicted: medium
+    agree: false
+    gradable: true
+    confidence: 0.5965
+    confidence_band: low
+    verifiable: false
+    band_gap: 1
+  - question: rewrite_strategy
+    gold: refactor
+    predicted: refactor
+    agree: true
+    gradable: true
+    confidence: 0.4388
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 1.0
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.9147
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.9393
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.9117
+    confidence_band: high
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 6006.4
+- script_id: script_71
+  outcome: ESCALATE
+  reasons:
+  - 'has_subquery: answered True at 100% but the AST says False'
+  - 'has_window_function: answered True at 93% but the AST says False'
+  questions:
+  - question: migration_complexity
+    gold: high
+    predicted: medium
+    agree: false
+    gradable: true
+    confidence: 0.6103
+    confidence_band: medium
+    verifiable: false
+    band_gap: 1
+  - question: rewrite_strategy
+    gold: refactor
+    predicted: refactor
+    agree: true
+    gradable: true
+    confidence: 0.4343
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 1.0
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.9324
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.9705
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.888
+    confidence_band: high
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 6081.6
+- script_id: script_72
+  outcome: HUMAN_REVIEW
+  reasons:
+  - 'has_window_function: wrong but only 83% confident'
+  - 'migration_complexity: medium vs gold high — one band apart'
+  questions:
+  - question: migration_complexity
+    gold: high
+    predicted: medium
+    agree: false
+    gradable: true
+    confidence: 0.6033
+    confidence_band: medium
+    verifiable: false
+    band_gap: 1
+  - question: rewrite_strategy
+    gold: refactor
+    predicted: manual_rewrite
+    agree: false
+    gradable: true
+    confidence: 0.4421
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.9329
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.8325
+    confidence_band: medium
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.9578
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.8909
+    confidence_band: high
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 6074.1
+- script_id: script_73
+  outcome: ESCALATE
+  reasons:
+  - 'has_window_function: answered True at 100% but the AST says False'
+  questions:
+  - question: migration_complexity
+    gold: high
+    predicted: medium
+    agree: false
+    gradable: true
+    confidence: 0.5192
+    confidence_band: low
+    verifiable: false
+    band_gap: 1
+  - question: rewrite_strategy
+    gold: refactor
+    predicted: refactor
+    agree: true
+    gradable: true
+    confidence: 0.3748
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.9866
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 1.0
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 1.0
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.9415
+    confidence_band: high
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 6012.9
+- script_id: script_74
+  outcome: HUMAN_REVIEW
+  reasons:
+  - 'has_window_function: wrong but only 78% confident'
+  - 'multi_source: wrong but only 83% confident'
+  - 'migration_complexity: medium vs gold high — one band apart'
+  questions:
+  - question: migration_complexity
+    gold: high
+    predicted: medium
+    agree: false
+    gradable: true
+    confidence: 0.6271
+    confidence_band: medium
+    verifiable: false
+    band_gap: 1
+  - question: rewrite_strategy
+    gold: redesign
+    predicted: refactor
+    agree: false
+    gradable: true
+    confidence: 0.362
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.9344
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.7764
+    confidence_band: medium
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.8349
+    confidence_band: medium
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.782
+    confidence_band: medium
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 6044.3
+- script_id: script_75
+  outcome: ESCALATE
+  reasons:
+  - 'has_subquery: answered True at 97% but the AST says False'
+  - 'has_window_function: answered True at 95% but the AST says False'
+  questions:
+  - question: migration_complexity
+    gold: high
+    predicted: medium
+    agree: false
+    gradable: true
+    confidence: 0.5988
+    confidence_band: low
+    verifiable: false
+    band_gap: 1
+  - question: rewrite_strategy
+    gold: lift_and_shift
+    predicted: refactor
+    agree: false
+    gradable: true
+    confidence: 0.3048
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.9701
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.952
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.9319
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.838
+    confidence_band: medium
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 6094.5
+- script_id: script_76
+  outcome: ESCALATE
+  reasons:
+  - 'has_window_function: answered True at 100% but the AST says False'
+  - 'multi_source: answered True at 100% but the AST says False'
+  questions:
+  - question: migration_complexity
+    gold: high
+    predicted: medium
+    agree: false
+    gradable: true
+    confidence: 0.6387
+    confidence_band: medium
+    verifiable: false
+    band_gap: 1
+  - question: rewrite_strategy
+    gold: refactor
+    predicted: refactor
+    agree: true
+    gradable: true
+    confidence: 0.3617
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 1.0
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 1.0
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 1.0
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.9018
+    confidence_band: high
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 6039.4
+- script_id: script_77
+  outcome: ESCALATE
+  reasons:
+  - 'has_window_function: answered True at 100% but the AST says False'
+  questions:
+  - question: migration_complexity
+    gold: high
+    predicted: medium
+    agree: false
+    gradable: true
+    confidence: 0.6388
+    confidence_band: medium
+    verifiable: false
+    band_gap: 1
+  - question: rewrite_strategy
+    gold: refactor
+    predicted: refactor
+    agree: true
+    gradable: true
+    confidence: 0.4075
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.9986
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 1.0
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 1.0
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.9998
+    confidence_band: high
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 18002.0
+- script_id: script_78
+  outcome: ESCALATE
+  reasons:
+  - 'has_window_function: answered True at 90% but the AST says False'
+  questions:
+  - question: migration_complexity
+    gold: high
+    predicted: medium
+    agree: false
+    gradable: true
+    confidence: 0.6576
+    confidence_band: medium
+    verifiable: false
+    band_gap: 1
+  - question: rewrite_strategy
+    gold: refactor
+    predicted: refactor
+    agree: true
+    gradable: true
+    confidence: 0.3792
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.9548
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.8972
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 1.0
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.7966
+    confidence_band: medium
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 12090.5
+- script_id: script_79
+  outcome: HUMAN_REVIEW
+  reasons:
+  - 'has_window_function: wrong but only 82% confident'
+  - 'migration_complexity: medium vs gold high — one band apart'
+  questions:
+  - question: migration_complexity
+    gold: high
+    predicted: medium
+    agree: false
+    gradable: true
+    confidence: 0.6012
+    confidence_band: medium
+    verifiable: false
+    band_gap: 1
+  - question: rewrite_strategy
+    gold: refactor
+    predicted: manual_rewrite
+    agree: false
+    gradable: true
+    confidence: 0.4421
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.9358
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.8211
+    confidence_band: medium
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.9438
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.855
+    confidence_band: high
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 6144.5
+- script_id: script_80
+  outcome: ESCALATE
+  reasons:
+  - 'has_window_function: answered True at 97% but the AST says False'
+  questions:
+  - question: migration_complexity
+    gold: high
+    predicted: medium
+    agree: false
+    gradable: true
+    confidence: 0.6012
+    confidence_band: medium
+    verifiable: false
+    band_gap: 1
+  - question: rewrite_strategy
+    gold: refactor
+    predicted: refactor
+    agree: true
+    gradable: true
+    confidence: 0.5431
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.9623
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.9717
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 1.0
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.8393
+    confidence_band: medium
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 6155.3
+- script_id: script_81
+  outcome: ESCALATE
+  reasons:
+  - 'has_window_function: answered True at 96% but the AST says False'
+  questions:
+  - question: migration_complexity
+    gold: high
+    predicted: medium
+    agree: false
+    gradable: true
+    confidence: 0.5983
+    confidence_band: low
+    verifiable: false
+    band_gap: 1
+  - question: rewrite_strategy
+    gold: lift_and_shift
+    predicted: refactor
+    agree: false
+    gradable: true
+    confidence: 0.2677
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.9946
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.9615
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.9675
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.8871
+    confidence_band: high
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 6054.8
+- script_id: script_82
+  outcome: HUMAN_REVIEW
+  reasons:
+  - 'has_window_function: wrong but only 83% confident'
+  - 'migration_complexity: medium vs gold high — one band apart'
+  questions:
+  - question: migration_complexity
+    gold: high
+    predicted: medium
+    agree: false
+    gradable: true
+    confidence: 0.5736
+    confidence_band: low
+    verifiable: false
+    band_gap: 1
+  - question: rewrite_strategy
+    gold: refactor
+    predicted: refactor
+    agree: true
+    gradable: true
+    confidence: 0.5043
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 1.0
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.8303
+    confidence_band: medium
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 1.0
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.8381
+    confidence_band: medium
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 6054.1
+- script_id: script_83
+  outcome: ESCALATE
+  reasons:
+  - 'has_subquery: answered True at 89% but the AST says False'
+  questions:
+  - question: migration_complexity
+    gold: high
+    predicted: medium
+    agree: false
+    gradable: true
+    confidence: 0.5788
+    confidence_band: low
+    verifiable: false
+    band_gap: 1
+  - question: rewrite_strategy
+    gold: refactor
+    predicted: refactor
+    agree: true
+    gradable: true
+    confidence: 0.2979
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.8924
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.7567
+    confidence_band: medium
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 1.0
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.8604
+    confidence_band: high
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 6116.0
+- script_id: script_84
+  outcome: HUMAN_REVIEW
+  reasons:
+  - 'has_window_function: wrong but only 77% confident'
+  - 'migration_complexity: medium vs gold high — one band apart'
+  questions:
+  - question: migration_complexity
+    gold: high
+    predicted: medium
+    agree: false
+    gradable: true
+    confidence: 0.5655
+    confidence_band: low
+    verifiable: false
+    band_gap: 1
+  - question: rewrite_strategy
+    gold: refactor
+    predicted: lift_and_shift
+    agree: false
+    gradable: true
+    confidence: 0.5911
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 1.0
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.7674
+    confidence_band: medium
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.9139
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.8533
+    confidence_band: high
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 6109.8
+- script_id: script_85
+  outcome: ESCALATE
+  reasons:
+  - 'has_window_function: answered True at 92% but the AST says False'
+  questions:
+  - question: migration_complexity
+    gold: high
+    predicted: medium
+    agree: false
+    gradable: true
+    confidence: 0.6284
+    confidence_band: medium
+    verifiable: false
+    band_gap: 1
+  - question: rewrite_strategy
+    gold: refactor
+    predicted: refactor
+    agree: true
+    gradable: true
+    confidence: 0.3988
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 1.0
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.92
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 1.0
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.9094
+    confidence_band: high
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 6046.4
+- script_id: script_86
+  outcome: ESCALATE
+  reasons:
+  - 'has_subquery: answered True at 99% but the AST says False'
+  - 'has_window_function: answered True at 100% but the AST says False'
+  questions:
+  - question: migration_complexity
+    gold: high
+    predicted: medium
+    agree: false
+    gradable: true
+    confidence: 0.6299
+    confidence_band: medium
+    verifiable: false
+    band_gap: 1
+  - question: rewrite_strategy
+    gold: redesign
+    predicted: refactor
+    agree: false
+    gradable: true
+    confidence: 0.639
+    confidence_band: medium
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.989
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 1.0
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.973
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.932
+    confidence_band: high
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 9146.2
+- script_id: script_87
+  outcome: HUMAN_REVIEW
+  reasons:
+  - 'migration_complexity: medium vs gold high — one band apart'
+  questions:
+  - question: migration_complexity
+    gold: high
+    predicted: medium
+    agree: false
+    gradable: true
+    confidence: 0.66
+    confidence_band: medium
+    verifiable: false
+    band_gap: 1
+  - question: rewrite_strategy
+    gold: redesign
+    predicted: refactor
+    agree: false
+    gradable: true
+    confidence: 0.4012
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.9638
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.8892
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.9571
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.9167
+    confidence_band: high
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 11873.0
+- script_id: script_88
+  outcome: ESCALATE
+  reasons:
+  - 'has_window_function: answered True at 100% but the AST says False'
+  questions:
+  - question: migration_complexity
+    gold: high
+    predicted: medium
+    agree: false
+    gradable: true
+    confidence: 0.602
+    confidence_band: medium
+    verifiable: false
+    band_gap: 1
+  - question: rewrite_strategy
+    gold: refactor
+    predicted: refactor
+    agree: true
+    gradable: true
+    confidence: 0.4025
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 1.0
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 1.0
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 1.0
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.968
+    confidence_band: high
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 6166.8
+- script_id: script_89
+  outcome: HUMAN_REVIEW
+  reasons:
+  - 'has_window_function: wrong but only 77% confident'
+  - 'migration_complexity: medium vs gold high — one band apart'
+  questions:
+  - question: migration_complexity
+    gold: high
+    predicted: medium
+    agree: false
+    gradable: true
+    confidence: 0.6236
+    confidence_band: medium
+    verifiable: false
+    band_gap: 1
+  - question: rewrite_strategy
+    gold: refactor
+    predicted: refactor
+    agree: true
+    gradable: true
+    confidence: 0.3188
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.9812
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.7667
+    confidence_band: medium
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.9652
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.8787
+    confidence_band: high
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 6070.9
+- script_id: script_90
+  outcome: ESCALATE
+  reasons:
+  - 'has_window_function: answered True at 100% but the AST says False'
+  questions:
+  - question: migration_complexity
+    gold: high
+    predicted: medium
+    agree: false
+    gradable: true
+    confidence: 0.6016
+    confidence_band: medium
+    verifiable: false
+    band_gap: 1
+  - question: rewrite_strategy
+    gold: refactor
+    predicted: refactor
+    agree: true
+    gradable: true
+    confidence: 0.4079
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 1.0
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 1.0
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 1.0
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.9334
+    confidence_band: high
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 24053.2
+- script_id: script_91
+  outcome: ESCALATE
+  reasons:
+  - 'has_subquery: answered True at 100% but the AST says False'
+  - 'has_window_function: answered True at 100% but the AST says False'
+  questions:
+  - question: migration_complexity
+    gold: high
+    predicted: medium
+    agree: false
+    gradable: true
+    confidence: 0.6459
+    confidence_band: medium
+    verifiable: false
+    band_gap: 1
+  - question: rewrite_strategy
+    gold: redesign
+    predicted: refactor
+    agree: false
+    gradable: true
+    confidence: 0.3987
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 1.0
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 1.0
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.9547
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.9604
+    confidence_band: high
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 10652.6
+- script_id: script_92
+  outcome: ESCALATE
+  reasons:
+  - 'has_window_function: answered True at 94% but the AST says False'
+  questions:
+  - question: migration_complexity
+    gold: high
+    predicted: medium
+    agree: false
+    gradable: true
+    confidence: 0.5833
+    confidence_band: low
+    verifiable: false
+    band_gap: 1
+  - question: rewrite_strategy
+    gold: redesign
+    predicted: refactor
+    agree: false
+    gradable: true
+    confidence: 0.518
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.9729
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.9395
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.9562
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.9311
+    confidence_band: high
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 11869.6
+- script_id: script_93
+  outcome: ESCALATE
+  reasons:
+  - 'has_window_function: answered True at 95% but the AST says False'
+  questions:
+  - question: migration_complexity
+    gold: high
+    predicted: medium
+    agree: false
+    gradable: true
+    confidence: 0.5856
+    confidence_band: low
+    verifiable: false
+    band_gap: 1
+  - question: rewrite_strategy
+    gold: refactor
+    predicted: refactor
+    agree: true
+    gradable: true
+    confidence: 0.3936
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 1.0
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.9515
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.9851
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.9179
+    confidence_band: high
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 6509.0
+- script_id: script_94
+  outcome: ESCALATE
+  reasons:
+  - 'has_window_function: answered True at 100% but the AST says False'
+  questions:
+  - question: migration_complexity
+    gold: high
+    predicted: medium
+    agree: false
+    gradable: true
+    confidence: 0.5979
+    confidence_band: low
+    verifiable: false
+    band_gap: 1
+  - question: rewrite_strategy
+    gold: refactor
+    predicted: refactor
+    agree: true
+    gradable: true
+    confidence: 0.3845
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 1.0
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.9999
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 1.0
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.8848
+    confidence_band: high
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 6529.1
+- script_id: script_95
+  outcome: ESCALATE
+  reasons:
+  - 'has_window_function: answered True at 90% but the AST says False'
+  questions:
+  - question: migration_complexity
+    gold: high
+    predicted: medium
+    agree: false
+    gradable: true
+    confidence: 0.5993
+    confidence_band: low
+    verifiable: false
+    band_gap: 1
+  - question: rewrite_strategy
+    gold: refactor
+    predicted: refactor
+    agree: true
+    gradable: true
+    confidence: 0.3934
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 1.0
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.9025
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.9703
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.91
+    confidence_band: high
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 6524.3
+- script_id: script_96
+  outcome: ESCALATE
+  reasons:
+  - 'has_window_function: answered True at 95% but the AST says False'
+  questions:
+  - question: migration_complexity
+    gold: high
+    predicted: medium
+    agree: false
+    gradable: true
+    confidence: 0.609
+    confidence_band: medium
+    verifiable: false
+    band_gap: 1
+  - question: rewrite_strategy
+    gold: redesign
+    predicted: refactor
+    agree: false
+    gradable: true
+    confidence: 0.4991
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.9311
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.9483
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 1.0
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.922
+    confidence_band: high
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 19550.2
+- script_id: script_97
+  outcome: ESCALATE
+  reasons:
+  - 'has_window_function: answered True at 98% but the AST says False'
+  questions:
+  - question: migration_complexity
+    gold: high
+    predicted: medium
+    agree: false
+    gradable: true
+    confidence: 0.6437
+    confidence_band: medium
+    verifiable: false
+    band_gap: 1
+  - question: rewrite_strategy
+    gold: redesign
+    predicted: refactor
+    agree: false
+    gradable: true
+    confidence: 0.3678
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 1.0
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.9824
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 1.0
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.9266
+    confidence_band: high
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 12996.6
+- script_id: script_98
+  outcome: HUMAN_REVIEW
+  reasons:
+  - 'has_window_function: wrong but only 85% confident'
+  - 'migration_complexity: medium vs gold high — one band apart'
+  questions:
+  - question: migration_complexity
+    gold: high
+    predicted: medium
+    agree: false
+    gradable: true
+    confidence: 0.6201
+    confidence_band: medium
+    verifiable: false
+    band_gap: 1
+  - question: rewrite_strategy
+    gold: redesign
+    predicted: refactor
+    agree: false
+    gradable: true
+    confidence: 0.3665
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 1.0
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.8484
+    confidence_band: medium
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 1.0
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.9396
+    confidence_band: high
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 9340.8
+- script_id: script_99
+  outcome: HUMAN_REVIEW
+  reasons:
+  - 'has_window_function: wrong but only 84% confident'
+  - 'migration_complexity: medium vs gold high — one band apart'
+  questions:
+  - question: migration_complexity
+    gold: high
+    predicted: medium
+    agree: false
+    gradable: true
+    confidence: 0.682
+    confidence_band: medium
+    verifiable: false
+    band_gap: 1
+  - question: rewrite_strategy
+    gold: redesign
+    predicted: refactor
+    agree: false
+    gradable: true
+    confidence: 0.3586
+    confidence_band: low
+    verifiable: false
+    band_gap: 0
+  - question: has_subquery
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.9946
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: has_window_function
+    gold: false
+    predicted: true
+    agree: false
+    gradable: true
+    confidence: 0.8432
+    confidence_band: medium
+    verifiable: true
+    band_gap: 0
+  - question: multi_source
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.9873
+    confidence_band: high
+    verifiable: true
+    band_gap: 0
+  - question: needs_human_review
+    gold: true
+    predicted: true
+    agree: true
+    gradable: true
+    confidence: 0.9448
+    confidence_band: high
+    verifiable: false
+    band_gap: 0
+  elapsed_ms: 10025.8

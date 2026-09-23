@@ -1,0 +1,108 @@
+id: script_86
+name: query64
+source_path: repos/legacy/scripts/script_86_query64.sql
+origin: tpc-ds query64
+dialect: spark
+selected_because:
+- widest data footprint (graph_nodes=13)
+evidence_card:
+  purpose: Finds items bought in consecutive years by the same customer and compares their price and quantity
+    between the two years, with buyer address, income band and demographics on both sides.
+  structure: 1 statement in the file. Reads 13 source tables, joined in a mesh shape with 15 join predicates.
+    Uses 2 CTEs. No subquery, window function, set operation or CASE expression. Nests 1 level deep.
+  facts: lines=121 statements=1 sources=13 joins=15 widest_join=12 subqueries=0 correlated=0 ctes=2 window_fns=0
+    set_ops=0 case_exprs=0 nesting=1
+  approx_tokens: 115
+features:
+  parse_ok: true
+  parse_dialect: spark
+  loc: 122
+  loc_code: 121
+  chars: 4723
+  statements: 1
+  cte_count: 2
+  cte_max_depth: 1
+  subquery_count: 0
+  scalar_subquery_count: 0
+  correlated_subquery_count: 0
+  derived_table_count: 0
+  max_nesting_depth: 1
+  scope_count: 3
+  window_function_count: 0
+  distinct_window_specs: 0
+  aggregate_count: 8
+  has_having: true
+  has_distinct: false
+  has_order_by: true
+  source_tables: 13
+  table_references: 19
+  cte_references: 3
+  set_operation_count: 0
+  union_all_count: 0
+  intersect_except_count: 0
+  case_expression_count: 0
+  case_max_branches: 0
+  graph_nodes: 13
+  graph_edges: 15
+  graph_density: 0.1923
+  graph_components: 2
+  graph_max_degree: 9
+  graph_max_scope_sources: 12
+  graph_max_scope_edges: 15
+  graph_max_scope_degree: 10
+  graph_shape: mesh
+  implicit_joins: 19
+  explicit_joins: 0
+  cross_join_risk: 0
+  unresolved_predicates: 0
+  distinct_sources:
+  - catalog_returns
+  - catalog_sales
+  - customer
+  - customer_address
+  - customer_demographics
+  - date_dim
+  - household_demographics
+  - income_band
+  - item
+  - promotion
+  - store
+  - store_returns
+  - store_sales
+  distinct_aggregates:
+  - count
+  - sum
+  nonportable_markers: []
+corpus_percentile:
+  rubric_points: 90
+  loc_code: 93
+  source_tables: 100
+  subquery_count: 42
+  cte_count: 88
+  graph_edges: 100
+  graph_max_scope_sources: 100
+categories_to_verify:
+- migration_complexity
+- rewrite_strategy
+- has_subquery
+- has_window_function
+- multi_source
+- needs_human_review
+gold:
+  migration_complexity: high
+  rubric_points: 11
+  has_subquery: false
+  has_window_function: false
+  multi_source: true
+  rewrite_strategy: redesign
+  needs_human_review: true
+  rationale: An eighteen-source join carrying paired aliases of five different dimensions (two date, two
+    demographic, two household, two address, two income band), feeding a self-join of the resulting CTE.
+    The join graph, not the syntax, is the migration cost; it has to be reasoned through rather than converted.
+  source: deterministic+claude
+latency:
+  estimated_ms: 2187.9
+  measured_ms: 9146.2
+  ms_per_question: 1524.4
+  input_tokens: 4512
+  device: cpu

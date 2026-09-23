@@ -1,0 +1,192 @@
+run_id: sql99
+features:
+- loc_code
+- statements
+- cte_count
+- cte_max_depth
+- subquery_count
+- scalar_subquery_count
+- correlated_subquery_count
+- derived_table_count
+- max_nesting_depth
+- scope_count
+- window_function_count
+- distinct_window_specs
+- aggregate_count
+- source_tables
+- table_references
+- cte_references
+- set_operation_count
+- union_all_count
+- intersect_except_count
+- case_expression_count
+- case_max_branches
+- graph_nodes
+- graph_edges
+- graph_density
+- graph_components
+- graph_max_degree
+- graph_max_scope_sources
+- graph_max_scope_edges
+- implicit_joins
+- explicit_joins
+- cross_join_risk
+- n_nonportable_markers
+method: logistic regression, leave-one-out, L2=1.0
+results:
+- question: has_subquery
+  variant: leaky
+  n: 99
+  n_features: 32
+  dropped: []
+  accuracy: 0.9697
+  auc: 0.972
+  accuracy_ci95:
+  - 0.9147
+  - 0.9896
+  laya_accuracy: 0.5758
+  laya_auc: 0.5718
+  vs_laya:
+    p_value: 0.0
+    model_only: 1
+    baseline_only: 40
+    discordant: 41
+- question: has_subquery
+  variant: clean
+  n: 99
+  n_features: 26
+  dropped:
+  - correlated_subquery_count
+  - derived_table_count
+  - max_nesting_depth
+  - scalar_subquery_count
+  - scope_count
+  - subquery_count
+  accuracy: 0.8485
+  auc: 0.8801
+  accuracy_ci95:
+  - 0.765
+  - 0.906
+  laya_accuracy: 0.5758
+  laya_auc: 0.5718
+  vs_laya:
+    p_value: 0.0002
+    model_only: 12
+    baseline_only: 39
+    discordant: 51
+- question: has_window_function
+  variant: leaky
+  n: 99
+  n_features: 32
+  dropped: []
+  accuracy: 1.0
+  auc: 1.0
+  accuracy_ci95:
+  - 0.9626
+  - 1.0
+  laya_accuracy: 0.2828
+  laya_auc: 0.6683
+  vs_laya:
+    p_value: 0.0
+    model_only: 0
+    baseline_only: 71
+    discordant: 71
+- question: has_window_function
+  variant: clean
+  n: 99
+  n_features: 30
+  dropped:
+  - distinct_window_specs
+  - window_function_count
+  accuracy: 0.8485
+  auc: 0.919
+  accuracy_ci95:
+  - 0.765
+  - 0.906
+  laya_accuracy: 0.2828
+  laya_auc: 0.6683
+  vs_laya:
+    p_value: 0.0
+    model_only: 10
+    baseline_only: 66
+    discordant: 76
+- question: multi_source
+  variant: leaky
+  n: 99
+  n_features: 32
+  dropped: []
+  accuracy: 1.0
+  auc: 1.0
+  accuracy_ci95:
+  - 0.9626
+  - 1.0
+  laya_accuracy: 0.7879
+  laya_auc: 0.6068
+  vs_laya:
+    p_value: 0.0
+    model_only: 0
+    baseline_only: 21
+    discordant: 21
+- question: multi_source
+  variant: clean
+  n: 99
+  n_features: 20
+  dropped:
+  - cross_join_risk
+  - explicit_joins
+  - graph_components
+  - graph_density
+  - graph_edges
+  - graph_max_degree
+  - graph_max_scope_edges
+  - graph_max_scope_sources
+  - graph_nodes
+  - implicit_joins
+  - source_tables
+  - table_references
+  accuracy: 0.798
+  auc: 0.6355
+  accuracy_ci95:
+  - 0.7085
+  - 0.8652
+  laya_accuracy: 0.7879
+  laya_auc: 0.6068
+  vs_laya:
+    p_value: 1.0
+    model_only: 3
+    baseline_only: 4
+    discordant: 7
+- question: needs_human_review
+  variant: leaky
+  n: 99
+  n_features: 32
+  dropped: []
+  accuracy: 0.8889
+  auc: 0.9357
+  accuracy_ci95:
+  - 0.8119
+  - 0.9368
+  laya_accuracy: 0.7273
+  laya_auc: 0.4978
+  vs_laya:
+    p_value: 0.00904
+    model_only: 9
+    baseline_only: 25
+    discordant: 34
+- question: needs_human_review
+  variant: clean
+  n: 99
+  n_features: 32
+  dropped: []
+  accuracy: 0.8889
+  auc: 0.9357
+  accuracy_ci95:
+  - 0.8119
+  - 0.9368
+  laya_accuracy: 0.7273
+  laya_auc: 0.4978
+  vs_laya:
+    p_value: 0.00904
+    model_only: 9
+    baseline_only: 25
+    discordant: 34

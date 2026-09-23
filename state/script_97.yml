@@ -1,0 +1,101 @@
+id: script_97
+name: query23
+source_path: repos/legacy/scripts/script_97_query23.sql
+origin: tpc-ds query23
+dialect: spark
+selected_because:
+- stratified fill (high, 14pts)
+evidence_card:
+  purpose: null
+  structure: 2 statements in the file. Reads 6 source tables, joined in a star shape with 7 join predicates.
+    Uses 6 CTEs, 14 subqueries and 2 set operations. No window function or CASE expression. 8 subqueries
+    correlated with the outer query. Nests 3 levels deep.
+  facts: lines=134 statements=2 sources=6 joins=7 widest_join=3 subqueries=14 correlated=8 ctes=6 window_fns=0
+    set_ops=2 case_exprs=0 nesting=3
+  approx_tokens: 92
+features:
+  parse_ok: true
+  parse_dialect: spark
+  loc: 135
+  loc_code: 134
+  chars: 5583
+  statements: 2
+  cte_count: 6
+  cte_max_depth: 1
+  subquery_count: 14
+  scalar_subquery_count: 10
+  correlated_subquery_count: 8
+  derived_table_count: 4
+  max_nesting_depth: 3
+  scope_count: 26
+  window_function_count: 0
+  distinct_window_specs: 0
+  aggregate_count: 15
+  has_having: true
+  has_distinct: false
+  has_order_by: true
+  source_tables: 6
+  table_references: 26
+  cte_references: 10
+  set_operation_count: 2
+  union_all_count: 2
+  intersect_except_count: 0
+  case_expression_count: 0
+  case_max_branches: 0
+  graph_nodes: 6
+  graph_edges: 7
+  graph_density: 0.4667
+  graph_components: 1
+  graph_max_degree: 3
+  graph_max_scope_sources: 3
+  graph_max_scope_edges: 2
+  graph_max_scope_degree: 2
+  graph_shape: star
+  implicit_joins: 16
+  explicit_joins: 0
+  cross_join_risk: 0
+  unresolved_predicates: 0
+  distinct_sources:
+  - catalog_sales
+  - customer
+  - date_dim
+  - item
+  - store_sales
+  - web_sales
+  distinct_aggregates:
+  - count
+  - max
+  - sum
+  nonportable_markers: []
+corpus_percentile:
+  rubric_points: 98
+  loc_code: 96
+  source_tables: 85
+  subquery_count: 98
+  cte_count: 100
+  graph_edges: 91
+  graph_max_scope_sources: 38
+categories_to_verify:
+- migration_complexity
+- rewrite_strategy
+- has_subquery
+- has_window_function
+- multi_source
+- needs_human_review
+gold:
+  migration_complexity: high
+  rubric_points: 14
+  has_subquery: true
+  has_window_function: false
+  multi_source: true
+  rewrite_strategy: redesign
+  needs_human_review: true
+  rationale: Multiple CTEs feeding correlated IN-subqueries, with a UNION ALL over the result and two
+    statements in the file. The parts interact, so the query has to be reasoned through as a whole.
+  source: deterministic+claude
+latency:
+  estimated_ms: 1948.0
+  measured_ms: 12996.6
+  ms_per_question: 2166.1
+  input_tokens: 6144
+  device: cpu

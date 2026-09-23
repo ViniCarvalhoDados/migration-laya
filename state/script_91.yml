@@ -1,0 +1,99 @@
+id: script_91
+name: query4
+source_path: repos/legacy/scripts/script_91_query4.sql
+origin: tpc-ds query4
+dialect: spark
+selected_because:
+- stratified fill (high, 12pts)
+evidence_card:
+  purpose: null
+  structure: 1 statement in the file. Reads 5 source tables, joined in a star shape with 6 join predicates.
+    Uses 1 CTE, 2 set operations and 4 CASE expressions. No subquery or window function. Nests 3 levels
+    deep.
+  facts: lines=151 statements=1 sources=5 joins=6 widest_join=6 subqueries=0 correlated=0 ctes=1 window_fns=0
+    set_ops=2 case_exprs=4 nesting=3
+  approx_tokens: 82
+features:
+  parse_ok: true
+  parse_dialect: spark
+  loc: 152
+  loc_code: 151
+  chars: 6666
+  statements: 1
+  cte_count: 1
+  cte_max_depth: 1
+  subquery_count: 0
+  scalar_subquery_count: 0
+  correlated_subquery_count: 0
+  derived_table_count: 0
+  max_nesting_depth: 3
+  scope_count: 6
+  window_function_count: 0
+  distinct_window_specs: 0
+  aggregate_count: 3
+  has_having: false
+  has_distinct: false
+  has_order_by: true
+  source_tables: 5
+  table_references: 9
+  cte_references: 6
+  set_operation_count: 2
+  union_all_count: 2
+  intersect_except_count: 0
+  case_expression_count: 4
+  case_max_branches: 1
+  graph_nodes: 5
+  graph_edges: 6
+  graph_density: 0.6
+  graph_components: 1
+  graph_max_degree: 3
+  graph_max_scope_sources: 6
+  graph_max_scope_edges: 5
+  graph_max_scope_degree: 5
+  graph_shape: star
+  implicit_joins: 11
+  explicit_joins: 0
+  cross_join_risk: 0
+  unresolved_predicates: 0
+  distinct_sources:
+  - catalog_sales
+  - customer
+  - date_dim
+  - store_sales
+  - web_sales
+  distinct_aggregates:
+  - sum
+  nonportable_markers: []
+corpus_percentile:
+  rubric_points: 93
+  loc_code: 97
+  source_tables: 69
+  subquery_count: 42
+  cte_count: 79
+  graph_edges: 87
+  graph_max_scope_sources: 94
+categories_to_verify:
+- migration_complexity
+- rewrite_strategy
+- has_subquery
+- has_window_function
+- multi_source
+- needs_human_review
+gold:
+  migration_complexity: high
+  rubric_points: 12
+  has_subquery: false
+  has_window_function: false
+  multi_source: true
+  rewrite_strategy: redesign
+  needs_human_review: true
+  rationale: A union-backed CTE joined to itself once per year and channel, with CASE-guarded ratio comparisons
+    between the copies. The comparison logic has to be rebuilt around window functions for the result
+    to stay defensible.
+  source: deterministic+claude
+latency:
+  estimated_ms: 1843.7
+  measured_ms: 10652.6
+  ms_per_question: 1775.4
+  input_tokens: 4950
+  device: cpu

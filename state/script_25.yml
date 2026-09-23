@@ -1,0 +1,97 @@
+id: script_25
+name: query79
+source_path: repos/legacy/scripts/script_25_query79.sql
+origin: tpc-ds query79
+dialect: spark
+selected_because:
+- stratified fill (low, 4pts)
+evidence_card:
+  purpose: null
+  structure: 1 statement in the file. Reads 5 source tables, joined in a star shape with 3 join predicates.
+    Uses 1 subquery. No CTE, window function, set operation or CASE expression. Nests 1 level deep.
+  facts: lines=34 statements=1 sources=5 joins=3 widest_join=4 subqueries=1 correlated=0 ctes=0 window_fns=0
+    set_ops=0 case_exprs=0 nesting=1
+  approx_tokens: 76
+features:
+  parse_ok: true
+  parse_dialect: spark
+  loc: 35
+  loc_code: 34
+  chars: 1343
+  statements: 1
+  cte_count: 0
+  cte_max_depth: 0
+  subquery_count: 1
+  scalar_subquery_count: 0
+  correlated_subquery_count: 0
+  derived_table_count: 1
+  max_nesting_depth: 1
+  scope_count: 2
+  window_function_count: 0
+  distinct_window_specs: 0
+  aggregate_count: 2
+  has_having: false
+  has_distinct: false
+  has_order_by: true
+  source_tables: 5
+  table_references: 5
+  cte_references: 0
+  set_operation_count: 0
+  union_all_count: 0
+  intersect_except_count: 0
+  case_expression_count: 0
+  case_max_branches: 0
+  graph_nodes: 5
+  graph_edges: 3
+  graph_density: 0.3
+  graph_components: 2
+  graph_max_degree: 3
+  graph_max_scope_sources: 4
+  graph_max_scope_edges: 3
+  graph_max_scope_degree: 3
+  graph_shape: star
+  implicit_joins: 4
+  explicit_joins: 0
+  cross_join_risk: 0
+  unresolved_predicates: 0
+  distinct_sources:
+  - customer
+  - date_dim
+  - household_demographics
+  - store
+  - store_sales
+  distinct_aggregates:
+  - sum
+  nonportable_markers: []
+corpus_percentile:
+  rubric_points: 31
+  loc_code: 34
+  source_tables: 69
+  subquery_count: 68
+  cte_count: 70
+  graph_edges: 53
+  graph_max_scope_sources: 69
+categories_to_verify:
+- migration_complexity
+- rewrite_strategy
+- has_subquery
+- has_window_function
+- multi_source
+- needs_human_review
+gold:
+  migration_complexity: low
+  rubric_points: 4
+  has_subquery: true
+  has_window_function: false
+  multi_source: true
+  rewrite_strategy: lift_and_shift
+  needs_human_review: false
+  rationale: A derived table doing one aggregation, then joined to a dimension. Flat and portable once
+    the dialect is fixed.
+  source: deterministic+claude
+latency:
+  estimated_ms: 1781.1
+  measured_ms: 5746.5
+  ms_per_question: 957.8
+  input_tokens: 2622
+  device: cpu

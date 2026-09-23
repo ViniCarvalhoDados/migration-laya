@@ -1,0 +1,108 @@
+id: script_98
+name: query80
+source_path: repos/legacy/scripts/script_98_query80.sql
+origin: tpc-ds query80
+dialect: spark
+selected_because:
+- stratified fill (high, 15pts)
+evidence_card:
+  purpose: null
+  structure: '1 statement in the file. Reads 12 source tables, joined in a star shape with 10 join predicates.
+    Uses 3 CTEs, 1 subquery and 2 set operations. No window function or CASE expression. Nests 3 levels
+    deep. Engine-specific syntax: rollup, interval_arithmetic.'
+  facts: lines=104 statements=1 sources=12 joins=10 widest_join=6 subqueries=1 correlated=0 ctes=3 window_fns=0
+    set_ops=2 case_exprs=0 nesting=3
+  approx_tokens: 87
+features:
+  parse_ok: true
+  parse_dialect: spark
+  loc: 105
+  loc_code: 104
+  chars: 5357
+  statements: 1
+  cte_count: 3
+  cte_max_depth: 1
+  subquery_count: 1
+  scalar_subquery_count: 0
+  correlated_subquery_count: 0
+  derived_table_count: 1
+  max_nesting_depth: 3
+  scope_count: 9
+  window_function_count: 0
+  distinct_window_specs: 0
+  aggregate_count: 12
+  has_having: false
+  has_distinct: false
+  has_order_by: true
+  source_tables: 12
+  table_references: 18
+  cte_references: 3
+  set_operation_count: 2
+  union_all_count: 2
+  intersect_except_count: 0
+  case_expression_count: 0
+  case_max_branches: 0
+  graph_nodes: 12
+  graph_edges: 10
+  graph_density: 0.1515
+  graph_components: 4
+  graph_max_degree: 5
+  graph_max_scope_sources: 6
+  graph_max_scope_edges: 5
+  graph_max_scope_degree: 5
+  graph_shape: star
+  implicit_joins: 12
+  explicit_joins: 3
+  cross_join_risk: 0
+  unresolved_predicates: 5
+  distinct_sources:
+  - catalog_page
+  - catalog_returns
+  - catalog_sales
+  - date_dim
+  - item
+  - promotion
+  - store
+  - store_returns
+  - store_sales
+  - web_returns
+  - web_sales
+  - web_site
+  distinct_aggregates:
+  - sum
+  nonportable_markers:
+  - rollup
+  - interval_arithmetic
+corpus_percentile:
+  rubric_points: 100
+  loc_code: 90
+  source_tables: 99
+  subquery_count: 68
+  cte_count: 97
+  graph_edges: 99
+  graph_max_scope_sources: 94
+categories_to_verify:
+- migration_complexity
+- rewrite_strategy
+- has_subquery
+- has_window_function
+- multi_source
+- needs_human_review
+gold:
+  migration_complexity: high
+  rubric_points: 15
+  has_subquery: true
+  has_window_function: false
+  multi_source: true
+  rewrite_strategy: redesign
+  needs_human_review: true
+  rationale: Several CTEs per channel, each an outer join with COALESCE arithmetic, unioned and then rolled
+    up. Outer-join nulls, the union and the grouping sets all feed each other, so the pieces cannot be
+    migrated one at a time.
+  source: deterministic+claude
+latency:
+  estimated_ms: 1895.9
+  measured_ms: 9340.8
+  ms_per_question: 1556.8
+  input_tokens: 4266
+  device: cpu

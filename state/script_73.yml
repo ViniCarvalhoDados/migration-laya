@@ -1,0 +1,101 @@
+id: script_73
+name: query95
+source_path: repos/legacy/scripts/script_73_query95.sql
+origin: tpc-ds query95
+dialect: spark
+selected_because:
+- stratified fill (high, 7pts)
+evidence_card:
+  purpose: null
+  structure: '1 statement in the file. Reads 5 source tables, joined in a star shape with 3 join predicates.
+    Uses 1 CTE and 2 subqueries. No window function, set operation or CASE expression. 2 subqueries correlated
+    with the outer query. Nests 1 level deep. Engine-specific syntax: backtick_identifier, interval_arithmetic.'
+  facts: lines=36 statements=1 sources=5 joins=3 widest_join=4 subqueries=2 correlated=2 ctes=1 window_fns=0
+    set_ops=0 case_exprs=0 nesting=1
+  approx_tokens: 95
+features:
+  parse_ok: true
+  parse_dialect: spark
+  loc: 37
+  loc_code: 36
+  chars: 1357
+  statements: 1
+  cte_count: 1
+  cte_max_depth: 1
+  subquery_count: 2
+  scalar_subquery_count: 2
+  correlated_subquery_count: 2
+  derived_table_count: 0
+  max_nesting_depth: 1
+  scope_count: 4
+  window_function_count: 0
+  distinct_window_specs: 0
+  aggregate_count: 4
+  has_having: false
+  has_distinct: true
+  has_order_by: true
+  source_tables: 5
+  table_references: 7
+  cte_references: 2
+  set_operation_count: 0
+  union_all_count: 0
+  intersect_except_count: 0
+  case_expression_count: 0
+  case_max_branches: 0
+  graph_nodes: 5
+  graph_edges: 3
+  graph_density: 0.3
+  graph_components: 2
+  graph_max_degree: 3
+  graph_max_scope_sources: 4
+  graph_max_scope_edges: 3
+  graph_max_scope_degree: 3
+  graph_shape: star
+  implicit_joins: 5
+  explicit_joins: 0
+  cross_join_risk: 0
+  unresolved_predicates: 0
+  distinct_sources:
+  - customer_address
+  - date_dim
+  - web_returns
+  - web_sales
+  - web_site
+  distinct_aggregates:
+  - count
+  - sum
+  nonportable_markers:
+  - backtick_identifier
+  - interval_arithmetic
+corpus_percentile:
+  rubric_points: 79
+  loc_code: 36
+  source_tables: 69
+  subquery_count: 80
+  cte_count: 79
+  graph_edges: 53
+  graph_max_scope_sources: 69
+categories_to_verify:
+- migration_complexity
+- rewrite_strategy
+- has_subquery
+- has_window_function
+- multi_source
+- needs_human_review
+gold:
+  migration_complexity: high
+  rubric_points: 7
+  has_subquery: true
+  has_window_function: false
+  multi_source: true
+  rewrite_strategy: refactor
+  needs_human_review: true
+  rationale: Correlated EXISTS and NOT EXISTS over the same table. The anti-join half is where engines
+    differ on NULL handling, so it should be rewritten as an explicit anti-join and the row counts compared.
+  source: deterministic+claude
+latency:
+  estimated_ms: 1979.3
+  measured_ms: 6012.9
+  ms_per_question: 1002.1
+  input_tokens: 2928
+  device: cpu

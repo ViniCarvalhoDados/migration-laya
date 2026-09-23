@@ -1,0 +1,1504 @@
+meta:
+  seed: 42
+  census: state/corpus_census.csv
+  rubric: config/rubric.yml
+coverage:
+  n_sampled: 99
+  n_corpus: 99
+  bands:
+    low: 31
+    medium: 37
+    high: 31
+  rubric_points_range:
+  - 0
+  - 15
+  corpus_points_range:
+  - 0
+  - 15
+  corpus_p90_points: 12
+scripts:
+- id: script_01
+  origin: query42
+  rubric_points: 0
+  rubric_band: low
+  selected_because:
+  - stratified fill (low, 0pts)
+  corpus_percentile:
+    rubric_points: 4
+    loc_code: 10
+    source_tables: 21
+    subquery_count: 42
+    cte_count: 70
+    graph_edges: 28
+    graph_max_scope_sources: 38
+  source_path: repos/legacy/scripts/script_01_query42.sql
+- id: script_02
+  origin: query55
+  rubric_points: 0
+  rubric_band: low
+  selected_because:
+  - stratified fill (low, 0pts)
+  corpus_percentile:
+    rubric_points: 4
+    loc_code: 2
+    source_tables: 21
+    subquery_count: 42
+    cte_count: 70
+    graph_edges: 28
+    graph_max_scope_sources: 38
+  source_path: repos/legacy/scripts/script_02_query55.sql
+- id: script_03
+  origin: query3
+  rubric_points: 0
+  rubric_band: low
+  selected_because:
+  - stratified fill (low, 0pts)
+  corpus_percentile:
+    rubric_points: 4
+    loc_code: 3
+    source_tables: 21
+    subquery_count: 42
+    cte_count: 70
+    graph_edges: 28
+    graph_max_scope_sources: 38
+  source_path: repos/legacy/scripts/script_03_query3.sql
+- id: script_04
+  origin: query52
+  rubric_points: 0
+  rubric_band: low
+  selected_because:
+  - stratified fill (low, 0pts)
+  corpus_percentile:
+    rubric_points: 4
+    loc_code: 5
+    source_tables: 21
+    subquery_count: 42
+    cte_count: 70
+    graph_edges: 28
+    graph_max_scope_sources: 38
+  source_path: repos/legacy/scripts/script_04_query52.sql
+- id: script_05
+  origin: query96
+  rubric_points: 1
+  rubric_band: low
+  selected_because:
+  - stratified fill (low, 1pts)
+  corpus_percentile:
+    rubric_points: 6
+    loc_code: 1
+    source_tables: 45
+    subquery_count: 42
+    cte_count: 70
+    graph_edges: 53
+    graph_max_scope_sources: 69
+  source_path: repos/legacy/scripts/script_05_query96.sql
+- id: script_06
+  origin: query15
+  rubric_points: 1
+  rubric_band: low
+  selected_because:
+  - stratified fill (low, 1pts)
+  corpus_percentile:
+    rubric_points: 6
+    loc_code: 5
+    source_tables: 45
+    subquery_count: 42
+    cte_count: 70
+    graph_edges: 53
+    graph_max_scope_sources: 69
+  source_path: repos/legacy/scripts/script_06_query15.sql
+- id: script_07
+  origin: query37
+  rubric_points: 2
+  rubric_band: low
+  selected_because:
+  - stratified fill (low, 2pts)
+  corpus_percentile:
+    rubric_points: 13
+    loc_code: 14
+    source_tables: 45
+    subquery_count: 42
+    cte_count: 70
+    graph_edges: 53
+    graph_max_scope_sources: 69
+  source_path: repos/legacy/scripts/script_07_query37.sql
+- id: script_08
+  origin: query22
+  rubric_points: 2
+  rubric_band: low
+  selected_because:
+  - stratified fill (low, 2pts)
+  corpus_percentile:
+    rubric_points: 13
+    loc_code: 10
+    source_tables: 45
+    subquery_count: 42
+    cte_count: 70
+    graph_edges: 53
+    graph_max_scope_sources: 69
+  source_path: repos/legacy/scripts/script_08_query22.sql
+- id: script_09
+  origin: query43
+  rubric_points: 2
+  rubric_band: low
+  selected_because:
+  - stratified fill (low, 2pts)
+  corpus_percentile:
+    rubric_points: 13
+    loc_code: 60
+    source_tables: 21
+    subquery_count: 42
+    cte_count: 70
+    graph_edges: 28
+    graph_max_scope_sources: 38
+  source_path: repos/legacy/scripts/script_09_query43.sql
+- id: script_10
+  origin: query20
+  rubric_points: 2
+  rubric_band: low
+  selected_because:
+  - stratified fill (low, 2pts)
+  corpus_percentile:
+    rubric_points: 13
+    loc_code: 26
+    source_tables: 21
+    subquery_count: 42
+    cte_count: 70
+    graph_edges: 28
+    graph_max_scope_sources: 38
+  source_path: repos/legacy/scripts/script_10_query20.sql
+- id: script_11
+  origin: query82
+  rubric_points: 2
+  rubric_band: low
+  selected_because:
+  - stratified fill (low, 2pts)
+  corpus_percentile:
+    rubric_points: 13
+    loc_code: 14
+    source_tables: 45
+    subquery_count: 42
+    cte_count: 70
+    graph_edges: 53
+    graph_max_scope_sources: 69
+  source_path: repos/legacy/scripts/script_11_query82.sql
+- id: script_12
+  origin: query98
+  rubric_points: 2
+  rubric_band: low
+  selected_because:
+  - stratified fill (low, 2pts)
+  corpus_percentile:
+    rubric_points: 13
+    loc_code: 23
+    source_tables: 21
+    subquery_count: 42
+    cte_count: 70
+    graph_edges: 28
+    graph_max_scope_sources: 38
+  source_path: repos/legacy/scripts/script_12_query98.sql
+- id: script_13
+  origin: query12
+  rubric_points: 2
+  rubric_band: low
+  selected_because:
+  - stratified fill (low, 2pts)
+  corpus_percentile:
+    rubric_points: 13
+    loc_code: 26
+    source_tables: 21
+    subquery_count: 42
+    cte_count: 70
+    graph_edges: 28
+    graph_max_scope_sources: 38
+  source_path: repos/legacy/scripts/script_13_query12.sql
+- id: script_14
+  origin: query65
+  rubric_points: 3
+  rubric_band: low
+  selected_because:
+  - stratified fill (low, 3pts)
+  corpus_percentile:
+    rubric_points: 20
+    loc_code: 36
+    source_tables: 45
+    subquery_count: 87
+    cte_count: 70
+    graph_edges: 10
+    graph_max_scope_sources: 69
+  source_path: repos/legacy/scripts/script_14_query65.sql
+- id: script_15
+  origin: query48
+  rubric_points: 3
+  rubric_band: low
+  selected_because:
+  - stratified fill (low, 3pts)
+  corpus_percentile:
+    rubric_points: 20
+    loc_code: 32
+    source_tables: 69
+    subquery_count: 42
+    cte_count: 70
+    graph_edges: 65
+    graph_max_scope_sources: 82
+  source_path: repos/legacy/scripts/script_15_query48.sql
+- id: script_16
+  origin: query26
+  rubric_points: 3
+  rubric_band: low
+  selected_because:
+  - stratified fill (low, 3pts)
+  corpus_percentile:
+    rubric_points: 20
+    loc_code: 19
+    source_tables: 69
+    subquery_count: 42
+    cte_count: 70
+    graph_edges: 65
+    graph_max_scope_sources: 82
+  source_path: repos/legacy/scripts/script_16_query26.sql
+- id: script_17
+  origin: query7
+  rubric_points: 3
+  rubric_band: low
+  selected_because:
+  - stratified fill (low, 3pts)
+  corpus_percentile:
+    rubric_points: 20
+    loc_code: 19
+    source_tables: 69
+    subquery_count: 42
+    cte_count: 70
+    graph_edges: 65
+    graph_max_scope_sources: 82
+  source_path: repos/legacy/scripts/script_17_query7.sql
+- id: script_18
+  origin: query86
+  rubric_points: 3
+  rubric_band: low
+  selected_because:
+  - stratified fill (low, 3pts)
+  corpus_percentile:
+    rubric_points: 20
+    loc_code: 19
+    source_tables: 21
+    subquery_count: 42
+    cte_count: 70
+    graph_edges: 28
+    graph_max_scope_sources: 38
+  source_path: repos/legacy/scripts/script_18_query86.sql
+- id: script_19
+  origin: query97
+  rubric_points: 3
+  rubric_band: low
+  selected_because:
+  - stratified fill (low, 3pts)
+  corpus_percentile:
+    rubric_points: 20
+    loc_code: 40
+    source_tables: 21
+    subquery_count: 42
+    cte_count: 88
+    graph_edges: 28
+    graph_max_scope_sources: 5
+  source_path: repos/legacy/scripts/script_19_query97.sql
+- id: script_20
+  origin: query93
+  rubric_points: 3
+  rubric_band: low
+  selected_because:
+  - stratified fill (low, 3pts)
+  corpus_percentile:
+    rubric_points: 20
+    loc_code: 14
+    source_tables: 21
+    subquery_count: 68
+    cte_count: 70
+    graph_edges: 28
+    graph_max_scope_sources: 38
+  source_path: repos/legacy/scripts/script_20_query93.sql
+- id: script_21
+  origin: query92
+  rubric_points: 4
+  rubric_band: low
+  selected_because:
+  - just below the low/medium boundary (points=4)
+  corpus_percentile:
+    rubric_points: 31
+    loc_code: 14
+    source_tables: 21
+    subquery_count: 68
+    cte_count: 70
+    graph_edges: 28
+    graph_max_scope_sources: 38
+  source_path: repos/legacy/scripts/script_21_query92.sql
+- id: script_22
+  origin: query84
+  rubric_points: 4
+  rubric_band: low
+  selected_because:
+  - stratified fill (low, 4pts)
+  corpus_percentile:
+    rubric_points: 31
+    loc_code: 10
+    source_tables: 85
+    subquery_count: 42
+    cte_count: 70
+    graph_edges: 74
+    graph_max_scope_sources: 94
+  source_path: repos/legacy/scripts/script_22_query84.sql
+- id: script_23
+  origin: query27
+  rubric_points: 4
+  rubric_band: low
+  selected_because:
+  - stratified fill (low, 4pts)
+  corpus_percentile:
+    rubric_points: 31
+    loc_code: 21
+    source_tables: 69
+    subquery_count: 42
+    cte_count: 70
+    graph_edges: 65
+    graph_max_scope_sources: 82
+  source_path: repos/legacy/scripts/script_23_query27.sql
+- id: script_24
+  origin: query81
+  rubric_points: 4
+  rubric_band: low
+  selected_because:
+  - stratified fill (low, 4pts)
+  corpus_percentile:
+    rubric_points: 31
+    loc_code: 65
+    source_tables: 45
+    subquery_count: 68
+    cte_count: 79
+    graph_edges: 28
+    graph_max_scope_sources: 38
+  source_path: repos/legacy/scripts/script_24_query81.sql
+- id: script_25
+  origin: query79
+  rubric_points: 4
+  rubric_band: low
+  selected_because:
+  - stratified fill (low, 4pts)
+  corpus_percentile:
+    rubric_points: 31
+    loc_code: 34
+    source_tables: 69
+    subquery_count: 68
+    cte_count: 70
+    graph_edges: 53
+    graph_max_scope_sources: 69
+  source_path: repos/legacy/scripts/script_25_query79.sql
+- id: script_26
+  origin: query36
+  rubric_points: 4
+  rubric_band: low
+  selected_because:
+  - stratified fill (low, 4pts)
+  corpus_percentile:
+    rubric_points: 31
+    loc_code: 28
+    source_tables: 45
+    subquery_count: 42
+    cte_count: 70
+    graph_edges: 53
+    graph_max_scope_sources: 69
+  source_path: repos/legacy/scripts/script_26_query36.sql
+- id: script_27
+  origin: query1
+  rubric_points: 4
+  rubric_band: low
+  selected_because:
+  - stratified fill (low, 4pts)
+  corpus_percentile:
+    rubric_points: 31
+    loc_code: 16
+    source_tables: 45
+    subquery_count: 68
+    cte_count: 79
+    graph_edges: 10
+    graph_max_scope_sources: 38
+  source_path: repos/legacy/scripts/script_27_query1.sql
+- id: script_28
+  origin: query41
+  rubric_points: 4
+  rubric_band: low
+  selected_because:
+  - stratified fill (low, 4pts)
+  corpus_percentile:
+    rubric_points: 31
+    loc_code: 75
+    source_tables: 2
+    subquery_count: 68
+    cte_count: 70
+    graph_edges: 6
+    graph_max_scope_sources: 2
+  source_path: repos/legacy/scripts/script_28_query41.sql
+- id: script_29
+  origin: query30
+  rubric_points: 4
+  rubric_band: low
+  selected_because:
+  - stratified fill (low, 4pts)
+  corpus_percentile:
+    rubric_points: 31
+    loc_code: 59
+    source_tables: 45
+    subquery_count: 68
+    cte_count: 79
+    graph_edges: 28
+    graph_max_scope_sources: 38
+  source_path: repos/legacy/scripts/script_29_query30.sql
+- id: script_30
+  origin: query90
+  rubric_points: 4
+  rubric_band: low
+  selected_because:
+  - stratified fill (low, 4pts)
+  corpus_percentile:
+    rubric_points: 31
+    loc_code: 21
+    source_tables: 45
+    subquery_count: 80
+    cte_count: 70
+    graph_edges: 53
+    graph_max_scope_sources: 69
+  source_path: repos/legacy/scripts/script_30_query90.sql
+- id: script_31
+  origin: query32
+  rubric_points: 4
+  rubric_band: low
+  selected_because:
+  - stratified fill (low, 4pts)
+  corpus_percentile:
+    rubric_points: 31
+    loc_code: 10
+    source_tables: 21
+    subquery_count: 68
+    cte_count: 70
+    graph_edges: 28
+    graph_max_scope_sources: 38
+  source_path: repos/legacy/scripts/script_31_query32.sql
+- id: script_32
+  origin: query34
+  rubric_points: 5
+  rubric_band: medium
+  selected_because:
+  - just above the low/medium boundary (points=5)
+  corpus_percentile:
+    rubric_points: 47
+    loc_code: 54
+    source_tables: 69
+    subquery_count: 68
+    cte_count: 70
+    graph_edges: 53
+    graph_max_scope_sources: 69
+  source_path: repos/legacy/scripts/script_32_query34.sql
+- id: script_33
+  origin: query21
+  rubric_points: 5
+  rubric_band: medium
+  selected_because:
+  - stratified fill (medium, 5pts)
+  corpus_percentile:
+    rubric_points: 47
+    loc_code: 38
+    source_tables: 45
+    subquery_count: 68
+    cte_count: 70
+    graph_edges: 53
+    graph_max_scope_sources: 69
+  source_path: repos/legacy/scripts/script_33_query21.sql
+- id: script_34
+  origin: query62
+  rubric_points: 5
+  rubric_band: medium
+  selected_because:
+  - stratified fill (medium, 5pts)
+  corpus_percentile:
+    rubric_points: 47
+    loc_code: 52
+    source_tables: 69
+    subquery_count: 42
+    cte_count: 70
+    graph_edges: 6
+    graph_max_scope_sources: 82
+  source_path: repos/legacy/scripts/script_34_query62.sql
+- id: script_35
+  origin: query51
+  rubric_points: 5
+  rubric_band: medium
+  selected_because:
+  - stratified fill (medium, 5pts)
+  corpus_percentile:
+    rubric_points: 47
+    loc_code: 64
+    source_tables: 21
+    subquery_count: 80
+    cte_count: 88
+    graph_edges: 28
+    graph_max_scope_sources: 5
+  source_path: repos/legacy/scripts/script_35_query51.sql
+- id: script_36
+  origin: query67
+  rubric_points: 5
+  rubric_band: medium
+  selected_because:
+  - stratified fill (medium, 5pts)
+  corpus_percentile:
+    rubric_points: 47
+    loc_code: 46
+    source_tables: 45
+    subquery_count: 80
+    cte_count: 70
+    graph_edges: 53
+    graph_max_scope_sources: 69
+  source_path: repos/legacy/scripts/script_36_query67.sql
+- id: script_37
+  origin: query73
+  rubric_points: 5
+  rubric_band: medium
+  selected_because:
+  - stratified fill (medium, 5pts)
+  corpus_percentile:
+    rubric_points: 47
+    loc_code: 40
+    source_tables: 69
+    subquery_count: 68
+    cte_count: 70
+    graph_edges: 53
+    graph_max_scope_sources: 69
+  source_path: repos/legacy/scripts/script_37_query73.sql
+- id: script_38
+  origin: query13
+  rubric_points: 5
+  rubric_band: medium
+  selected_because:
+  - stratified fill (medium, 5pts)
+  corpus_percentile:
+    rubric_points: 47
+    loc_code: 48
+    source_tables: 85
+    subquery_count: 42
+    cte_count: 70
+    graph_edges: 74
+    graph_max_scope_sources: 94
+  source_path: repos/legacy/scripts/script_38_query13.sql
+- id: script_39
+  origin: query63
+  rubric_points: 5
+  rubric_band: medium
+  selected_because:
+  - stratified fill (medium, 5pts)
+  corpus_percentile:
+    rubric_points: 47
+    loc_code: 52
+    source_tables: 45
+    subquery_count: 68
+    cte_count: 70
+    graph_edges: 53
+    graph_max_scope_sources: 69
+  source_path: repos/legacy/scripts/script_39_query63.sql
+- id: script_40
+  origin: query40
+  rubric_points: 5
+  rubric_band: medium
+  selected_because:
+  - stratified fill (medium, 5pts)
+  corpus_percentile:
+    rubric_points: 47
+    loc_code: 34
+    source_tables: 69
+    subquery_count: 42
+    cte_count: 70
+    graph_edges: 65
+    graph_max_scope_sources: 82
+  source_path: repos/legacy/scripts/script_40_query40.sql
+- id: script_41
+  origin: query45
+  rubric_points: 5
+  rubric_band: medium
+  selected_because:
+  - stratified fill (medium, 5pts)
+  corpus_percentile:
+    rubric_points: 47
+    loc_code: 23
+    source_tables: 69
+    subquery_count: 68
+    cte_count: 70
+    graph_edges: 65
+    graph_max_scope_sources: 82
+  source_path: repos/legacy/scripts/script_41_query45.sql
+- id: script_42
+  origin: query6
+  rubric_points: 5
+  rubric_band: medium
+  selected_because:
+  - stratified fill (medium, 5pts)
+  corpus_percentile:
+    rubric_points: 47
+    loc_code: 16
+    source_tables: 69
+    subquery_count: 80
+    cte_count: 70
+    graph_edges: 65
+    graph_max_scope_sources: 82
+  source_path: repos/legacy/scripts/script_42_query6.sql
+- id: script_43
+  origin: query44
+  rubric_points: 5
+  rubric_band: medium
+  selected_because:
+  - stratified fill (medium, 5pts)
+  corpus_percentile:
+    rubric_points: 47
+    loc_code: 62
+    source_tables: 4
+    subquery_count: 97
+    cte_count: 70
+    graph_edges: 6
+    graph_max_scope_sources: 38
+  source_path: repos/legacy/scripts/script_43_query44.sql
+- id: script_44
+  origin: query53
+  rubric_points: 5
+  rubric_band: medium
+  selected_because:
+  - stratified fill (medium, 5pts)
+  corpus_percentile:
+    rubric_points: 47
+    loc_code: 54
+    source_tables: 45
+    subquery_count: 68
+    cte_count: 70
+    graph_edges: 53
+    graph_max_scope_sources: 69
+  source_path: repos/legacy/scripts/script_44_query53.sql
+- id: script_45
+  origin: query19
+  rubric_points: 5
+  rubric_band: medium
+  selected_because:
+  - stratified fill (medium, 5pts)
+  corpus_percentile:
+    rubric_points: 47
+    loc_code: 28
+    source_tables: 85
+    subquery_count: 42
+    cte_count: 70
+    graph_edges: 74
+    graph_max_scope_sources: 94
+  source_path: repos/legacy/scripts/script_45_query19.sql
+- id: script_46
+  origin: query50
+  rubric_points: 5
+  rubric_band: medium
+  selected_because:
+  - stratified fill (medium, 5pts)
+  corpus_percentile:
+    rubric_points: 47
+    loc_code: 78
+    source_tables: 45
+    subquery_count: 42
+    cte_count: 70
+    graph_edges: 65
+    graph_max_scope_sources: 69
+  source_path: repos/legacy/scripts/script_46_query50.sql
+- id: script_47
+  origin: query89
+  rubric_points: 5
+  rubric_band: medium
+  selected_because:
+  - stratified fill (medium, 5pts)
+  corpus_percentile:
+    rubric_points: 47
+    loc_code: 43
+    source_tables: 45
+    subquery_count: 68
+    cte_count: 70
+    graph_edges: 53
+    graph_max_scope_sources: 69
+  source_path: repos/legacy/scripts/script_47_query89.sql
+- id: script_48
+  origin: query11
+  rubric_points: 6
+  rubric_band: medium
+  selected_because:
+  - just below the medium/high boundary (points=6)
+  corpus_percentile:
+    rubric_points: 69
+    loc_code: 89
+    source_tables: 45
+    subquery_count: 42
+    cte_count: 79
+    graph_edges: 65
+    graph_max_scope_sources: 69
+  source_path: repos/legacy/scripts/script_48_query11.sql
+- id: script_49
+  origin: query87
+  rubric_points: 6
+  rubric_band: medium
+  selected_because:
+  - stratified fill (medium, 6pts)
+  corpus_percentile:
+    rubric_points: 69
+    loc_code: 10
+    source_tables: 69
+    subquery_count: 68
+    cte_count: 70
+    graph_edges: 87
+    graph_max_scope_sources: 38
+  source_path: repos/legacy/scripts/script_49_query87.sql
+- id: script_50
+  origin: query99
+  rubric_points: 6
+  rubric_band: medium
+  selected_because:
+  - stratified fill (medium, 6pts)
+  corpus_percentile:
+    rubric_points: 69
+    loc_code: 52
+    source_tables: 69
+    subquery_count: 42
+    cte_count: 70
+    graph_edges: 65
+    graph_max_scope_sources: 82
+  source_path: repos/legacy/scripts/script_50_query99.sql
+- id: script_51
+  origin: query69
+  rubric_points: 6
+  rubric_band: medium
+  selected_because:
+  - stratified fill (medium, 6pts)
+  corpus_percentile:
+    rubric_points: 69
+    loc_code: 56
+    source_tables: 93
+    subquery_count: 87
+    cte_count: 70
+    graph_edges: 74
+    graph_max_scope_sources: 38
+  source_path: repos/legacy/scripts/script_51_query69.sql
+- id: script_52
+  origin: query18
+  rubric_points: 6
+  rubric_band: medium
+  selected_because:
+  - stratified fill (medium, 6pts)
+  corpus_percentile:
+    rubric_points: 69
+    loc_code: 38
+    source_tables: 85
+    subquery_count: 42
+    cte_count: 70
+    graph_edges: 87
+    graph_max_scope_sources: 94
+  source_path: repos/legacy/scripts/script_52_query18.sql
+- id: script_53
+  origin: query16
+  rubric_points: 6
+  rubric_band: medium
+  selected_because:
+  - stratified fill (medium, 6pts)
+  corpus_percentile:
+    rubric_points: 69
+    loc_code: 31
+    source_tables: 69
+    subquery_count: 80
+    cte_count: 70
+    graph_edges: 53
+    graph_max_scope_sources: 69
+  source_path: repos/legacy/scripts/script_53_query16.sql
+- id: script_54
+  origin: query46
+  rubric_points: 6
+  rubric_band: medium
+  selected_because:
+  - stratified fill (medium, 6pts)
+  corpus_percentile:
+    rubric_points: 69
+    loc_code: 48
+    source_tables: 85
+    subquery_count: 68
+    cte_count: 70
+    graph_edges: 74
+    graph_max_scope_sources: 82
+  source_path: repos/legacy/scripts/script_54_query46.sql
+- id: script_55
+  origin: query59
+  rubric_points: 6
+  rubric_band: medium
+  selected_because:
+  - stratified fill (medium, 6pts)
+  corpus_percentile:
+    rubric_points: 69
+    loc_code: 84
+    source_tables: 21
+    subquery_count: 80
+    cte_count: 79
+    graph_edges: 10
+    graph_max_scope_sources: 38
+  source_path: repos/legacy/scripts/script_55_query59.sql
+- id: script_56
+  origin: query29
+  rubric_points: 6
+  rubric_band: medium
+  selected_because:
+  - stratified fill (medium, 6pts)
+  corpus_percentile:
+    rubric_points: 69
+    loc_code: 43
+    source_tables: 85
+    subquery_count: 42
+    cte_count: 70
+    graph_edges: 91
+    graph_max_scope_sources: 94
+  source_path: repos/legacy/scripts/script_56_query29.sql
+- id: script_57
+  origin: query94
+  rubric_points: 6
+  rubric_band: medium
+  selected_because:
+  - stratified fill (medium, 6pts)
+  corpus_percentile:
+    rubric_points: 69
+    loc_code: 24
+    source_tables: 69
+    subquery_count: 80
+    cte_count: 70
+    graph_edges: 53
+    graph_max_scope_sources: 69
+  source_path: repos/legacy/scripts/script_57_query94.sql
+- id: script_58
+  origin: query85
+  rubric_points: 6
+  rubric_band: medium
+  selected_because:
+  - stratified fill (medium, 6pts)
+  corpus_percentile:
+    rubric_points: 69
+    loc_code: 63
+    source_tables: 93
+    subquery_count: 42
+    cte_count: 70
+    graph_edges: 87
+    graph_max_scope_sources: 97
+  source_path: repos/legacy/scripts/script_58_query85.sql
+- id: script_59
+  origin: query91
+  rubric_points: 6
+  rubric_band: medium
+  selected_because:
+  - stratified fill (medium, 6pts)
+  corpus_percentile:
+    rubric_points: 69
+    loc_code: 30
+    source_tables: 93
+    subquery_count: 42
+    cte_count: 70
+    graph_edges: 87
+    graph_max_scope_sources: 97
+  source_path: repos/legacy/scripts/script_59_query91.sql
+- id: script_60
+  origin: query25
+  rubric_points: 6
+  rubric_band: medium
+  selected_because:
+  - stratified fill (medium, 6pts)
+  corpus_percentile:
+    rubric_points: 69
+    loc_code: 45
+    source_tables: 85
+    subquery_count: 42
+    cte_count: 70
+    graph_edges: 91
+    graph_max_scope_sources: 94
+  source_path: repos/legacy/scripts/script_60_query25.sql
+- id: script_61
+  origin: query38
+  rubric_points: 6
+  rubric_band: medium
+  selected_because:
+  - stratified fill (medium, 6pts)
+  corpus_percentile:
+    rubric_points: 69
+    loc_code: 30
+    source_tables: 69
+    subquery_count: 68
+    cte_count: 70
+    graph_edges: 87
+    graph_max_scope_sources: 38
+  source_path: repos/legacy/scripts/script_61_query38.sql
+- id: script_62
+  origin: query71
+  rubric_points: 6
+  rubric_band: medium
+  selected_because:
+  - stratified fill (medium, 6pts)
+  corpus_percentile:
+    rubric_points: 69
+    loc_code: 57
+    source_tables: 85
+    subquery_count: 68
+    cte_count: 70
+    graph_edges: 53
+    graph_max_scope_sources: 38
+  source_path: repos/legacy/scripts/script_62_query71.sql
+- id: script_63
+  origin: query68
+  rubric_points: 6
+  rubric_band: medium
+  selected_because:
+  - stratified fill (medium, 6pts)
+  corpus_percentile:
+    rubric_points: 69
+    loc_code: 45
+    source_tables: 85
+    subquery_count: 68
+    cte_count: 70
+    graph_edges: 74
+    graph_max_scope_sources: 82
+  source_path: repos/legacy/scripts/script_63_query68.sql
+- id: script_64
+  origin: query74
+  rubric_points: 6
+  rubric_band: medium
+  selected_because:
+  - stratified fill (medium, 6pts)
+  corpus_percentile:
+    rubric_points: 69
+    loc_code: 77
+    source_tables: 45
+    subquery_count: 42
+    cte_count: 79
+    graph_edges: 65
+    graph_max_scope_sources: 69
+  source_path: repos/legacy/scripts/script_64_query74.sql
+- id: script_65
+  origin: query57
+  rubric_points: 6
+  rubric_band: medium
+  selected_because:
+  - stratified fill (medium, 6pts)
+  corpus_percentile:
+    rubric_points: 69
+    loc_code: 75
+    source_tables: 45
+    subquery_count: 42
+    cte_count: 88
+    graph_edges: 53
+    graph_max_scope_sources: 69
+  source_path: repos/legacy/scripts/script_65_query57.sql
+- id: script_66
+  origin: query70
+  rubric_points: 6
+  rubric_band: medium
+  selected_because:
+  - stratified fill (medium, 6pts)
+  corpus_percentile:
+    rubric_points: 69
+    loc_code: 43
+    source_tables: 21
+    subquery_count: 80
+    cte_count: 70
+    graph_edges: 28
+    graph_max_scope_sources: 38
+  source_path: repos/legacy/scripts/script_66_query70.sql
+- id: script_67
+  origin: query28
+  rubric_points: 6
+  rubric_band: medium
+  selected_because:
+  - stratified fill (medium, 6pts)
+  corpus_percentile:
+    rubric_points: 69
+    loc_code: 62
+    source_tables: 2
+    subquery_count: 95
+    cte_count: 70
+    graph_edges: 6
+    graph_max_scope_sources: 94
+  source_path: repos/legacy/scripts/script_67_query28.sql
+- id: script_68
+  origin: query47
+  rubric_points: 6
+  rubric_band: medium
+  selected_because:
+  - stratified fill (medium, 6pts)
+  corpus_percentile:
+    rubric_points: 69
+    loc_code: 80
+    source_tables: 45
+    subquery_count: 42
+    cte_count: 88
+    graph_edges: 53
+    graph_max_scope_sources: 69
+  source_path: repos/legacy/scripts/script_68_query47.sql
+- id: script_69
+  origin: query76
+  rubric_points: 7
+  rubric_band: high
+  selected_because:
+  - just above the medium/high boundary (points=7)
+  corpus_percentile:
+    rubric_points: 79
+    loc_code: 68
+    source_tables: 69
+    subquery_count: 68
+    cte_count: 70
+    graph_edges: 87
+    graph_max_scope_sources: 38
+  source_path: repos/legacy/scripts/script_69_query76.sql
+- id: script_70
+  origin: query78
+  rubric_points: 7
+  rubric_band: high
+  selected_because:
+  - stratified fill (high, 7pts)
+  corpus_percentile:
+    rubric_points: 79
+    loc_code: 85
+    source_tables: 93
+    subquery_count: 42
+    cte_count: 97
+    graph_edges: 87
+    graph_max_scope_sources: 38
+  source_path: repos/legacy/scripts/script_70_query78.sql
+- id: script_71
+  origin: query31
+  rubric_points: 7
+  rubric_band: high
+  selected_because:
+  - stratified fill (high, 7pts)
+  corpus_percentile:
+    rubric_points: 79
+    loc_code: 81
+    source_tables: 45
+    subquery_count: 42
+    cte_count: 88
+    graph_edges: 65
+    graph_max_scope_sources: 94
+  source_path: repos/legacy/scripts/script_71_query31.sql
+- id: script_72
+  origin: query10
+  rubric_points: 7
+  rubric_band: high
+  selected_because:
+  - stratified fill (high, 7pts)
+  corpus_percentile:
+    rubric_points: 79
+    loc_code: 70
+    source_tables: 93
+    subquery_count: 87
+    cte_count: 70
+    graph_edges: 74
+    graph_max_scope_sources: 38
+  source_path: repos/legacy/scripts/script_72_query10.sql
+- id: script_73
+  origin: query95
+  rubric_points: 7
+  rubric_band: high
+  selected_because:
+  - stratified fill (high, 7pts)
+  corpus_percentile:
+    rubric_points: 79
+    loc_code: 36
+    source_tables: 69
+    subquery_count: 80
+    cte_count: 79
+    graph_edges: 53
+    graph_max_scope_sources: 69
+  source_path: repos/legacy/scripts/script_73_query95.sql
+- id: script_74
+  origin: query9
+  rubric_points: 7
+  rubric_band: high
+  selected_because:
+  - stratified fill (high, 7pts)
+  corpus_percentile:
+    rubric_points: 79
+    loc_code: 71
+    source_tables: 4
+    subquery_count: 99
+    cte_count: 70
+    graph_edges: 6
+    graph_max_scope_sources: 2
+  source_path: repos/legacy/scripts/script_74_query9.sql
+- id: script_75
+  origin: query17
+  rubric_points: 7
+  rubric_band: high
+  selected_because:
+  - stratified fill (high, 7pts)
+  corpus_percentile:
+    rubric_points: 79
+    loc_code: 66
+    source_tables: 85
+    subquery_count: 42
+    cte_count: 70
+    graph_edges: 91
+    graph_max_scope_sources: 94
+  source_path: repos/legacy/scripts/script_75_query17.sql
+- id: script_76
+  origin: query2
+  rubric_points: 7
+  rubric_band: high
+  selected_because:
+  - stratified fill (high, 7pts)
+  corpus_percentile:
+    rubric_points: 79
+    loc_code: 83
+    source_tables: 21
+    subquery_count: 87
+    cte_count: 88
+    graph_edges: 6
+    graph_max_scope_sources: 5
+  source_path: repos/legacy/scripts/script_76_query2.sql
+- id: script_77
+  origin: query8
+  rubric_points: 7
+  rubric_band: high
+  selected_because:
+  - stratified fill (high, 7pts)
+  corpus_percentile:
+    rubric_points: 79
+    loc_code: 98
+    source_tables: 69
+    subquery_count: 87
+    cte_count: 70
+    graph_edges: 53
+    graph_max_scope_sources: 69
+  source_path: repos/legacy/scripts/script_77_query8.sql
+- id: script_78
+  origin: query88
+  rubric_points: 7
+  rubric_band: high
+  selected_because:
+  - stratified fill (high, 7pts)
+  corpus_percentile:
+    rubric_points: 79
+    loc_code: 86
+    source_tables: 45
+    subquery_count: 97
+    cte_count: 70
+    graph_edges: 53
+    graph_max_scope_sources: 98
+  source_path: repos/legacy/scripts/script_78_query88.sql
+- id: script_79
+  origin: query35
+  rubric_points: 8
+  rubric_band: high
+  selected_because:
+  - stratified fill (high, 8pts)
+  corpus_percentile:
+    rubric_points: 80
+    loc_code: 69
+    source_tables: 93
+    subquery_count: 87
+    cte_count: 70
+    graph_edges: 74
+    graph_max_scope_sources: 38
+  source_path: repos/legacy/scripts/script_79_query35.sql
+- id: script_80
+  origin: query83
+  rubric_points: 9
+  rubric_band: high
+  selected_because:
+  - stratified fill (high, 9pts)
+  corpus_percentile:
+    rubric_points: 84
+    loc_code: 82
+    source_tables: 69
+    subquery_count: 95
+    cte_count: 97
+    graph_edges: 87
+    graph_max_scope_sources: 38
+  source_path: repos/legacy/scripts/script_80_query83.sql
+- id: script_81
+  origin: query61
+  rubric_points: 9
+  rubric_band: high
+  selected_because:
+  - stratified fill (high, 9pts)
+  corpus_percentile:
+    rubric_points: 84
+    loc_code: 56
+    source_tables: 93
+    subquery_count: 80
+    cte_count: 70
+    graph_edges: 87
+    graph_max_scope_sources: 97
+  source_path: repos/legacy/scripts/script_81_query61.sql
+- id: script_82
+  origin: query58
+  rubric_points: 9
+  rubric_band: high
+  selected_because:
+  - stratified fill (high, 9pts)
+  corpus_percentile:
+    rubric_points: 84
+    loc_code: 80
+    source_tables: 69
+    subquery_count: 95
+    cte_count: 97
+    graph_edges: 87
+    graph_max_scope_sources: 38
+  source_path: repos/legacy/scripts/script_82_query58.sql
+- id: script_83
+  origin: query72
+  rubric_points: 9
+  rubric_band: high
+  selected_because:
+  - stratified fill (high, 9pts)
+  corpus_percentile:
+    rubric_points: 84
+    loc_code: 59
+    source_tables: 97
+    subquery_count: 42
+    cte_count: 70
+    graph_edges: 97
+    graph_max_scope_sources: 99
+  source_path: repos/legacy/scripts/script_83_query72.sql
+- id: script_84
+  origin: query39
+  rubric_points: 10
+  rubric_band: high
+  selected_because:
+  - multiple statements in one file (statements=2)
+  corpus_percentile:
+    rubric_points: 86
+    loc_code: 92
+    source_tables: 45
+    subquery_count: 80
+    cte_count: 88
+    graph_edges: 53
+    graph_max_scope_sources: 69
+  source_path: repos/legacy/scripts/script_84_query39.sql
+- id: script_85
+  origin: query54
+  rubric_points: 10
+  rubric_band: high
+  selected_because:
+  - stratified fill (high, 10pts)
+  corpus_percentile:
+    rubric_points: 86
+    loc_code: 68
+    source_tables: 95
+    subquery_count: 87
+    cte_count: 97
+    graph_edges: 28
+    graph_max_scope_sources: 82
+  source_path: repos/legacy/scripts/script_85_query54.sql
+- id: script_86
+  origin: query64
+  rubric_points: 11
+  rubric_band: high
+  selected_because:
+  - widest data footprint (graph_nodes=13)
+  corpus_percentile:
+    rubric_points: 90
+    loc_code: 93
+    source_tables: 100
+    subquery_count: 42
+    cte_count: 88
+    graph_edges: 100
+    graph_max_scope_sources: 100
+  source_path: repos/legacy/scripts/script_86_query64.sql
+- id: script_87
+  origin: query49
+  rubric_points: 11
+  rubric_band: high
+  selected_because:
+  - most window functions (window_function_count=6)
+  corpus_percentile:
+    rubric_points: 90
+    loc_code: 95
+    source_tables: 93
+    subquery_count: 95
+    cte_count: 70
+    graph_edges: 87
+    graph_max_scope_sources: 38
+  source_path: repos/legacy/scripts/script_87_query49.sql
+- id: script_88
+  origin: query24
+  rubric_points: 11
+  rubric_band: high
+  selected_because:
+  - stratified fill (high, 11pts)
+  corpus_percentile:
+    rubric_points: 90
+    loc_code: 88
+    source_tables: 85
+    subquery_count: 80
+    cte_count: 88
+    graph_edges: 74
+    graph_max_scope_sources: 94
+  source_path: repos/legacy/scripts/script_88_query24.sql
+- id: script_89
+  origin: query75
+  rubric_points: 11
+  rubric_band: high
+  selected_because:
+  - stratified fill (high, 11pts)
+  corpus_percentile:
+    rubric_points: 90
+    loc_code: 87
+    source_tables: 95
+    subquery_count: 68
+    cte_count: 79
+    graph_edges: 97
+    graph_max_scope_sources: 69
+  source_path: repos/legacy/scripts/script_89_query75.sql
+- id: script_90
+  origin: query66
+  rubric_points: 12
+  rubric_band: high
+  selected_because:
+  - most CASE expressions (case_expression_count=48)
+  corpus_percentile:
+    rubric_points: 93
+    loc_code: 100
+    source_tables: 85
+    subquery_count: 68
+    cte_count: 70
+    graph_edges: 92
+    graph_max_scope_sources: 82
+  source_path: repos/legacy/scripts/script_90_query66.sql
+- id: script_91
+  origin: query4
+  rubric_points: 12
+  rubric_band: high
+  selected_because:
+  - stratified fill (high, 12pts)
+  corpus_percentile:
+    rubric_points: 93
+    loc_code: 97
+    source_tables: 69
+    subquery_count: 42
+    cte_count: 79
+    graph_edges: 87
+    graph_max_scope_sources: 94
+  source_path: repos/legacy/scripts/script_91_query4.sql
+- id: script_92
+  origin: query5
+  rubric_points: 12
+  rubric_band: high
+  selected_because:
+  - stratified fill (high, 12pts)
+  corpus_percentile:
+    rubric_points: 93
+    loc_code: 94
+    source_tables: 98
+    subquery_count: 91
+    cte_count: 97
+    graph_edges: 10
+    graph_max_scope_sources: 38
+  source_path: repos/legacy/scripts/script_92_query5.sql
+- id: script_93
+  origin: query60
+  rubric_points: 13
+  rubric_band: high
+  selected_because:
+  - stratified fill (high, 13pts)
+  corpus_percentile:
+    rubric_points: 96
+    loc_code: 75
+    source_tables: 85
+    subquery_count: 91
+    cte_count: 97
+    graph_edges: 97
+    graph_max_scope_sources: 69
+  source_path: repos/legacy/scripts/script_93_query60.sql
+- id: script_94
+  origin: query56
+  rubric_points: 13
+  rubric_band: high
+  selected_because:
+  - stratified fill (high, 13pts)
+  corpus_percentile:
+    rubric_points: 96
+    loc_code: 76
+    source_tables: 85
+    subquery_count: 91
+    cte_count: 97
+    graph_edges: 97
+    graph_max_scope_sources: 69
+  source_path: repos/legacy/scripts/script_94_query56.sql
+- id: script_95
+  origin: query33
+  rubric_points: 13
+  rubric_band: high
+  selected_because:
+  - stratified fill (high, 13pts)
+  corpus_percentile:
+    rubric_points: 96
+    loc_code: 72
+    source_tables: 85
+    subquery_count: 91
+    cte_count: 97
+    graph_edges: 97
+    graph_max_scope_sources: 69
+  source_path: repos/legacy/scripts/script_95_query33.sql
+- id: script_96
+  origin: query14
+  rubric_points: 14
+  rubric_band: high
+  selected_because:
+  - most nested subqueries in the corpus (subquery_count=19)
+  corpus_percentile:
+    rubric_points: 98
+    loc_code: 99
+    source_tables: 69
+    subquery_count: 100
+    cte_count: 98
+    graph_edges: 87
+    graph_max_scope_sources: 38
+  source_path: repos/legacy/scripts/script_96_query14.sql
+- id: script_97
+  origin: query23
+  rubric_points: 14
+  rubric_band: high
+  selected_because:
+  - stratified fill (high, 14pts)
+  corpus_percentile:
+    rubric_points: 98
+    loc_code: 96
+    source_tables: 85
+    subquery_count: 98
+    cte_count: 100
+    graph_edges: 91
+    graph_max_scope_sources: 38
+  source_path: repos/legacy/scripts/script_97_query23.sql
+- id: script_98
+  origin: query80
+  rubric_points: 15
+  rubric_band: high
+  selected_because:
+  - stratified fill (high, 15pts)
+  corpus_percentile:
+    rubric_points: 100
+    loc_code: 90
+    source_tables: 99
+    subquery_count: 68
+    cte_count: 97
+    graph_edges: 99
+    graph_max_scope_sources: 94
+  source_path: repos/legacy/scripts/script_98_query80.sql
+- id: script_99
+  origin: query77
+  rubric_points: 15
+  rubric_band: high
+  selected_because:
+  - stratified fill (high, 15pts)
+  corpus_percentile:
+    rubric_points: 100
+    loc_code: 91
+    source_tables: 97
+    subquery_count: 68
+    cte_count: 100
+    graph_edges: 99
+    graph_max_scope_sources: 38
+  source_path: repos/legacy/scripts/script_99_query77.sql

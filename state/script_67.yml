@@ -1,0 +1,96 @@
+id: script_67
+name: query28
+source_path: repos/legacy/scripts/script_67_query28.sql
+origin: tpc-ds query28
+dialect: spark
+selected_because:
+- stratified fill (medium, 6pts)
+evidence_card:
+  purpose: null
+  structure: 1 statement in the file. Reads 1 source table, joined in a disconnected shape with 0 join
+    predicates. Uses 6 subqueries. No CTE, window function, set operation or CASE expression. Nests 1
+    level deep.
+  facts: lines=50 statements=1 sources=1 joins=0 widest_join=6 subqueries=6 correlated=0 ctes=0 window_fns=0
+    set_ops=0 case_exprs=0 nesting=1
+  approx_tokens: 76
+features:
+  parse_ok: true
+  parse_dialect: spark
+  loc: 51
+  loc_code: 50
+  chars: 2687
+  statements: 1
+  cte_count: 0
+  cte_max_depth: 0
+  subquery_count: 6
+  scalar_subquery_count: 0
+  correlated_subquery_count: 0
+  derived_table_count: 6
+  max_nesting_depth: 1
+  scope_count: 7
+  window_function_count: 0
+  distinct_window_specs: 0
+  aggregate_count: 18
+  has_having: false
+  has_distinct: true
+  has_order_by: false
+  source_tables: 1
+  table_references: 6
+  cte_references: 0
+  set_operation_count: 0
+  union_all_count: 0
+  intersect_except_count: 0
+  case_expression_count: 0
+  case_max_branches: 0
+  graph_nodes: 1
+  graph_edges: 0
+  graph_density: 0.0
+  graph_components: 1
+  graph_max_degree: 0
+  graph_max_scope_sources: 6
+  graph_max_scope_edges: 0
+  graph_max_scope_degree: 0
+  graph_shape: disconnected
+  implicit_joins: 5
+  explicit_joins: 0
+  cross_join_risk: 6
+  unresolved_predicates: 0
+  distinct_sources:
+  - store_sales
+  distinct_aggregates:
+  - avg
+  - count
+  nonportable_markers: []
+corpus_percentile:
+  rubric_points: 69
+  loc_code: 62
+  source_tables: 2
+  subquery_count: 95
+  cte_count: 70
+  graph_edges: 6
+  graph_max_scope_sources: 94
+categories_to_verify:
+- migration_complexity
+- rewrite_strategy
+- has_subquery
+- has_window_function
+- multi_source
+- needs_human_review
+gold:
+  migration_complexity: medium
+  rubric_points: 6
+  has_subquery: true
+  has_window_function: false
+  multi_source: false
+  rewrite_strategy: refactor
+  needs_human_review: true
+  rationale: The same table is scanned several times by sibling subqueries that differ only in a filter.
+    One pass with conditional aggregation replaces all of them, and carrying the repeated scans across
+    wastes the migration.
+  source: deterministic+claude
+latency:
+  estimated_ms: 1781.1
+  measured_ms: 7712.6
+  ms_per_question: 1285.4
+  input_tokens: 3780
+  device: cpu

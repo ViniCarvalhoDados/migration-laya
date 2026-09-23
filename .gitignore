@@ -1,0 +1,9 @@
+.venv/
+__pycache__/
+*.pyc
+*.egg-info/
+.pytest_cache/
+
+# Gerado por `mlaya sample` a partir de corpus/tpcds/ — não versionado para
+# limitar a redistribuição das queries TPC-DS (ver NOTICE.md).
+repos/legacy/scripts/*.sql

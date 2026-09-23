@@ -1,0 +1,51 @@
+# Typed questions in Laya's schema (choice | score | noul).
+#
+# Written in English on purpose: the `laya` checkpoint is the English one
+# (ModernBERT-large, 512 tokens) and SQL vocabulary is English anyway. Reports
+# and per-script metadata stay in Portuguese.
+#
+# The first three are *verifiable*: the AST already knows the answer, so a
+# confident wrong answer here is the strongest possible negative signal. The
+# last three are judgement calls, graded against the rubric and against Claude's
+# written rationale.
+#
+# Keep every question short. The 512-token budget is shared between the
+# evidence card, these instructions and all the option descriptions.
+
+migration_complexity:
+  type: score
+  instructions: "How hard is this SQL script to migrate to a modern cloud warehouse?"
+  criteria:
+    - "trivial - only dialect syntax needs changing"
+    - "moderate - joins or subqueries need restructuring"
+    - "high - logic must be redesigned and validated in depth"
+
+rewrite_strategy:
+  type: choice
+  instructions: "Which migration strategy does this script require?"
+  criteria:
+    lift_and_shift: "runs as-is after dialect-level syntax fixes"
+    refactor: "needs joins, CTEs or subqueries restructured"
+    redesign: "logic must be redesigned for the target engine"
+    manual_rewrite: "too entangled for automated conversion"
+
+has_subquery:
+  type: noul
+  # "Nest a SELECT inside another query" is ambiguous for a WITH clause: a CTE
+  # is, on most readings, exactly that. Nine scripts in the corpus have CTEs and
+  # no subquery, and five of the model's errors on this question are those nine.
+  # The gold counts only inline subqueries, so the wording now says so.
+  instructions: "Does this script contain an inline subquery - a SELECT inside a
+    FROM, WHERE, IN or EXISTS clause? A WITH/CTE alone does not count."
+
+has_window_function:
+  type: noul
+  instructions: "Does this script use an analytic window function with an OVER clause?"
+
+multi_source:
+  type: noul
+  instructions: "Does this script read from four or more distinct source tables?"
+
+needs_human_review:
+  type: noul
+  instructions: "Must a human engineer review this script's logic before migrating it?"

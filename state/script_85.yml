@@ -1,0 +1,102 @@
+id: script_85
+name: query54
+source_path: repos/legacy/scripts/script_85_query54.sql
+origin: tpc-ds query54
+dialect: spark
+selected_because:
+- stratified fill (high, 10pts)
+evidence_card:
+  purpose: null
+  structure: 1 statement in the file. Reads 8 source tables, joined in a snowflake shape with 2 join predicates.
+    Uses 3 CTEs, 3 subqueries and 1 set operation. No window function or CASE expression. 2 subqueries
+    correlated with the outer query. Nests 3 levels deep.
+  facts: lines=56 statements=1 sources=8 joins=2 widest_join=5 subqueries=3 correlated=2 ctes=3 window_fns=0
+    set_ops=1 case_exprs=0 nesting=3
+  approx_tokens: 92
+features:
+  parse_ok: true
+  parse_dialect: spark
+  loc: 57
+  loc_code: 56
+  chars: 2379
+  statements: 1
+  cte_count: 3
+  cte_max_depth: 1
+  subquery_count: 3
+  scalar_subquery_count: 2
+  correlated_subquery_count: 2
+  derived_table_count: 1
+  max_nesting_depth: 3
+  scope_count: 9
+  window_function_count: 0
+  distinct_window_specs: 0
+  aggregate_count: 2
+  has_having: false
+  has_distinct: true
+  has_order_by: true
+  source_tables: 8
+  table_references: 11
+  cte_references: 3
+  set_operation_count: 1
+  union_all_count: 1
+  intersect_except_count: 0
+  case_expression_count: 0
+  case_max_branches: 0
+  graph_nodes: 8
+  graph_edges: 2
+  graph_density: 0.0714
+  graph_components: 6
+  graph_max_degree: 1
+  graph_max_scope_sources: 5
+  graph_max_scope_edges: 4
+  graph_max_scope_degree: 3
+  graph_shape: snowflake
+  implicit_joins: 7
+  explicit_joins: 0
+  cross_join_risk: 0
+  unresolved_predicates: 0
+  distinct_sources:
+  - catalog_sales
+  - customer
+  - customer_address
+  - date_dim
+  - item
+  - store
+  - store_sales
+  - web_sales
+  distinct_aggregates:
+  - count
+  - sum
+  nonportable_markers: []
+corpus_percentile:
+  rubric_points: 86
+  loc_code: 68
+  source_tables: 95
+  subquery_count: 87
+  cte_count: 97
+  graph_edges: 28
+  graph_max_scope_sources: 82
+categories_to_verify:
+- migration_complexity
+- rewrite_strategy
+- has_subquery
+- has_window_function
+- multi_source
+- needs_human_review
+gold:
+  migration_complexity: high
+  rubric_points: 10
+  has_subquery: true
+  has_window_function: false
+  multi_source: true
+  rewrite_strategy: refactor
+  needs_human_review: true
+  rationale: A chain of CTEs where each feeds the next, ending in an integer cast over a division. The
+    cast truncates, so the segment boundaries depend on the division semantics of the engine.
+  source: deterministic+claude
+latency:
+  estimated_ms: 1948.0
+  measured_ms: 6046.4
+  ms_per_question: 1007.7
+  input_tokens: 3072
+  device: cpu

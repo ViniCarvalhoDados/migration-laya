@@ -1,0 +1,977 @@
+<title>Laya na triagem de SQL</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;800&family=JetBrains+Mono:wght@400;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">
+
+<style>
+  :root {
+    --ground:   #f4f7f8;
+    --surface:  #ffffff;
+    --plate:    #fbfcfd;
+    --ink:      #0d1417;
+    --body:     #253238;
+    --muted:    #5c6b72;
+    --rule:     #dce4e7;
+    --rule-soft:#e9eef0;
+    --accent:   #0e7490;
+    --accent-dim:#e0f0f4;
+    --pos:      #15803d;
+    --warn:     #a16207;
+    --neg:      #9f1239;
+    --pos-bg:   #e8f4ec;
+    --warn-bg:  #f8f0dd;
+    --neg-bg:   #fae9ec;
+    --shadow:   0 1px 2px rgba(13,20,23,.05), 0 8px 24px -12px rgba(13,20,23,.18);
+    --measure:  68ch;
+  }
+  :root:not([data-theme="light"]) { }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground:   #0b1114;
+      --surface:  #121a1e;
+      --plate:    #f7f9fa;
+      --ink:      #eaf0f2;
+      --body:     #c3cfd4;
+      --muted:    #8798a0;
+      --rule:     #233137;
+      --rule-soft:#1a262b;
+      --accent:   #4bb8d4;
+      --accent-dim:#11313b;
+      --pos:      #5bbd83;
+      --warn:     #d6a94a;
+      --neg:      #e8788c;
+      --pos-bg:   #14291d;
+      --warn-bg:  #2b2415;
+      --neg-bg:   #2e161d;
+      --shadow:   0 1px 2px rgba(0,0,0,.4), 0 8px 28px -14px rgba(0,0,0,.8);
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground:   #0b1114;
+    --surface:  #121a1e;
+    --plate:    #f7f9fa;
+    --ink:      #eaf0f2;
+    --body:     #c3cfd4;
+    --muted:    #8798a0;
+    --rule:     #233137;
+    --rule-soft:#1a262b;
+    --accent:   #4bb8d4;
+    --accent-dim:#11313b;
+    --pos:      #5bbd83;
+    --warn:     #d6a94a;
+    --neg:      #e8788c;
+    --pos-bg:   #14291d;
+    --warn-bg:  #2b2415;
+    --neg-bg:   #2e161d;
+    --shadow:   0 1px 2px rgba(0,0,0,.4), 0 8px 28px -14px rgba(0,0,0,.8);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--body);
+    font-family: "Source Serif 4", Georgia, "Times New Roman", serif;
+    font-size: 17px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 0 28px 96px; }
+  .col  { max-width: var(--measure); }
+
+  h1, h2, h3, .eyebrow, .metric-val, th, .pill, .btn {
+    font-family: Archivo, "Helvetica Neue", Arial, sans-serif;
+  }
+  h1, h2, h3 { color: var(--ink); text-wrap: balance; margin: 0; }
+  h1 { font-size: clamp(2.4rem, 5.4vw, 3.9rem); font-weight: 800; letter-spacing: -.033em; line-height: 1.02; }
+  h2 { font-size: clamp(1.45rem, 2.6vw, 1.85rem); font-weight: 700; letter-spacing: -.02em; line-height: 1.15; }
+  h3 { font-size: 1.08rem; font-weight: 600; letter-spacing: -.008em; }
+  p  { margin: 0 0 1.05em; }
+  a  { color: var(--accent); text-underline-offset: 3px; text-decoration-thickness: 1px; }
+  a:focus-visible, summary:focus-visible {
+    outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 3px;
+  }
+  code, .mono { font-family: "JetBrains Mono", ui-monospace, monospace; font-size: .855em; }
+  code {
+    background: var(--rule-soft); padding: .12em .38em;
+    border-radius: 3px; color: var(--ink);
+  }
+
+  .eyebrow {
+    font-size: .705rem; font-weight: 600; letter-spacing: .15em;
+    text-transform: uppercase; color: var(--accent); margin: 0 0 .85rem;
+  }
+
+  /* ---------- hero ---------- */
+  header.hero { padding: 84px 0 56px; border-bottom: 1px solid var(--rule); }
+  .hero .lede {
+    font-size: 1.22rem; color: var(--muted); max-width: 60ch; margin-top: 1.4rem;
+  }
+  .hero .answer {
+    margin-top: 2.6rem; padding: 1.4rem 1.6rem;
+    background: var(--surface); border: 1px solid var(--rule);
+    border-left: 3px solid var(--neg); border-radius: 4px;
+    max-width: 66ch; box-shadow: var(--shadow);
+  }
+  .hero .answer strong { color: var(--ink); }
+  .facts {
+    display: flex; flex-wrap: wrap; gap: 8px 28px; margin-top: 2.1rem;
+    font-family: "JetBrains Mono", monospace; font-size: .76rem;
+    color: var(--muted); letter-spacing: .01em;
+  }
+  .facts b { color: var(--ink); font-weight: 600; }
+
+  /* ---------- sections ---------- */
+  section { padding: 62px 0 4px; }
+  section + section { border-top: 1px solid var(--rule-soft); }
+  .sec-head { margin-bottom: 1.9rem; }
+
+  /* ---------- plates (full-width data) ---------- */
+  .plate {
+    background: var(--surface); border: 1px solid var(--rule);
+    border-radius: 5px; margin: 1.9rem 0 2.2rem; box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+  .plate-head {
+    padding: .85rem 1.15rem; border-bottom: 1px solid var(--rule-soft);
+    font-family: Archivo, sans-serif; font-size: .74rem; font-weight: 600;
+    letter-spacing: .1em; text-transform: uppercase; color: var(--muted);
+    display: flex; justify-content: space-between; gap: 1rem; align-items: baseline;
+  }
+  .plate-body { padding: 1.15rem; }
+  .scroll { overflow-x: auto; }
+
+  table { border-collapse: collapse; width: 100%; font-size: .85rem; }
+  th {
+    text-align: left; font-size: .705rem; font-weight: 600; letter-spacing: .07em;
+    text-transform: uppercase; color: var(--muted);
+    padding: .55rem .7rem; border-bottom: 1px solid var(--rule);
+    white-space: nowrap;
+  }
+  td {
+    padding: .55rem .7rem; border-bottom: 1px solid var(--rule-soft);
+    font-variant-numeric: tabular-nums; white-space: nowrap;
+  }
+  tbody tr:last-child td { border-bottom: 0; }
+  td.q { font-family: "JetBrains Mono", monospace; font-size: .78rem; color: var(--ink); white-space: nowrap; }
+  td.note { white-space: normal; color: var(--muted); font-size: .8rem; }
+  .num { text-align: right; }
+  .strong-num { color: var(--ink); font-weight: 600; }
+
+  .pill {
+    display: inline-block; font-size: .67rem; font-weight: 600;
+    letter-spacing: .06em; text-transform: uppercase;
+    padding: .18em .5em; border-radius: 3px; white-space: nowrap;
+  }
+  .pill.pos  { background: var(--pos-bg);  color: var(--pos); }
+  .pill.warn { background: var(--warn-bg); color: var(--warn); }
+  .pill.neg  { background: var(--neg-bg);  color: var(--neg); }
+  .pill.flat { background: var(--rule-soft); color: var(--muted); }
+
+  /* ---------- metric strip ---------- */
+  .strip {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(146px, 1fr));
+    gap: 1px; background: var(--rule); border: 1px solid var(--rule);
+    border-radius: 5px; overflow: hidden; margin: 1.9rem 0 2.2rem;
+  }
+  .metric { background: var(--surface); padding: 1.05rem 1.1rem; }
+  .metric-lab {
+    font-family: "JetBrains Mono", monospace; font-size: .68rem;
+    color: var(--muted); letter-spacing: .02em; margin-bottom: .45rem;
+  }
+  .metric-val {
+    font-size: 1.62rem; font-weight: 700; color: var(--ink);
+    letter-spacing: -.02em; font-variant-numeric: tabular-nums; line-height: 1;
+  }
+  .metric-val.neg { color: var(--neg); }
+  .metric-sub { font-size: .76rem; color: var(--muted); margin-top: .35rem; }
+
+  /* ---------- figures (mermaid on a fixed light plate) ---------- */
+  figure { margin: 1.9rem 0 2.3rem; }
+  .diagram {
+    background: var(--plate); border: 1px solid var(--rule);
+    border-radius: 5px; padding: 1.5rem .9rem; overflow-x: auto;
+    box-shadow: var(--shadow);
+  }
+  .diagram pre.mermaid {
+    margin: 0; background: transparent; display: flex; justify-content: center;
+    min-width: max-content;
+  }
+  figcaption {
+    font-size: .845rem; color: var(--muted); margin-top: .85rem;
+    max-width: 72ch; line-height: 1.55;
+  }
+  figcaption b { color: var(--ink); font-weight: 600; }
+
+  /* ---------- callouts ---------- */
+  .call {
+    border: 1px solid var(--rule); border-left: 3px solid var(--accent);
+    background: var(--surface); border-radius: 4px;
+    padding: 1.05rem 1.2rem; margin: 1.6rem 0 1.9rem; max-width: var(--measure);
+    font-size: .93rem;
+  }
+  .call.neg  { border-left-color: var(--neg); }
+  .call.warn { border-left-color: var(--warn); }
+  .call p:last-child { margin-bottom: 0; }
+  .call .tag {
+    font-family: Archivo, sans-serif; font-size: .7rem; font-weight: 600;
+    letter-spacing: .1em; text-transform: uppercase; color: var(--muted);
+    display: block; margin-bottom: .45rem;
+  }
+
+  ul, ol { margin: 0 0 1.1em; padding-left: 1.25em; }
+  li { margin-bottom: .45em; }
+  li::marker { color: var(--muted); }
+
+  .open-q { display: grid; gap: 1px; background: var(--rule);
+            border: 1px solid var(--rule); border-radius: 5px; overflow: hidden; }
+  .open-q > div { background: var(--surface); padding: 1.15rem 1.25rem; }
+  .open-q h3 { margin-bottom: .4rem; }
+  .open-q p { font-size: .9rem; margin: 0; color: var(--muted); }
+  .open-q .who {
+    font-family: "JetBrains Mono", monospace; font-size: .7rem;
+    color: var(--accent); margin-top: .6rem; display: block;
+  }
+
+  pre.cmd {
+    background: var(--surface); border: 1px solid var(--rule); border-radius: 5px;
+    padding: 1rem 1.15rem; overflow-x: auto; font-family: "JetBrains Mono", monospace;
+    font-size: .79rem; line-height: 1.75; color: var(--body); margin: 1.4rem 0;
+  }
+  pre.cmd .c { color: var(--muted); }
+
+  footer {
+    margin-top: 72px; padding-top: 28px; border-top: 1px solid var(--rule);
+    font-size: .84rem; color: var(--muted);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    a { transition: color .15s ease; }
+  }
+  @media (max-width: 640px) {
+    body { font-size: 16px; }
+    .wrap { padding: 0 18px 64px; }
+    header.hero { padding: 54px 0 40px; }
+  }
+</style>
+
+<div class="wrap">
+
+<header class="hero">
+  <p class="eyebrow">Discovery técnico · corpus TPC-DS · n=99</p>
+  <h1>Laya na triagem de SQL</h1>
+  <p class="lede">
+    Um motor de decisão não-autoregressivo consegue triar um backlog de SQL
+    legado antes de uma migração? Montei o experimento, rodei nas 99 queries do
+    TPC-DS, submeti a uma auditoria externa — e duas das minhas conclusões
+    caíram.
+  </p>
+
+  <div class="answer">
+    <strong>Resposta curta:</strong> não com este checkpoint. O modelo
+    <em>ordena</em> bem (AUC 0,88–0,99) mas <em>corta</em> no lugar errado, e uma
+    regressão logística sobre as mesmas features empata com ele — ou ganha por
+    35 pontos na única pergunta sem vazamento. Alimentá-lo com SQL cru, que era
+    a correção óbvia, piora tudo.
+  </div>
+
+  <div class="facts">
+    <span><b>99</b> queries</span>
+    <span><b>99/99</b> parseadas</span>
+    <span><b>594</b> decisões avaliadas</span>
+    <span><b>139</b> testes</span>
+    <span><b>2,3 s</b> por script (CPU)</span>
+  </div>
+</header>
+
+<!-- ===================== METODOLOGIA ===================== -->
+<section id="metodologia">
+  <div class="sec-head col">
+    <p class="eyebrow">Metodologia</p>
+    <h2>Como o experimento foi montado</h2>
+  </div>
+
+  <div class="col">
+    <p>
+      O <a href="https://github.com/NandhaKishorM/laya">Laya</a> não gera texto:
+      ele responde perguntas tipadas
+      (<code>choice</code>, <code>score</code>, <code>noul</code>) devolvendo
+      probabilidades. Isso o torna atraente para triagem — mas o checkpoint
+      inglês tem <b>512 tokens de contexto por passagem</b>, e um script de 300
+      linhas não cabe.
+    </p>
+    <p>
+      Então o modelo nunca vê o SQL. Vê um <em>evidence card</em> de ~100 tokens
+      comprimido do AST. Essa compressão é o artefato central do estudo — e,
+      como se verá, também o seu problema.
+    </p>
+  </div>
+
+  <figure>
+    <div class="diagram">
+<pre class="mermaid">
+flowchart LR
+  SQL[/"99 queries<br/>TPC-DS"/]
+  EX["extrator sqlglot<br/><small>cascata spark → tsql</small>"]
+  F[("features do AST<br/>subqueries, CTEs,<br/>grafo de joins")]
+  RUB["rubrica<br/><small>limiares = percentis</small>"]
+  CARD["evidence card<br/><small>~100 tokens</small>"]
+  LAYA(["Laya<br/>421M"])
+  TREE{"árvore de<br/>decisão"}
+  OUT["AUTO / REVIEW /<br/>ESCALATE"]
+
+  SQL --> EX --> F
+  F -->|"pontua"| RUB
+  F -->|"comprime"| CARD
+  CARD -->|"único input"| LAYA
+  RUB ==>|"gabarito"| TREE
+  LAYA ==>|"predição"| TREE
+  TREE --> OUT
+
+  classDef gold fill:#e8f4ec,stroke:#15803d,color:#0d1417
+  classDef pred fill:#e0f0f4,stroke:#0e7490,color:#0d1417
+  classDef src  fill:#eef1f2,stroke:#93a4ab,color:#0d1417
+  class RUB gold
+  class LAYA,CARD pred
+  class SQL,EX,F src
+</pre>
+    </div>
+    <figcaption>
+      O pipeline. O caminho <b>verde</b> produz o gabarito; o <b>azul</b>, a
+      predição. Os dois se encontram só na árvore de decisão — mas repare de
+      onde ambos partem.
+    </figcaption>
+  </figure>
+
+  <div class="col">
+    <h3>Três decisões que sustentam o resto</h3>
+    <p>
+      <b>Limiares vindos de percentis, não de opinião.</b> A rubrica de
+      complexidade deriva cada corte de um percentil observado no corpus e
+      registra qual. "Por que 40 linhas?" vira "por que o percentil 66?" — uma
+      pergunta que o time consegue responder.
+    </p>
+    <p>
+      <b>Perguntas que o AST já responde.</b> <code>has_subquery</code>,
+      <code>has_window_function</code> e <code>multi_source</code> são 100%
+      verificáveis. Isso dá gabarito objetivo para as 99 sem trabalho manual — e
+      transforma um erro confiante nelas no sinal negativo mais forte possível.
+    </p>
+    <p>
+      <b>Gabarito cego para os julgamentos.</b> <code>rewrite_strategy</code> e
+      <code>needs_human_review</code> foram escritos lendo cada SQL. Os 10
+      primeiros antes de o Laya rodar; os 89 restantes depois de um run existir
+      em disco, sem consultá-lo. Blindagem procedimental, não estrutural — está
+      registrado no arquivo.
+    </p>
+  </div>
+</section>
+
+<!-- ===================== O DEFEITO ===================== -->
+<section id="circularidade">
+  <div class="sec-head col">
+    <p class="eyebrow">O defeito de desenho</p>
+    <h2>O cartão entrega a resposta</h2>
+  </div>
+
+  <div class="col">
+    <p>
+      Uma auditoria externa reproduziu tudo e apontou o problema central antes
+      de qualquer número: o cartão <em>lista os fatos perguntados</em> —
+      literalmente <code>subqueries=0</code>, "No CTE, subquery…". E o gabarito
+      de complexidade é uma função determinística dos mesmos números.
+    </p>
+  </div>
+
+  <figure>
+    <div class="diagram">
+<pre class="mermaid">
+flowchart TB
+  EX["extrator sqlglot"]
+  F[("subquery_count = 0")]
+  EX --> F
+  F -->|"escreve no cartão"| C["card: <i>subqueries=0</i>"]
+  F -->|"define o rótulo"| G["gold: has_subquery = <i>false</i>"]
+  C --> Q(["pergunta ao Laya:<br/>tem subquery?"])
+  Q -.->|"comparado com"| G
+
+  IF["um <b>if</b> sobre o cartão<br/>acerta 100%"]
+  C -.-> IF
+
+  classDef gold fill:#e8f4ec,stroke:#15803d,color:#0d1417
+  classDef pred fill:#e0f0f4,stroke:#0e7490,color:#0d1417
+  classDef bad  fill:#fae9ec,stroke:#9f1239,color:#0d1417
+  classDef src  fill:#eef1f2,stroke:#93a4ab,color:#0d1417
+  class G gold
+  class C,Q pred
+  class IF bad
+  class EX,F src
+</pre>
+    </div>
+    <figcaption>
+      A circularidade: pergunta e gabarito saem <b>da mesma feature</b>. Em 4 das
+      6 perguntas o experimento vira um teste de leitura, e o desenho não
+      consegue mostrar valor agregado do modelo.
+    </figcaption>
+  </figure>
+
+  <div class="call warn">
+    <span class="tag">Consequência</span>
+    <p>
+      As conclusões <b>negativas</b> deste estudo valem para este cartão e este
+      prompt. As conclusões <b>positivas</b> sobre automação não se sustentam.
+      Isso está dito aqui em cima de propósito, não enterrado nas limitações.
+    </p>
+  </div>
+</section>
+
+<!-- ===================== RESULTADOS ===================== -->
+<section id="resultados">
+  <div class="sec-head col">
+    <p class="eyebrow">Resultados · n=99</p>
+    <h2>Ordena bem, corta errado</h2>
+  </div>
+
+  <div class="col">
+    <p>
+      Reportar só acurácia me levou à conclusão errada. Acurácia responde
+      <em>o limiar está certo?</em>; AUC responde <em>a ordenação está certa?</em>.
+      Aqui as duas se separam.
+    </p>
+  </div>
+
+  <div class="plate">
+    <div class="plate-head">
+      <span>Perguntas binárias · cartão como input</span>
+      <span class="mono">leave-one-out não se aplica — Laya é zero-shot</span>
+    </div>
+    <div class="plate-body scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>pergunta</th><th class="num">AUC</th><th class="num">acc @0,5</th>
+            <th class="num">IC95</th><th class="num">baseline</th>
+            <th class="num">McNemar p</th><th class="num">melhor limiar</th>
+            <th class="num">acc nele</th><th>leitura</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="q">has_window_function</td>
+            <td class="num strong-num">0,99</td><td class="num">88%</td>
+            <td class="num">80–93%</td><td class="num">85%</td><td class="num">0,25</td>
+            <td class="num">0,21</td><td class="num strong-num">97%</td>
+            <td><span class="pill warn">limiar errado</span></td>
+          </tr>
+          <tr>
+            <td class="q">has_subquery</td>
+            <td class="num strong-num">0,95</td><td class="num">80%</td>
+            <td class="num">71–87%</td><td class="num">58%</td><td class="num">0,007</td>
+            <td class="num">0,34</td><td class="num strong-num">89%</td>
+            <td><span class="pill pos">ganho real</span></td>
+          </tr>
+          <tr>
+            <td class="q">multi_source</td>
+            <td class="num strong-num">0,88</td><td class="num">77%</td>
+            <td class="num">68–84%</td><td class="num">79%</td><td class="num">0,86</td>
+            <td class="num">0,35</td><td class="num strong-num">84%</td>
+            <td><span class="pill warn">limiar errado</span></td>
+          </tr>
+          <tr>
+            <td class="q">needs_human_review</td>
+            <td class="num strong-num" style="color:var(--neg)">0,22</td><td class="num">54%</td>
+            <td class="num">44–63%</td><td class="num">70%</td><td class="num">&lt;0,001</td>
+            <td class="num">0,69 inv.</td><td class="num strong-num">78%</td>
+            <td><span class="pill neg">sinal invertido</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="col">
+    <p>
+      Dois fatos saem daí. Primeiro: <b>todos os limiares ótimos caem abaixo de
+      0,5</b> — o modelo subestima P(true) de forma sistemática, que é o aviso de
+      temperatura inválida do próprio checkpoint aparecendo em número. Segundo:
+      AUC 0,22 não é ausência de sinal, é <b>sinal apontando para o lado
+      errado</b>; invertendo o limiar vai a 78%.
+    </p>
+  </div>
+
+  <div class="call">
+    <span class="tag">Ressalva metodológica</span>
+    <p>
+      O "melhor limiar" foi ajustado nos mesmos 99 pontos em que é medido. É um
+      <b>teto otimista</b>, não uma configuração implantável — serve só para
+      separar <em>o modelo não sabe</em> de <em>o corte está no lugar errado</em>.
+      Um número defensável exige hold-out.
+    </p>
+  </div>
+
+  <div class="col">
+    <h3>Os dois categóricos são constantes</h3>
+    <p>
+      <code>migration_complexity</code> respondeu <code>medium</code> nas 99.
+      <code>rewrite_strategy</code> respondeu <code>refactor</code> nas 99. Ambas
+      as matrizes de confusão têm <b>uma coluna só</b>, e a acurácia iguala a
+      taxa-base ao decimal. Não é classificação, é a distribuição a priori.
+    </p>
+    <p>
+      Ainda assim há ordenação por baixo do argmax: ρ = +0,59 (Spearman) entre os
+      pontos da rubrica e o score esperado. O intervalo útil está comprimido
+      entre 0,79 e 1,12 numa escala de 0 a 2.
+    </p>
+  </div>
+</section>
+
+<!-- ===================== BASELINE ===================== -->
+<section id="baseline">
+  <div class="sec-head col">
+    <p class="eyebrow">O baseline que decide o caso</p>
+    <h2>Contra uma regressão logística</h2>
+  </div>
+
+  <div class="col">
+    <p>
+      Superar a classe majoritária é barra baixa. A pergunta de um discovery é se
+      um modelo de 421M parâmetros se paga contra aritmética sobre features que
+      já extraímos de graça. Regressão logística (IRLS, L2,
+      <b>leave-one-out</b>), em duas variantes: <b>leaky</b> inclui a feature de
+      que o rótulo é definido; <b>clean</b> a remove.
+    </p>
+  </div>
+
+  <div class="plate">
+    <div class="plate-head">
+      <span>Regressão logística vs Laya · mesmas features, mesmo gabarito</span>
+    </div>
+    <div class="plate-body scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>pergunta</th><th>variante</th>
+            <th class="num">LR acc</th><th class="num">LR AUC</th>
+            <th class="num">Laya acc</th><th class="num">Laya AUC</th>
+            <th class="num">McNemar p</th><th>leitura</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="q">has_subquery</td><td>leaky</td>
+            <td class="num strong-num">97%</td><td class="num">0,97</td>
+            <td class="num">80%</td><td class="num">0,95</td><td class="num">0,0005</td>
+            <td><span class="pill neg">LR vence</span></td></tr>
+          <tr><td class="q">has_subquery</td><td>clean</td>
+            <td class="num">85%</td><td class="num">0,88</td>
+            <td class="num">80%</td><td class="num">0,95</td><td class="num">0,47</td>
+            <td><span class="pill flat">empate</span></td></tr>
+          <tr><td class="q">has_window_function</td><td>leaky</td>
+            <td class="num strong-num">100%</td><td class="num">1,00</td>
+            <td class="num">88%</td><td class="num">0,99</td><td class="num">0,0005</td>
+            <td><span class="pill neg">LR vence</span></td></tr>
+          <tr><td class="q">has_window_function</td><td>clean</td>
+            <td class="num">85%</td><td class="num">0,92</td>
+            <td class="num">88%</td><td class="num">0,99</td><td class="num">0,51</td>
+            <td><span class="pill flat">empate</span></td></tr>
+          <tr><td class="q">multi_source</td><td>leaky</td>
+            <td class="num strong-num">100%</td><td class="num">1,00</td>
+            <td class="num">77%</td><td class="num">0,88</td><td class="num">&lt;0,001</td>
+            <td><span class="pill neg">LR vence</span></td></tr>
+          <tr><td class="q">multi_source</td><td>clean</td>
+            <td class="num">80%</td><td class="num">0,63</td>
+            <td class="num">77%</td><td class="num">0,88</td><td class="num">0,74</td>
+            <td><span class="pill flat">empate</span></td></tr>
+          <tr><td class="q">needs_human_review</td><td>—</td>
+            <td class="num strong-num">89%</td><td class="num strong-num">0,94</td>
+            <td class="num">54%</td><td class="num" style="color:var(--neg)">0,22</td>
+            <td class="num">&lt;0,001</td>
+            <td><span class="pill neg">LR vence</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="col">
+    <p>
+      <b>A variante leaky em 97–100% é a medida da circularidade.</b> O cartão
+      lista os fatos; a regressão os lê de volta. Sobre exatamente o mesmo input,
+      o Laya fica <em>abaixo</em> da aritmética.
+    </p>
+    <p>
+      <b>Sem vazamento, é empate</b> (p = 0,47–0,74) nas três verificáveis. Um
+      ponto a favor do Laya, honestamente: por AUC ele bate a LR clean em duas
+      das três (<code>multi_source</code> 0,88 vs 0,63). Ordena melhor mesmo
+      empatando em acurácia.
+    </p>
+  </div>
+
+  <div class="call neg">
+    <span class="tag">E um achado sobre o meu próprio gabarito</span>
+    <p>
+      <code>needs_human_review</code> é a única pergunta sem vazamento possível —
+      é julgamento lido do SQL. A regressão acerta <b>89% (AUC 0,94)</b> fora da
+      amostra. Ou seja: se uma LR prevê meu julgamento de "precisa de revisão
+      humana" a partir de features do AST, então meus julgamentos eram, em boa
+      medida, função dessas mesmas features. Eu achava que estava adicionando
+      julgamento semântico; estava majoritariamente reescrevendo o extrator.
+    </p>
+  </div>
+</section>
+
+<!-- ===================== SQL CRU ===================== -->
+<section id="sql-cru">
+  <div class="sec-head col">
+    <p class="eyebrow">A correção óbvia, testada</p>
+    <h2>E se o Laya lesse o SQL?</h2>
+  </div>
+
+  <div class="col">
+    <p>
+      Era a recomendação mais importante da auditoria, e eu mesmo a tinha escrito:
+      enquanto o input for um resumo numérico, o teto do modelo é ler números.
+      Testei. Cada script é partido em janelas do tamanho do contexto, cada janela
+      recebe todas as perguntas, e a agregação segue regras
+      <b>pré-registradas</b> — escritas antes de ver qualquer resultado.
+    </p>
+  </div>
+
+  <figure>
+    <div class="diagram">
+<pre class="mermaid">
+flowchart LR
+  subgraph A["input A · evidence card"]
+    direction TB
+    A1["SQL"] --> A2["extrator"] --> A3["card<br/>~100 tokens"]
+  end
+  subgraph B["input B · SQL bruto"]
+    direction TB
+    B1["SQL"] --> B2["fatiador<br/>janelas de 512 tok"] --> B3["1–8 janelas<br/><small>86/99 cabem em 1</small>"]
+  end
+  A3 --> LA(["Laya"])
+  B3 --> LB(["Laya"])
+  LA --> RA["AUC 0,95 – 0,99<br/>P(true) calibrado<br/><b>0 ESCALATE</b>"]
+  LB --> RB["AUC 0,57 – 0,67<br/>P(true) ≈ 0,97<br/><b>80 ESCALATE</b>"]
+
+  classDef good fill:#e8f4ec,stroke:#15803d,color:#0d1417
+  classDef bad  fill:#fae9ec,stroke:#9f1239,color:#0d1417
+  classDef pred fill:#e0f0f4,stroke:#0e7490,color:#0d1417
+  class RA good
+  class RB bad
+  class LA,LB pred
+</pre>
+    </div>
+    <figcaption>
+      A única diferença entre os dois caminhos é o que entra no modelo. O
+      fatiador não é o problema: nos <b>86 scripts que cabem numa única janela</b>,
+      onde não há agregação nenhuma, o colapso é idêntico.
+    </figcaption>
+  </figure>
+
+  <div class="strip">
+    <div class="metric">
+      <div class="metric-lab">AUC has_subquery</div>
+      <div class="metric-val neg">0,95 → 0,57</div>
+      <div class="metric-sub">cartão → SQL bruto</div>
+    </div>
+    <div class="metric">
+      <div class="metric-lab">AUC has_window_function</div>
+      <div class="metric-val neg">0,99 → 0,67</div>
+      <div class="metric-sub">acurácia cai a 28%</div>
+    </div>
+    <div class="metric">
+      <div class="metric-lab">P(true) médio</div>
+      <div class="metric-val neg">0,16 → 0,80</div>
+      <div class="metric-sub">taxa real: 0,15</div>
+    </div>
+    <div class="metric">
+      <div class="metric-lab">Erros confiantes</div>
+      <div class="metric-val neg">0 → 80</div>
+      <div class="metric-sub">de 99 scripts</div>
+    </div>
+  </div>
+
+  <div class="col">
+    <p>
+      <b>Piora, e piora feio.</b> Lendo SQL o modelo responde "sim" a quase tudo —
+      P(true) médio de 0,80 a 0,97 contra taxas reais de 15% a 58%. Ele não está
+      lendo o SQL; está reagindo a um texto fora da sua distribuição e saturando.
+      Com o cartão, <code>has_window_function</code> dava P(true) médio de 0,16
+      contra uma taxa real de 0,15 — quase perfeito.
+    </p>
+    <p>
+      E o modo de falha muda de categoria: <b>81% dos scripts</b> passam a errar
+      com alta confiança um fato que o AST já conhece. É o modo irrecuperável, e é
+      o pior resultado do estudo.
+    </p>
+    <p>
+      Um ponto a favor: ler SQL <em>destrava</em> os categóricos —
+      <code>rewrite_strategy</code> passa a emitir as 4 classes contra 1 com o
+      cartão. Mas destravar não é acertar: a acurácia cai de 55% para 47%, abaixo
+      do baseline.
+    </p>
+  </div>
+
+  <div class="call neg">
+    <span class="tag">Reversão</span>
+    <p>
+      Isso reverte a minha própria recomendação anterior. O <code>laya</code> é um
+      ModernBERT afinado sobre estados em linguagem natural — tickets, mensagens.
+      SQL é código e não está na sua distribuição. <b>O cartão não era uma muleta:
+      era o que tornava a tarefa legível para este modelo.</b>
+    </p>
+  </div>
+</section>
+
+<!-- ===================== ÁRVORE ===================== -->
+<section id="arvore">
+  <div class="sec-head col">
+    <p class="eyebrow">Como a decisão é tomada</p>
+    <h2>Por que "erro confiante" é a métrica que importa</h2>
+  </div>
+
+  <div class="col">
+    <p>
+      A distinção que interessa não é certo-vs-errado, e sim <em>confiantemente
+      errado sobre algo que o AST já sabia</em>. Um classificador meramente errado
+      é gerenciável; um que erra e tem certeza, não.
+    </p>
+  </div>
+
+  <figure>
+    <div class="diagram">
+<pre class="mermaid">
+flowchart TB
+  IN(["6 respostas do Laya<br/>+ gabarito do AST"])
+  Q1{"algum fato verificável<br/>errado com conf ≥ 0,85?"}
+  Q2{"complexidade a<br/>2 bandas do gold?"}
+  Q3{"3 fatos certos<br/>e todos ≥ 0,85?"}
+  E["ESCALATE<br/><small>quebra confiança em produção</small>"]
+  A["AUTO<br/><small>sem humano</small>"]
+  H["HUMAN_REVIEW<br/><small>uma olhada, não uma investigação</small>"]
+
+  IN --> Q1
+  Q1 -->|sim| E
+  Q1 -->|não| Q2
+  Q2 -->|sim| E
+  Q2 -->|não| Q3
+  Q3 -->|sim| A
+  Q3 -->|não| H
+
+  classDef good fill:#e8f4ec,stroke:#15803d,color:#0d1417
+  classDef bad  fill:#fae9ec,stroke:#9f1239,color:#0d1417
+  classDef mid  fill:#f8f0dd,stroke:#a16207,color:#0d1417
+  class A good
+  class E bad
+  class H mid
+</pre>
+    </div>
+    <figcaption>
+      A árvore existe para separar erro recuperável de irrecuperável. Com o
+      cartão ela nunca disparou <b>ESCALATE</b> em 99 scripts; com SQL bruto,
+      disparou em 80.
+    </figcaption>
+  </figure>
+</section>
+
+<!-- ===================== AUDITORIA ===================== -->
+<section id="auditoria">
+  <div class="sec-head col">
+    <p class="eyebrow">Registro de revisões</p>
+    <h2>O que a auditoria derrubou</h2>
+  </div>
+
+  <div class="col">
+    <p>
+      Uma auditoria independente reproduziu os números e encontrou erros reais.
+      Verifiquei cada alegação de forma independente; todas reproduziram.
+    </p>
+  </div>
+
+  <div class="plate">
+    <div class="plate-head"><span>Achados confirmados e corrigidos</span></div>
+    <div class="plate-body scroll">
+      <table>
+        <thead><tr><th>achado</th><th>impacto</th><th>estado</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="note">Comparava perguntas binárias contra "~50% de acaso"</td>
+            <td class="note">Inflava o ganho: 79% vs 74% real, não vs 50%</td>
+            <td><span class="pill pos">corrigido</span></td>
+          </tr>
+          <tr>
+            <td class="note">Só acurácia reportada, sem AUC</td>
+            <td class="note">Levou ao veredito errado: "sem informação" virou "ordena bem, corta errado"</td>
+            <td><span class="pill pos">corrigido</span></td>
+          </tr>
+          <tr>
+            <td class="note"><code>cross_join_risk</code> disparava com predicado não resolvido</td>
+            <td class="note">Contaminava o gabarito: 12 → 6 scripts; dois mudaram de banda</td>
+            <td><span class="pill pos">corrigido</span></td>
+          </tr>
+          <tr>
+            <td class="note">Pergunta <code>has_subquery</code> ambígua com CTE</td>
+            <td class="note">Só reformular levou o <b>AUC de 0,84 para 0,95</b></td>
+            <td><span class="pill pos">corrigido</span></td>
+          </tr>
+          <tr>
+            <td class="note">Runs antigos irreprodutíveis — ids remapeados pelo amostrador</td>
+            <td class="note">Re-pontuar casava respostas com o gabarito errado</td>
+            <td><span class="pill pos">corrigido</span></td>
+          </tr>
+          <tr>
+            <td class="note">"8% sem humano com zero erro"</td>
+            <td class="note">n=7, IC95 de 49–97%. Não se sustenta</td>
+            <td><span class="pill warn">retirado</span></td>
+          </tr>
+          <tr>
+            <td class="note">A rubrica não mede dificuldade de migração</td>
+            <td class="note">ρ = <b>0,82</b> com contagem de linhas. Mede tamanho</td>
+            <td><span class="pill neg">em aberto</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="col">
+    <p>
+      O caso mais instrutivo é o da pergunta ambígua. "Does this script nest a
+      SELECT inside another query?" é ambíguo para um <code>WITH</code> — um CTE
+      é, na maioria das leituras, exatamente isso. Nove scripts do corpus têm CTE
+      e nenhuma subquery inline, e cinco dos erros do modelo eram esses nove.
+      Explicitar que CTE não conta levou o AUC de 0,84 a 0,95.
+    </p>
+    <p>
+      Isso é evidência direta de que parte do que chamei de "o checkpoint não
+      carrega informação" era <b>viés de formulação</b> — e apenas uma formulação
+      foi testada por pergunta.
+    </p>
+  </div>
+</section>
+
+<!-- ===================== EM ABERTO ===================== -->
+<section id="aberto">
+  <div class="sec-head col">
+    <p class="eyebrow">Pontos em aberto</p>
+    <h2>O que este estudo ainda não decide</h2>
+  </div>
+
+  <div class="open-q">
+    <div>
+      <h3>O gabarito é independente do input?</h3>
+      <p>
+        Hoje não. Precisaria de esforço real de migração medido, com anotadores
+        humanos e kappa de concordância. Sem isso, a circularidade permanece e
+        nenhum resultado positivo é conclusivo.
+      </p>
+      <span class="who">prioridade 1 · exige gente, não código</span>
+    </div>
+    <div>
+      <h3>TPC-DS é representativo de SQL legado?</h3>
+      <p>
+        Não. É analytics em ANSI SQL, escrito para rodar em qualquer engine. Não
+        cobre PL/SQL procedural, cursores, SQL dinâmico. E a pergunta não informa
+        dialeto de origem nem de destino.
+      </p>
+      <span class="who">prioridade 2 · pipeline aceita novo corpus sem mudança</span>
+    </div>
+    <div>
+      <h3>Quanto do resultado é viés de formulação?</h3>
+      <p>
+        Desconhecido, e possivelmente muito: reformular uma única pergunta moveu
+        o AUC 11 pontos. As opções de <code>rewrite_strategy</code> repetem
+        palavras que aparecem em quase todo cartão, o que explicaria bem os
+        preditores constantes.
+      </p>
+      <span class="who">prioridade 3 · barato de testar</span>
+    </div>
+    <div>
+      <h3>Um limiar calibrado sobrevive em hold-out?</h3>
+      <p>
+        Os limiares ótimos (0,21–0,35) foram ajustados nos mesmos 99 pontos.
+        AUC 0,99 diz que a informação está lá, mas só um split treino/teste
+        transforma isso em configuração implantável.
+      </p>
+      <span class="who">prioridade 4 · exige mais corpus</span>
+    </div>
+    <div>
+      <h3>Um encoder de código mudaria o quadro?</h3>
+      <p>
+        O experimento de SQL bruto sugere que sim — o fracasso foi de
+        distribuição, não de capacidade. Mas isso já é outro produto, não este
+        checkpoint.
+      </p>
+      <span class="who">fora de escopo deste discovery</span>
+    </div>
+    <div>
+      <h3>A ablação do <code>purpose</code> foi conclusiva?</h3>
+      <p>
+        Não. Com n=10 o teste não tem poder para detectar um efeito moderado. A
+        leitura correta é "nenhum efeito detectável nesta amostra" — foi uma
+        decisão de custo assumida, não um resultado.
+      </p>
+      <span class="who">reexecutar se o corpus crescer</span>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== REPRODUZIR ===================== -->
+<section id="reproduzir">
+  <div class="sec-head col">
+    <p class="eyebrow">Reprodução</p>
+    <h2>Rodando do zero</h2>
+  </div>
+
+  <div class="col">
+    <p>
+      O bloco de censo não precisa do Laya nem do torch e roda em segundos — e
+      vale por si só, independentemente do veredito sobre o modelo.
+    </p>
+  </div>
+
+  <pre class="cmd"><span class="c"># Bloco A — censo determinístico, sem Laya</span>
+uv venv --python 3.12 &amp;&amp; uv pip install -e ".[dev]"
+mlaya census --verify --emit-rubric   <span class="c"># 99 queries → censo + rubrica</span>
+mlaya sample --n 99 --seed 42
+mlaya card
+
+<span class="c"># Bloco B — Laya (baixa ~1 GB na primeira vez)</span>
+uv pip install laya
+mlaya ask     --run-id full99 --no-purpose   <span class="c"># ~3min45s em CPU</span>
+mlaya decide  --run-id full99
+mlaya baseline --run-id full99               <span class="c"># regressão logística, ~1 s</span>
+mlaya report  --run-id full99
+
+<span class="c"># Variante: Laya lendo SQL bruto em janelas (~11 min)</span>
+mlaya ask --run-id sql99 --source sql
+mlaya compare full99 sql99</pre>
+
+  <div class="col">
+    <p>
+      <code>pytest</code> roda 139 testes, incluindo casos que travam as
+      armadilhas que este estudo pisou: AUC abaixo de 0,5 como sinal invertido,
+      McNemar chamando ±2% de ruído, Wilson impedindo que "8/8" vire "100%", e um
+      teste que verifica que o leave-one-out não vaza.
+    </p>
+  </div>
+</section>
+
+<footer>
+  <p>
+    Corpus: 99 queries TPC-DS via
+    <a href="https://github.com/agirish/tpcds">agirish/tpcds</a>, derivadas da
+    especificação do Transaction Processing Performance Council — uso de
+    avaliação interna. Modelo:
+    <a href="https://github.com/NandhaKishorM/laya">convaiinnovations/laya</a>
+    0.3.10, Apache 2.0, executado em CPU.
+  </p>
+  <p>
+    Todos os números desta página saem de <code>runs/full99/report.md</code> e
+    <code>runs/sql99/report.md</code> no repositório, e são regeneráveis pelos
+    comandos acima.
+  </p>
+</footer>
+
+</div>
