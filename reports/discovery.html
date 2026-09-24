@@ -260,7 +260,7 @@
 <div class="wrap">
 
 <header class="hero">
-  <p class="eyebrow">Discovery técnico · corpus TPC-DS · n=99</p>
+  <p class="eyebrow">Discovery técnico · corpus TPC-DS · n=99 · 12 experimentos</p>
   <h1>Laya na triagem de SQL</h1>
   <p class="lede">
     Um motor de decisão não-autoregressivo consegue triar um backlog de SQL
@@ -270,20 +270,19 @@
   </p>
 
   <div class="answer">
-    <strong>Resposta curta:</strong> não com este checkpoint. Depois de quatro
-    validações o modelo <em>sabe</em> responder uma pergunta estrutural de forma
-    robusta &mdash; 95% em <code>has_subquery</code>, batendo uma regressão
-    logística por 15 pontos. Mas é justamente a pergunta que o
-    <code>sqlglot</code> responde de graça, e na única que exigiria julgamento
-    ele perde para a regressão por 10 pontos. Capacidade real, valor de
-    negócio não.
+    <strong>Resposta curta:</strong> não zero-shot. Depois de doze experimentos
+    sobram dois resultados úteis: <b>complexidade</b> dá para ordenar backlog
+    (94% dos erros ficam dentro de uma banda adjacente), e <b>estratégia de
+    reescrita</b> não sai do lugar em nenhuma das quatro formulações testadas
+    &mdash; mas essa nunca deveria ter sido testada zero-shot, porque o rótulo
+    depende do padrão de código de cada cliente.
   </div>
 
   <div class="facts">
     <span><b>99</b> queries</span>
     <span><b>99/99</b> parseadas</span>
     <span><b>594</b> decisões avaliadas</span>
-    <span><b>159</b> testes</span>
+    <span><b>173</b> testes</span>
     <span><b>2,3 s</b> por script (CPU)</span>
   </div>
 </header>
@@ -1094,6 +1093,268 @@ flowchart LR
   </div>
 </section>
 
+<!-- ===================== NEGOCIO ===================== -->
+<section id="negocio">
+  <div class="sec-head col">
+    <p class="eyebrow">Rodada 4 &middot; o que o negócio pergunta</p>
+    <h2>As duas perguntas que a consultoria pagaria</h2>
+  </div>
+
+  <div class="col">
+    <p>
+      <code>migration_complexity</code> e <code>rewrite_strategy</code> são as de
+      valor comercial &mdash; e eram as únicas que eu nunca tinha submetido ao
+      tratamento que salvou as binárias. Julguei as duas pelo argmax sob uma
+      única redação, o que não é teste justo.
+    </p>
+    <p>
+      Quatro redações cada, variando o eixo que a auditoria apontou: as opções
+      originais ecoam o vocabulário do cartão; as alternativas descrevem por
+      esforço, por quem faz o trabalho, e sem descrição nenhuma.
+    </p>
+  </div>
+
+  <div class="plate">
+    <div class="plate-head">
+      <span>Complexidade &middot; 4 redações, cortes ajustados em hold-out</span>
+    </div>
+    <div class="plate-body scroll">
+      <table>
+        <thead><tr>
+          <th>redação</th><th class="num">AUC low&harr;high</th>
+          <th class="num">3 bandas (hold-out)</th><th class="num">baseline</th>
+        </tr></thead>
+        <tbody>
+          <tr><td>p1 &mdash; a do estudo</td>
+            <td class="num strong-num">0,86</td><td class="num strong-num">52%</td>
+            <td class="num">31%</td></tr>
+          <tr><td>p2 &mdash; por esforço</td>
+            <td class="num">0,77</td><td class="num">38%</td><td class="num">31%</td></tr>
+          <tr><td>p3 &mdash; por quem faz</td>
+            <td class="num">0,83</td><td class="num">41%</td><td class="num">31%</td></tr>
+          <tr><td>p4 &mdash; rótulos nus</td>
+            <td class="num">0,76</td><td class="num">41%</td><td class="num">31%</td></tr>
+          <tr><td>ensemble</td>
+            <td class="num">0,82</td><td class="num">43%</td><td class="num">31%</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="strip">
+    <div class="metric">
+      <div class="metric-lab">banda exata</div>
+      <div class="metric-val">58%</div>
+      <div class="metric-sub">acerta na mosca</div>
+    </div>
+    <div class="metric">
+      <div class="metric-lab">erra 1 banda</div>
+      <div class="metric-val">36%</div>
+      <div class="metric-sub">ruído tolerável na triagem</div>
+    </div>
+    <div class="metric">
+      <div class="metric-lab">erra 2 bandas</div>
+      <div class="metric-val" style="color:var(--pos)">6%</div>
+      <div class="metric-sub">o erro que estraga planejamento</div>
+    </div>
+    <div class="metric">
+      <div class="metric-lab">dentro de 1 banda</div>
+      <div class="metric-val" style="color:var(--pos)">94%</div>
+      <div class="metric-sub">utilizável para ordenar</div>
+    </div>
+  </div>
+
+  <div class="col">
+    <p>
+      <b>Complexidade tem base.</b> Todas as redações ficam acima do baseline, e
+      a estrutura do erro é a que importa: chamar um <code>high</code> de
+      <code>low</code> acontece em 6%. Para ordenar um backlog e decidir por onde
+      começar, serve.
+    </p>
+    <p>
+      Uma assimetria contra as binárias: aqui o <b>ensemble não ajuda</b> (43%
+      contra 52% da melhor redação). Para <code>score</code> ordinal, agregar
+      achata a distribuição em vez de estabilizá-la. E cuidado &mdash; comparar 4
+      redações e apontar a melhor já é seleção: o intervalo defensável é
+      <b>38&ndash;52%</b>.
+    </p>
+  </div>
+
+  <div class="plate">
+    <div class="plate-head"><span>Estratégia de reescrita &middot; 4 redações</span></div>
+    <div class="plate-body scroll">
+      <table>
+        <thead><tr>
+          <th>redação</th><th class="num">classes emitidas</th>
+          <th class="num">acurácia</th><th>leitura</th>
+        </tr></thead>
+        <tbody>
+          <tr><td>p1 &mdash; a do estudo</td><td class="num">1</td>
+            <td class="num">55% = baseline</td>
+            <td><span class="pill neg">constante</span></td></tr>
+          <tr><td>p2 &mdash; por resultado</td><td class="num">2</td>
+            <td class="num">54%</td>
+            <td><span class="pill neg">constante</span></td></tr>
+          <tr><td>p3 &mdash; por abordagem</td><td class="num">1</td>
+            <td class="num">55%</td>
+            <td><span class="pill neg">constante</span></td></tr>
+          <tr><td>p4 &mdash; rótulos nus</td><td class="num">1</td>
+            <td class="num">55%</td>
+            <td><span class="pill neg">constante</span></td></tr>
+          <tr><td>ensemble</td><td class="num">1</td>
+            <td class="num">55%</td>
+            <td><span class="pill neg">constante</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="call neg">
+    <span class="tag">Mas o teste estava errado</span>
+    <p>
+      Quatro formulações muito diferentes, todas colapsam em
+      <code>refactor</code>. Nem os rótulos nus destravam &mdash; <b>não é viés
+      de formulação, é ausência de capacidade zero-shot</b>.
+    </p>
+    <p>
+      <b>Só que zero-shot nunca foi o teste certo para essa pergunta.</b> O
+      rótulo depende do padrão de código da empresa: o que é "refactor" numa casa
+      é "lift and shift" em outra. Meu gabarito é a minha opinião, não a decisão
+      do cliente.
+    </p>
+  </div>
+</section>
+
+<!-- ===================== CUSTO ===================== -->
+<section id="custo">
+  <div class="sec-head col">
+    <p class="eyebrow">O argumento de custo, medido</p>
+    <h2>Quanto se economiza de verdade</h2>
+  </div>
+
+  <div class="col">
+    <p>
+      O motivo usual para preferir um classificador pequeno é que LLMs consomem
+      muitos tokens nesse tipo de tarefa. Medi, com preços de tabela e tokens do
+      próprio corpus (167 por cartão, 517 por SQL cru, mais ~250 de prompt).
+    </p>
+  </div>
+
+  <div class="plate">
+    <div class="plate-head">
+      <span>Classificar 5.000 scripts nas duas perguntas de valor</span>
+      <span class="mono">uma chamada por script</span>
+    </div>
+    <div class="plate-body scroll">
+      <table>
+        <thead><tr>
+          <th>modelo</th><th class="num">só o rótulo</th>
+          <th class="num">com justificativa</th><th class="num">com Batch API</th>
+        </tr></thead>
+        <tbody>
+          <tr><td>Haiku 4.5</td><td class="num">$5,83</td>
+            <td class="num">$19</td><td class="num">~$10</td></tr>
+          <tr><td>Sonnet 5</td><td class="num">$12</td>
+            <td class="num">$56</td><td class="num">~$28</td></tr>
+          <tr><td>Opus 5</td><td class="num">$20</td>
+            <td class="num">$94</td><td class="num">~$47</td></tr>
+          <tr><td><b>Laya</b> (CPU local)</td>
+            <td class="num strong-num">~$0,13</td>
+            <td class="num">&mdash;</td><td class="num">&mdash;</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="call">
+    <span class="tag">Leitura honesta</span>
+    <p>
+      Relativamente é 10&ndash;100&times; mais barato. Em absoluto estamos falando
+      de <b>dezenas de dólares</b> &mdash; custo de token sozinho não justifica
+      escolher um classificador pior.
+    </p>
+    <p>
+      Os dois eixos que justificam são outros: <b>residência de dado</b> (roda
+      local, o SQL do cliente não sai do perímetro &mdash; para consultoria isso
+      costuma valer mais que $94) e <b>fine-tune por cliente</b> (um encoder de
+      421M você afina com centenas de exemplos rotulados; Opus, não).
+    </p>
+  </div>
+</section>
+
+<!-- ===================== FINE-TUNE ===================== -->
+<section id="finetune">
+  <div class="sec-head col">
+    <p class="eyebrow">O caminho</p>
+    <h2>O rótulo já existe, no diff</h2>
+  </div>
+
+  <div class="col">
+    <p>
+      Todo gabarito deste estudo foi opinião minha &mdash; e por isso uma
+      regressão logística conseguiu reproduzi-lo a partir das mesmas features do
+      AST. Um fine-tune treinado nele aprenderia a minha opinião: uma forma cara
+      de reimplementar o extrator.
+    </p>
+    <p>
+      <b>Uma migração já concluída não tem esse problema.</b> O cliente decidiu,
+      script a script, e a decisão está registrada no diff entre o arquivo legado
+      e o migrado.
+    </p>
+  </div>
+
+  <figure>
+    <div class="diagram">
+<pre class="mermaid">
+flowchart LR
+  L["SQL legado"] --> EA["AST antes"]
+  M["SQL migrado"] --> EB["AST depois"]
+  EA --> D{"o que mudou?"}
+  EB --> D
+  D -->|"só dialeto"| S1["lift_and_shift"]
+  D -->|"forma mudou"| S2["refactor"]
+  D -->|"tabelas mudaram"| S3["redesign"]
+  D -->|"não parseia"| S4["revisão humana"]
+
+  classDef gold fill:#e8f4ec,stroke:#15803d,color:#0d1417
+  classDef src  fill:#eef1f2,stroke:#93a4ab,color:#0d1417
+  classDef warn fill:#f8f0dd,stroke:#a16207,color:#0d1417
+  class S1,S2,S3 gold
+  class S4 warn
+  class L,M,EA,EB src
+</pre>
+    </div>
+    <figcaption>
+      O rótulo vem <b>do que foi feito</b>, não do que alguém acha. Validado num
+      par antes/depois real: detecta corretamente o <i>wrap</i> em derived table
+      como <code>refactor</code>.
+    </figcaption>
+  </figure>
+
+  <div class="col">
+    <p>
+      Para <b>complexidade</b> o rótulo não pode vir do diff &mdash; tem que vir
+      do esforço real (horas apontadas, story points, commits no arquivo). É o
+      único jeito de não ser função das features de entrada.
+    </p>
+    <h3>O critério de aceite</h3>
+    <p>
+      O modelo afinado precisa <b>bater a regressão logística</b> sobre as mesmas
+      features do AST, em hold-out por família, com IC90 que não cruze zero
+      &mdash; e manter isso sob pelo menos duas formulações diferentes da
+      pergunta. Se não bater, o entregável é a regressão: mais barata,
+      milissegundos, explicável coeficiente a coeficiente.
+    </p>
+    <p>
+      Duas armadilhas já resolvidas nas ferramentas: <b>split por família</b>
+      (este corpus tem 82 famílias em 99 scripts &mdash; um split aleatório
+      vazaria quase-duplicatas entre treino e teste) e <b>fatia de calibração
+      reservada</b>, sem a qual se reproduz no modelo próprio o aviso de
+      confiança não calibrada do checkpoint de fábrica.
+    </p>
+  </div>
+</section>
+
 <!-- ===================== AUDITORIA ===================== -->
 <section id="auditoria">
   <div class="sec-head col">
@@ -1269,10 +1530,20 @@ mlaya compare full99 sql99</pre>
 
   <div class="col">
     <p>
-      <code>pytest</code> roda 139 testes, incluindo casos que travam as
+      <code>pytest</code> roda 173 testes, incluindo casos que travam as
       armadilhas que este estudo pisou: AUC abaixo de 0,5 como sinal invertido,
       McNemar chamando ±2% de ruído, Wilson impedindo que "8/8" vire "100%", e um
       teste que verifica que o leave-one-out não vaza.
+    </p>
+    <h3>Onde está o resto</h3>
+    <p>
+      Esta página é o resumo. O repositório traz o detalhe:
+      <code>docs/experiments.md</code> com os doze experimentos, cada um com sua
+      conclusão específica e quais derrubaram conclusões anteriores;
+      <code>docs/methodology.md</code> com as decisões de projeto e a procedência
+      de cada gabarito; <code>docs/limitations.md</code> com o que o estudo não
+      decide; e <code>docs/finetuning.md</code> com o plano operacional de
+      fine-tune por cliente.
     </p>
   </div>
 </section>
