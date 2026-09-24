@@ -1,0 +1,195 @@
+run_id: business
+splits: 200
+seed: 42
+note: the complexity gold is a deterministic function of the extracted features, so the rubric itself
+  scores 100% for free
+migration_complexity:
+- wording: migration_complexity_p1
+  n: 99
+  n_wordings: 1
+  distinct_argmax_labels: 1
+  band_counts:
+    low: 31
+    medium: 37
+    high: 31
+  majority_baseline: 0.3737
+  argmax_accuracy: 0.3737
+  auc_low_vs_high: 0.8652
+  holdout_accuracy:
+    mean: 0.5377
+    p05: 0.449
+    p95: 0.6122
+  optimistic_accuracy: 0.6061
+  error_structure_holdout:
+    exact: 0.5376
+    one_band: 0.3805
+    two_bands: 0.0818
+    within_one: 0.9182
+  error_structure_optimistic:
+    exact: 0.6061
+    one_band: 0.303
+    two_bands: 0.0909
+    within_one: 0.9091
+  rubric_accuracy: 1.0
+- wording: migration_complexity_p2
+  n: 99
+  n_wordings: 1
+  distinct_argmax_labels: 1
+  band_counts:
+    low: 31
+    medium: 37
+    high: 31
+  majority_baseline: 0.3737
+  argmax_accuracy: 0.3737
+  auc_low_vs_high: 0.7758
+  holdout_accuracy:
+    mean: 0.3968
+    p05: 0.3265
+    p95: 0.449
+  optimistic_accuracy: 0.4747
+  error_structure_holdout:
+    exact: 0.3969
+    one_band: 0.4418
+    two_bands: 0.1614
+    within_one: 0.8386
+  error_structure_optimistic:
+    exact: 0.4747
+    one_band: 0.3434
+    two_bands: 0.1818
+    within_one: 0.8182
+  rubric_accuracy: 1.0
+- wording: migration_complexity_p3
+  n: 99
+  n_wordings: 1
+  distinct_argmax_labels: 2
+  band_counts:
+    low: 31
+    medium: 37
+    high: 31
+  majority_baseline: 0.3737
+  argmax_accuracy: 0.404
+  auc_low_vs_high: 0.8299
+  holdout_accuracy:
+    mean: 0.4134
+    p05: 0.3469
+    p95: 0.4694
+  optimistic_accuracy: 0.5051
+  error_structure_holdout:
+    exact: 0.4134
+    one_band: 0.4849
+    two_bands: 0.1017
+    within_one: 0.8983
+  error_structure_optimistic:
+    exact: 0.5051
+    one_band: 0.3636
+    two_bands: 0.1313
+    within_one: 0.8687
+  rubric_accuracy: 1.0
+- wording: migration_complexity_p4
+  n: 99
+  n_wordings: 1
+  distinct_argmax_labels: 1
+  band_counts:
+    low: 31
+    medium: 37
+    high: 31
+  majority_baseline: 0.3737
+  argmax_accuracy: 0.3737
+  auc_low_vs_high: 0.7555
+  holdout_accuracy:
+    mean: 0.4357
+    p05: 0.3469
+    p95: 0.5306
+  optimistic_accuracy: 0.5253
+  error_structure_holdout:
+    exact: 0.4357
+    one_band: 0.4347
+    two_bands: 0.1296
+    within_one: 0.8704
+  error_structure_optimistic:
+    exact: 0.5253
+    one_band: 0.3333
+    two_bands: 0.1414
+    within_one: 0.8586
+  rubric_accuracy: 1.0
+- wording: ensemble
+  n: 99
+  n_wordings: 4
+  distinct_argmax_labels: 1
+  band_counts:
+    low: 31
+    medium: 37
+    high: 31
+  majority_baseline: 0.3737
+  argmax_accuracy: 0.3737
+  auc_low_vs_high: 0.8236
+  holdout_accuracy:
+    mean: 0.4442
+    p05: 0.3469
+    p95: 0.5306
+  optimistic_accuracy: 0.5354
+  error_structure_holdout:
+    exact: 0.4442
+    one_band: 0.4601
+    two_bands: 0.0957
+    within_one: 0.9043
+  error_structure_optimistic:
+    exact: 0.5354
+    one_band: 0.3434
+    two_bands: 0.1212
+    within_one: 0.8788
+  rubric_accuracy: 1.0
+rewrite_strategy:
+- wording: rewrite_strategy_p1
+  n: 99
+  distinct_predictions:
+  - refactor
+  gold_counts:
+    lift_and_shift: 35
+    redesign: 10
+    refactor: 54
+  majority_baseline: 0.5455
+  accuracy: 0.5455
+  accuracy_ci95:
+  - 0.4475
+  - 0.64
+- wording: rewrite_strategy_p2
+  n: 99
+  distinct_predictions:
+  - lift_and_shift
+  - refactor
+  gold_counts:
+    lift_and_shift: 35
+    redesign: 10
+    refactor: 54
+  majority_baseline: 0.5455
+  accuracy: 0.5354
+  accuracy_ci95:
+  - 0.4376
+  - 0.6304
+- wording: rewrite_strategy_p3
+  n: 99
+  distinct_predictions:
+  - refactor
+  gold_counts:
+    lift_and_shift: 35
+    redesign: 10
+    refactor: 54
+  majority_baseline: 0.5455
+  accuracy: 0.5455
+  accuracy_ci95:
+  - 0.4475
+  - 0.64
+- wording: rewrite_strategy_p4
+  n: 99
+  distinct_predictions:
+  - refactor
+  gold_counts:
+    lift_and_shift: 35
+    redesign: 10
+    refactor: 54
+  majority_baseline: 0.5455
+  accuracy: 0.5455
+  accuracy_ci95:
+  - 0.4475
+  - 0.64

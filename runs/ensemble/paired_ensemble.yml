@@ -1,0 +1,195 @@
+run_id: ensemble
+arm: ensemble
+splits: 200
+seed: 42
+protocol: stratified half-splits; threshold, coefficients and majority class all fitted on the training
+  half only
+results:
+- question: has_subquery
+  n: 99
+  splits: 200
+  gold_positive_rate: 0.5758
+  accuracy:
+    laya:
+      mean: 0.9682
+      p05: 0.9
+      p95: 1.0
+    lr_clean:
+      mean: 0.7958
+      p05: 0.68
+      p95: 0.88
+    lr_leaky:
+      mean: 0.9352
+      p05: 0.84
+      p95: 0.98
+    majority:
+      mean: 0.58
+      p05: 0.58
+      p95: 0.58
+  differences:
+    laya_minus_lr_clean:
+      mean: 0.1724
+      p05: 0.08
+      p95: 0.28
+      win_rate: 0.995
+      verdict: vence
+    laya_minus_lr_leaky:
+      mean: 0.033
+      p05: -0.04
+      p95: 0.14
+      win_rate: 0.645
+      verdict: empate
+    laya_minus_majority:
+      mean: 0.3882
+      p05: 0.32
+      p95: 0.42
+      win_rate: 1.0
+      verdict: vence
+  wordings:
+  - has_subquery_p1
+  - has_subquery_p2
+  - has_subquery_p3
+  - has_subquery_p4
+  - has_subquery_p5
+  - has_subquery_p6
+- question: has_window_function
+  n: 99
+  splits: 200
+  gold_positive_rate: 0.1515
+  accuracy:
+    laya:
+      mean: 0.8823
+      p05: 0.7755
+      p95: 0.9388
+    lr_clean:
+      mean: 0.8462
+      p05: 0.7551
+      p95: 0.898
+    lr_leaky:
+      mean: 0.9952
+      p05: 0.9388
+      p95: 1.0
+    majority:
+      mean: 0.8571
+      p05: 0.8571
+      p95: 0.8571
+  differences:
+    laya_minus_lr_clean:
+      mean: 0.0361
+      p05: -0.0816
+      p95: 0.1224
+      win_rate: 0.735
+      verdict: empate
+    laya_minus_lr_leaky:
+      mean: -0.1129
+      p05: -0.2245
+      p95: -0.0612
+      win_rate: 0.0
+      verdict: perde
+    laya_minus_majority:
+      mean: 0.0252
+      p05: -0.0816
+      p95: 0.0816
+      win_rate: 0.775
+      verdict: empate
+  wordings:
+  - has_window_function_p1
+  - has_window_function_p2
+  - has_window_function_p3
+  - has_window_function_p4
+  - has_window_function_p5
+  - has_window_function_p6
+- question: multi_source
+  n: 99
+  splits: 200
+  gold_positive_rate: 0.7879
+  accuracy:
+    laya:
+      mean: 0.7987
+      p05: 0.74
+      p95: 0.84
+    lr_clean:
+      mean: 0.7611
+      p05: 0.68
+      p95: 0.82
+    lr_leaky:
+      mean: 0.9792
+      p05: 0.92
+      p95: 1.0
+    majority:
+      mean: 0.78
+      p05: 0.78
+      p95: 0.78
+  differences:
+    laya_minus_lr_clean:
+      mean: 0.0376
+      p05: -0.02
+      p95: 0.12
+      win_rate: 0.67
+      verdict: empate
+    laya_minus_lr_leaky:
+      mean: -0.1805
+      p05: -0.24
+      p95: -0.1
+      win_rate: 0.0
+      verdict: perde
+    laya_minus_majority:
+      mean: 0.0187
+      p05: -0.04
+      p95: 0.06
+      win_rate: 0.595
+      verdict: empate
+  wordings:
+  - multi_source_p1
+  - multi_source_p2
+  - multi_source_p3
+  - multi_source_p4
+  - multi_source_p5
+  - multi_source_p6
+- question: needs_human_review
+  n: 99
+  splits: 200
+  gold_positive_rate: 0.697
+  accuracy:
+    laya:
+      mean: 0.7408
+      p05: 0.66
+      p95: 0.8
+    lr_clean:
+      mean: 0.8391
+      p05: 0.76
+      p95: 0.92
+    lr_leaky:
+      mean: 0.8391
+      p05: 0.76
+      p95: 0.92
+    majority:
+      mean: 0.7
+      p05: 0.7
+      p95: 0.7
+  differences:
+    laya_minus_lr_clean:
+      mean: -0.0983
+      p05: -0.2
+      p95: 0.0
+      win_rate: 0.04
+      verdict: empate
+    laya_minus_lr_leaky:
+      mean: -0.0983
+      p05: -0.2
+      p95: 0.0
+      win_rate: 0.04
+      verdict: empate
+    laya_minus_majority:
+      mean: 0.0408
+      p05: -0.04
+      p95: 0.1
+      win_rate: 0.795
+      verdict: empate
+  wordings:
+  - needs_human_review_p1
+  - needs_human_review_p2
+  - needs_human_review_p3
+  - needs_human_review_p4
+  - needs_human_review_p5
+  - needs_human_review_p6

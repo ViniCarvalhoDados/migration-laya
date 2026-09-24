@@ -5,7 +5,8 @@ o que ela mudou no estudo. Vários experimentos **derrubaram conclusões
 anteriores** — isso está marcado onde acontece.
 
 Artefatos brutos em `runs/<id>/`. Todos os números são regeneráveis pelos
-comandos indicados.
+comandos indicados — desde [E13](#e13), que trouxe para o repositório as
+comparações de E8, E10 e E11, até então produzidas por scripts fora dele.
 
 | # | experimento | run | veredito |
 |---|---|---|---|
@@ -16,11 +17,12 @@ comandos indicados.
 | [E5](#e5) | SQL bruto em janelas | `sql99` | ✗ piora muito |
 | [E6](#e6) | Baseline de regressão logística | `full99` | ✗ Laya empata ou perde |
 | [E7](#e7) | Hold-out do limiar | `full99` | ✓ calibração sobrevive |
-| [E8](#e8) | Comparação pareada Laya × LR | — | ↻ corrige E6 |
+| [E8](#e8) | Comparação pareada Laya × LR | `full99` | ↻ corrige E6 |
 | [E9](#e9) | Sensibilidade à formulação + negação | `variants` | ✗ derruba E7/E8 |
 | [E10](#e10) | Ensemble de 6 paráfrases | `ensemble` | ✓ resolve E9 |
-| [E11](#e11) | As duas perguntas de valor comercial | `business` | ◑ uma sim, uma não |
+| [E11](#e11) | As duas perguntas de valor comercial | `business` | ✗ nenhuma das duas |
 | [E12](#e12) | Custo contra LLM tradicional | — | ◑ real mas pequeno |
+| [E13](#e13) | O comparador certo e o baseline certo | `full99` / `ensemble` / `business` | ↻ **corrige E8, E10, E11** |
 
 ---
 
@@ -255,20 +257,32 @@ de 0,5**, confirmando a subestimação sistemática de P(true).
 probabilidades já saem calibradas do ajuste. Isso é injusto. E se os dois forem
 tratados igual?
 
-**Setup.** 200 splits, os dois ajustados só no treino e medidos só no teste.
+**Setup.** 200 splits estratificados. Limiar do Laya, coeficientes da LR e
+classe majoritária: todos ajustados só na metade de treino, todos medidos só na
+metade de teste.
 
-**Resultado.**
+```bash
+mlaya paired --run-id full99        # runs/full99/paired_single.yml
+```
 
-| pergunta | Laya | LR | baseline | diferença | IC90 | splits Laya>LR |
+**Resultado.** Duas colunas de LR, porque a diferença entre elas é o achado de
+[E13](#e13): a **limpa** não recebe as features que definem o rótulo; a **mesma
+info** recebe — é a informação que o cartão entrega ao Laya de graça.
+
+| pergunta | Laya | LR limpa | LR mesma info | base | Laya − limpa | Laya − mesma info |
 |---|---|---|---|---|---|---|
-| `has_window_function` | **95%** | 83% | 85% | **+11,4** | +6,0 a +18,0 | **100%** |
-| `has_subquery` | 86% | 80% | 58% | +5,4 | −4,0 a +16,0 | 76% |
-| `multi_source` | 79% | 77% | 79% | +2,8 | −8,0 a +12,0 | 63% |
-| `needs_human_review` | 75% | **84%** | 70% | **−8,8** | −16,0 a 0,0 | 3% |
+| `has_window_function` | **95%** | 85% | **100%** | 86% | **+10,2** (+4 a +20) | −4,7 (−8 a 0) |
+| `has_subquery` | 86% | 80% | 94% | 58% | +6,6 (−4 a +18) | −7,4 (−16 a +2) |
+| `multi_source` | 80% | 76% | **98%** | 78% | +3,8 (−4 a +14) | **−18,0** (−26 a −10) |
+| `needs_human_review` | 74% | **84%** | 84% | 70% | **−9,5** (−18 a −2) | **−9,5** (−18 a −2) |
 
-**Conclusão específica.** ↻ **Corrige E6.** Com tratamento igual, o Laya **vence
-a regressão** em `has_window_function`. Só duas diferenças são consistentes
-(IC90 sem cruzar zero): essa, a favor dele, e `needs_human_review`, contra.
+Entre parênteses, p05 e p95 da diferença entre os 200 splits. `needs_human_review`
+tem as duas colunas iguais porque o rótulo é julgamento humano: não há feature
+que o defina, logo nada a vazar.
+
+**Conclusão específica.** ↻ **Corrige E6.** Com tratamento igual, o Laya vence a
+regressão **limpa** em `has_window_function`. ↻ **Corrigido por [E13](#e13):**
+contra a regressão com a mesma informação que o cartão, essa vitória desaparece.
 
 **Nota metodológica.** Sem p-valor de propósito: as 200 metades de teste se
 sobrepõem, então um teste pareado clássico seria anticonservador. A dispersão
@@ -342,23 +356,29 @@ mlaya ensemble --run-id ensemble
 | `multi_source` | 0,55 | 0,90 | 0,35 | 0,73 | **0,86** |
 | `needs_human_review` | 0,15 | 0,40 | 0,25 | 0,28 | 0,24 |
 
-Pareado contra a LR (200 splits, os dois ajustados só no treino):
+Pareado contra as duas variantes da LR (200 splits, tudo ajustado só no treino):
 
-| pergunta | Laya 1× | **Laya 6×** | LR | baseline | 6×−LR | IC90 | splits |
+```bash
+mlaya paired --run-id ensemble --paraphrases   # runs/ensemble/paired_ensemble.yml
+```
+
+| pergunta | Laya 1× | **Laya 6×** | LR limpa | LR mesma info | base | 6× − limpa | 6× − mesma info |
 |---|---|---|---|---|---|---|---|
-| `has_subquery` | 86% | **95%** | 80% | 58% | **+15,2** | +6,0 a +26,0 | **100%** |
-| `has_window_function` | 95% | 87% | 83% | 85% | +4,1 | −4,0 a +12,0 | 75% |
-| `multi_source` | 79% | 79% | 77% | 79% | +2,8 | −6,0 a +12,0 | 62% |
-| `needs_human_review` | 75% | 74% | **84%** | 70% | **−9,8** | −18,0 a 0,0 | 3% |
+| `has_subquery` | 86% | **97%** | 80% | 94% | 58% | **+17,2** (+8 a +28) | +3,3 (−4 a +14) |
+| `has_window_function` | 95% | 88% | 85% | **100%** | 86% | +3,6 (−8 a +12) | **−11,3** (−22 a −6) |
+| `multi_source` | 80% | 80% | 76% | **98%** | 78% | +3,8 (−2 a +12) | **−18,1** (−24 a −10) |
+| `needs_human_review` | 74% | 74% | **84%** | 84% | 70% | −9,8 (−20 a 0) | −9,8 (−20 a 0) |
 
 **Conclusão específica.** ✓ **Resolve E9.** Agregar chega ao teto do oráculo
 (melhor redação escolhida *com o gabarito na mão*) sem precisar saber qual frase
-era a boa.
+era a boa. Esse achado continua de pé: é sobre estabilidade, não sobre o
+comparador.
 
-**`has_subquery` é a única vitória sólida do Laya no estudo inteiro:** 95%
-contra 80% da LR e 58% do baseline, IC90 longe de zero, consistente em 100% dos
-splits. É também a única robusta à paráfrase e que passa no teste de negação —
-três evidências independentes.
+**O que não continua de pé.** ↻ **Corrigido por [E13](#e13).** Eu chamei
+`has_subquery` de "a única vitória sólida do estudo" com base nos +15,2 pontos
+sobre a LR limpa. Contra a LR que enxerga o mesmo que o cartão, a diferença cai
+para **+3,3 pontos com IC de −4 a +14** — empate. Os +17,2 medem o quanto a
+regressão foi cegada, não o que o Laya sabe.
 
 **O preço honesto:** em `has_window_function` o ensemble (87%) fica *abaixo* da
 redação sortuda (95%). Você troca um número que não teria como saber escolher
@@ -383,43 +403,62 @@ esforço, por quem faz o trabalho, e sem descrição nenhuma.
 
 ```bash
 mlaya ask --run-id business --questions config/questions_business.yml --no-purpose
+mlaya business --run-id business          # runs/business/business.yml
 ```
 
-### Complexidade — há base
+### Complexidade — ordena, mas não acrescenta nada à rubrica
 
-| redação | AUC low↔high | 3 bandas (hold-out) | baseline |
+O baseline é a **classe majoritária do corpus: 37%** (as bandas saem 31 / 37 /
+31). A primeira versão desta tabela usava 31%, que é o reflexo "três bandas,
+logo um terço" — e sob ele uma redação de 38% parecia estar acima da linha
+quando está em cima dela. Corrigido em [E13](#e13).
+
+Cortes ajustados só na metade de treino, medidos só na metade de teste, 200
+splits:
+
+| redação | AUC low↔high | argmax | rótulos distintos | 3 bandas (hold-out) | [p05, p95] | teto in-sample |
+|---|---|---|---|---|---|---|
+| p1 (a do estudo) | **0,87** | 37% | 1 | **54%** | 45–61% | 61% |
+| p2 (por esforço) | 0,78 | 37% | 1 | 40% | 33–45% | 47% |
+| p3 (por quem faz) | 0,83 | 40% | 2 | 41% | 35–47% | 51% |
+| p4 (rótulos nus) | 0,76 | 37% | 1 | 44% | 35–53% | 53% |
+| ensemble | 0,82 | 37% | 1 | 44% | 35–53% | 54% |
+| **baseline (classe majoritária)** | — | — | — | **37%** | — | — |
+| **a própria rubrica** | — | — | — | **100%** | — | — |
+
+Estrutura do erro da p1, também em hold-out:
+
+| banda exata | erra 1 banda | **erra 2 bandas** | dentro de 1 banda |
 |---|---|---|---|
-| p1 (a do estudo) | **0,86** | **52%** | 31% |
-| p2 (por esforço) | 0,77 | 38% | 31% |
-| p3 (por quem faz) | 0,83 | 41% | 31% |
-| p4 (rótulos nus) | 0,76 | 41% | 31% |
-| ensemble | 0,82 | 43% | 31% |
+| 54% | 38% | **8%** | 92% |
 
-Estrutura do erro (p1, cortes nos quantis do gabarito):
+**Conclusão específica.** ↻ **Corrigida por [E13](#e13).** O que sobrevive: o
+score esperado **ordena** o corpus (AUC 0,87 entre `low` e `high`) e o erro de
+duas bandas é raro (8%). O que não sobrevive: a leitura de que isso serve para
+ordenar backlog.
 
-| banda exata | erra 1 banda | **erra 2 bandas** |
-|---|---|---|
-| 58% | 36% | **6%** |
+**Por quê.** O gabarito de complexidade *é a rubrica*, uma função determinística
+e gratuita das features que o extrator já calcula. A última linha da tabela não
+é retórica: para ordenar o backlog basta rodar a rubrica, que acerta 100% em
+milissegundos. O Laya a reproduz com 54% — e só depois de cortes ajustados em
+dados rotulados. Sem esse ajuste, o argmax é **constante em `medium` nas 99**,
+ou seja, exatamente o baseline.
 
-**Conclusão específica.** Todas as redações ficam acima do baseline. Chamar um
-`high` de `low` — o erro que estraga planejamento — acontece em 6%. **94% das
-vezes erra no máximo uma banda adjacente.** Para ordenar backlog e decidir por
-onde começar, é utilizável.
-
-**Assimetria contra E10:** aqui o **ensemble não ajuda** (43% contra 52% da
+**Assimetria contra E10:** aqui o **ensemble não ajuda** (44% contra 54% da
 melhor redação). Para `score` ordinal, agregar achata a distribuição em vez de
 estabilizá-la. E comparar 4 redações e apontar a melhor já é seleção — o
-intervalo defensável é **38–52%**.
+intervalo defensável é **40–54%**, não os 54% da melhor.
 
 ### Estratégia de reescrita — morta em todas as redações
 
 | redação | classes emitidas | acurácia |
 |---|---|---|
-| p1 (a do estudo) | 1 | 55% = baseline |
+| p1 (a do estudo) | 1 (`refactor`) | 55% = baseline |
 | p2 (por resultado) | 2 | 54% |
-| p3 (por abordagem) | 1 | 55% |
-| p4 (rótulos nus) | 1 | 55% |
-| ensemble | 1 | 55% |
+| p3 (por abordagem) | 1 (`refactor`) | 55% |
+| p4 (rótulos nus) | 1 (`refactor`) | 55% |
+
+IC95 de todas: 44–64%. Baseline (classe majoritária `refactor`): 55%.
 
 **Conclusão específica.** Quatro formulações muito diferentes, todas colapsam em
 `refactor`. Nem os rótulos nus destravam. **Não é viés de formulação — é
@@ -437,6 +476,10 @@ fine-tune com o histórico dele — ver [`finetuning.md`](finetuning.md).
 **Setup.** Preços de tabela da API Anthropic, tokens medidos no próprio corpus
 (167 por cartão, 517 por SQL cru, + ~250 de prompt), uma chamada por script
 respondendo as duas perguntas.
+
+A coluna "só o rótulo" assume ~150 tokens de saída, que é generoso para dois
+rótulos — o número real seria menor, e a conclusão fica ainda mais forte, não
+mais fraca: quanto mais barato o LLM, menos o custo justifica trocá-lo.
 
 **Resultado — 5.000 scripts.**
 
@@ -459,10 +502,78 @@ pior.** Os dois eixos que justificam são outros:
 
 ---
 
-## Auditoria externa
+## E13 — O comparador certo e o baseline certo {#e13}
 
-Uma auditoria independente reproduziu os números e encontrou erros reais.
-Verifiquei cada alegação de forma independente; **todas reproduziram**.
+**Pergunta.** Uma segunda auditoria externa apontou duas coisas que mudam
+conclusões, não detalhes:
+
+1. E8 e E10 comparam o Laya contra a regressão **limpa** — aquela de quem foram
+   removidas as features que definem o rótulo. Mas o cartão que o Laya lê
+   *imprime esses fatos*: `subqueries=0`, `window_fns=2`. Comparar o cartão
+   contra um modelo cego para o que o cartão diz mede o handicap, não o modelo.
+2. O baseline de complexidade estava em 31% quando a classe majoritária das 99
+   é **37%**.
+
+**Setup.** As duas comparações passaram a sair de código versionado, em vez dos
+scripts ad-hoc que produziram E8, E10 e E11. Mesmo protocolo para todos os
+braços — limiar, coeficientes e classe majoritária ajustados só no treino,
+medidos só no teste.
+
+```bash
+mlaya paired  --run-id full99                  # E8, agora com as duas LRs
+mlaya paired  --run-id ensemble --paraphrases  # E10, idem
+mlaya business --run-id business               # E11, com o baseline certo
+```
+
+**Resultado — o Laya contra a regressão com a mesma informação.**
+
+| pergunta | Laya 6× | LR mesma info | diferença | IC90 | veredito |
+|---|---|---|---|---|---|
+| `has_subquery` | 97% | 94% | +3,3 | −4 a +14 | empate |
+| `has_window_function` | 88% | **100%** | −11,3 | −22 a −6 | **perde** |
+| `multi_source` | 80% | **98%** | −18,1 | −24 a −10 | **perde** |
+| `needs_human_review` | 74% | 84% | −9,8 | −20 a 0 | empate |
+
+**Resultado — complexidade contra o baseline certo.**
+
+| | valor |
+|---|---|
+| classe majoritária (`medium`, 37 de 99) | **37%** |
+| argmax do Laya, qualquer redação | 37%, e constante em `medium` |
+| melhor redação, cortes em hold-out | 54% (45–61%) |
+| a rubrica que define o gabarito | **100%, determinística, grátis** |
+
+**Conclusão específica.** ↻ **Corrige E8, E10 e E11.**
+
+**Com a mesma informação, o Laya nunca vence.** Empata em `has_subquery`, perde
+nas outras duas verificáveis. Os "+15,2 pontos" que o README anunciava mediam o
+quanto a regressão tinha sido cegada.
+
+**E a conclusão positiva sobre complexidade não se sustenta.** Ela era positiva
+*sobre um gabarito que é ele próprio uma função gratuita das features*. Quem
+quer ordenar um backlog roda a rubrica e acerta 100%; o Laya entrega 54% da
+mesma coisa, e só com cortes ajustados em dados já rotulados.
+
+**O que isto não derruba.** Os resultados **negativos** ficam todos de pé — e
+ficam mais fortes, porque agora o comparador é mais duro, não mais frouxo:
+[E5](#e5) (SQL bruto), [E9](#e9) (sensibilidade à formulação),
+[E11](#e11) em `rewrite_strategy`. O veredito do estudo — **não adotar este
+checkpoint zero-shot** — não muda; o que muda é que ele deixa de ter uma
+exceção.
+
+**Nota de honestidade.** Esta é a segunda auditoria a encontrar o mesmo padrão:
+o desenho favorece o resultado positivo até alguém de fora olhar. Da primeira
+vez o problema era a ausência de AUC; desta, a escolha do comparador. As duas
+vezes o achado veio de fora, não de mim.
+
+---
+
+## Auditorias externas
+
+Duas auditorias independentes reproduziram os números e encontraram erros
+reais. Verifiquei cada alegação de forma independente; **todas reproduziram**.
+
+### Primeira rodada
 
 | achado | impacto | estado |
 |---|---|---|
@@ -482,3 +593,22 @@ leituras, exatamente isso. Nove scripts têm CTE e nenhuma subquery inline, e
 cinco dos erros do modelo eram esses nove. **Explicitar que CTE não conta levou
 o AUC de 0,84 a 0,95** — evidência direta, antes mesmo de E9, de que parte do
 que eu chamava de "o checkpoint não carrega informação" era viés de formulação.
+
+### Segunda rodada
+
+| achado | impacto | estado |
+|---|---|---|
+| E8/E10 comparavam o Laya contra a LR **limpa**, mas o cartão entrega as features que ela não recebe | Derruba a única vitória do estudo: +15,2 vira +3,3 com IC de −4 a +14 | corrigido em [E13](#e13) |
+| Baseline de complexidade em 31%; a classe majoritária é 37% | A redação p2 (40%) deixa de estar "acima do baseline" | corrigido em [E13](#e13) |
+| A conclusão positiva sobre complexidade é sobre um gabarito que é a própria rubrica | A rubrica ordena o backlog de graça e com 100%; o Laya entrega 54% da mesma função | conclusão reescrita |
+| E8, a tabela pareada do E10 e o E11 inteiro não tinham código no repositório | "Todos os números são regeneráveis" era falso | corrigido: `mlaya paired` e `mlaya business` |
+| O relatório lia `measured_ms` do YAML do script, que guarda o **último** run | A tabela de latência do `full99` mostrava o tempo do run `variants` (4060 ms contra 2209 ms reais) | corrigido: lê o raw do próprio run |
+| `methodology.md` dizia "8 scripts, zero erros: 49–97%" | Eram 7 scripts com 1 erro | corrigido |
+| Redações e paráfrases escritas **depois** de ver os erros | Margem de manobra do pesquisador, não fraude — mas precisa estar declarado | [declarado](limitations.md) |
+| `derive-labels` validado em um par só (8 de 9 acertos) | Amostra pequena demais para afirmar que a derivação funciona | [em aberto](limitations.md) |
+
+Um achado desta rodada era um bug meu de aritmética, não de desenho: o grid de
+cortes da complexidade arredondava a 3 casas mas o corte era aplicado ao valor
+cru, então `1.5999999999999999` caía abaixo de um limiar de `1.6`. Custava
+bandas inteiras de acurácia e está fixado por teste.
+

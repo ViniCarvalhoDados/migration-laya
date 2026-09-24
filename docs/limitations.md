@@ -20,6 +20,19 @@ sustentam.
 
 Isso está dito aqui e no topo do README de propósito, não enterrado no rodapé.
 
+### O corolário que demorei a tirar
+
+Se o cartão entrega os fatos, então a regressão que **não** os recebe é um
+comparador fraco por construção. E8 e E10 mediram o Laya contra ela e chamaram a
+diferença de vitória. Contra a regressão com a **mesma informação que o cartão**,
+o Laya empata em `has_subquery` e perde nas outras duas
+([E13](experiments.md#e13)).
+
+A mesma coisa vale para complexidade: o gabarito é a rubrica, e a rubrica é uma
+função determinística das features que o extrator já calcula. Ela acerta 100% em
+milissegundos. Qualquer número abaixo disso — inclusive os 54% do Laya — é uma
+cópia pior de algo que já existe de graça.
+
 ---
 
 ## A rubrica não mede dificuldade de migração
@@ -83,6 +96,7 @@ estrutural, mas nada aqui fala sobre legado procedural.
 | **O gabarito pode ser independente do input?** | Enquanto não for, nenhum resultado positivo é conclusivo. Precisa de esforço real medido, anotadores humanos, kappa. | alto — exige gente |
 | **TPC-DS representa legado real?** | Não. Precisa de PL/SQL procedural e dialeto de destino explícito. | médio — exige corpus |
 | **Quanto do resultado é viés de formulação?** | [E9](experiments.md#e9) mediu 0,28 de AUC médio. [E10](experiments.md#e10) mostrou que agregar resolve nas binárias — mas não nas ordinais. | baixo — feito parcialmente |
+| **O Laya bate a aritmética quando os dois veem a mesma coisa?** | [E13](experiments.md#e13) diz que não nas quatro perguntas medidas. O que falta é uma pergunta em que a aritmética **não** possa competir — e nesta rubrica não existe. | médio — exige outro gabarito |
 | **Um encoder de código mudaria o quadro?** | [E5](experiments.md#e5) sugere que sim: o fracasso com SQL bruto foi de distribuição, não de capacidade. Mas já é outro produto. | fora de escopo |
 | **Fine-tune com dados de cliente funciona?** | O único teste que decide o caso de `rewrite_strategy`, porque é o único em que o gabarito não é a minha opinião. | ver [`finetuning.md`](finetuning.md) |
 
@@ -93,8 +107,19 @@ estrutural, mas nada aqui fala sobre legado procedural.
 - **`has_window_function` tem só 15 positivos** em 99. Toda métrica dela tem
   intervalo largo.
 - **Comparar 4 redações e apontar a melhor já é seleção.** Em
-  [E11](experiments.md#e11) o intervalo defensável para complexidade é 38–52%,
-  não os 52% da melhor.
+  [E11](experiments.md#e11) o intervalo defensável para complexidade é 40–54%,
+  não os 54% da melhor.
+- **Redações escritas depois de ver os erros.** A formulação de `has_subquery`
+  foi ajustada depois que a auditoria mostrou onde o modelo errava (AUC 0,84 →
+  0,95), e as seis paráfrases de [E10](experiments.md#e10) foram escritas depois
+  de [E9](experiments.md#e9). A motivação é legítima — a pergunta era
+  genuinamente ambígua para um `WITH` — mas isso é **margem de manobra do
+  pesquisador**, e o resultado não é o mesmo que teria saído de um conjunto de
+  redações registrado antes de rodar. O teste limpo seria um corpus separado, ou
+  redações escritas às cegas.
+- **`derive-labels` foi validado em um par só.** Um antes/depois, 8 de 9
+  rótulos corretos. É suficiente para mostrar que o mecanismo funciona, e
+  insuficiente para afirmar que a derivação é confiável.
 - **O "melhor limiar" sem hold-out é teto otimista**, e está marcado como tal em
   todo lugar onde aparece.
 - **Ensemble de paráfrases custa 3,5×** em tempo de CPU.

@@ -867,6 +867,156 @@ def cmd_ensemble(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_paired(args: argparse.Namespace) -> int:
+    """Laya against both logistic-regression variants, all fitted on train only.
+
+    `--paraphrases` averages every `<question>_pN` wording present in the run,
+    which is the E10 ensemble; without it the single wording is scored, which is
+    E8. Either way the two regressions get the same splits, so the three arms
+    are directly comparable.
+    """
+    from . import paired as pr
+
+    run_dir, _run, docs, raw = _load_run(args)
+    if not raw:
+        print(f"no raw answers in {run_dir}/raw - run `mlaya ask` first",
+              file=sys.stderr)
+        return 2
+
+    any_answer = next(iter(raw.values())).get("answers") or {}
+    rows = []
+    for question in args.questions:
+        if args.paraphrases:
+            keys = sorted(k for k in any_answer if k.startswith(question + "_p"))
+            if len(keys) < 2:
+                continue
+        else:
+            keys = [question] if question in any_answer else []
+            if not keys:
+                continue
+        scores = pr.aggregate_scores(raw, docs, question, keys)
+        row = pr.compare(docs, question, scores, splits=args.splits,
+                         seed=args.seed)
+        if row:
+            row["wordings"] = keys
+            rows.append(row)
+
+    if not rows:
+        print("no question could be scored in this run", file=sys.stderr)
+        return 2
+
+    label = "ensemble" if args.paraphrases else "single"
+    census_mod.write_yaml(
+        {"run_id": args.run_id, "arm": label, "splits": args.splits,
+         "seed": args.seed,
+         "protocol": "stratified half-splits; threshold, coefficients and "
+                     "majority class all fitted on the training half only",
+         "results": rows},
+        run_dir / f"paired_{label}.yml",
+    )
+
+    print(f"  {'pergunta':22}{'Laya':>7}{'LR limpa':>10}{'LR vazada':>11}"
+          f"{'base':>7}   {'Laya-limpa':>22}   {'Laya-vazada':>22}")
+    for r in rows:
+        acc = r["accuracy"]
+        clean = r["differences"]["laya_minus_lr_clean"]
+        leaky = r["differences"]["laya_minus_lr_leaky"]
+        print(f"  {r['question']:22}"
+              f"{acc['laya']['mean']:>7.0%}{acc['lr_clean']['mean']:>10.0%}"
+              f"{acc['lr_leaky']['mean']:>11.0%}{acc['majority']['mean']:>7.0%}"
+              f"   {_delta(clean):>22}   {_delta(leaky):>22}")
+    print()
+    print("  LR limpa  = sem as features que definem o rotulo (piso honesto).")
+    print("  LR vazada = com elas, ou seja, a mesma informacao que o cartao da"
+          " ao Laya.")
+    print()
+    print(f"wrote {run_dir}/paired_{label}.yml")
+    return 0
+
+
+def _delta(summary: dict) -> str:
+    return (f"{100 * summary['mean']:+.1f} "
+            f"[{100 * summary['p05']:+.0f},{100 * summary['p95']:+.0f}] "
+            f"{summary['verdict']}")
+
+
+def cmd_business(args: argparse.Namespace) -> int:
+    """Score the two commercial questions across every wording in a run."""
+    from . import business as biz
+
+    run_dir, _run, docs, raw = _load_run(args)
+    if not raw:
+        print(f"no raw answers in {run_dir}/raw - run `mlaya ask` first",
+              file=sys.stderr)
+        return 2
+
+    by_id = {p.get("origin") or p["script_id"]: p for p in raw.values()}
+    any_answer = next(iter(raw.values())).get("answers") or {}
+
+    complexity, strategy = [], []
+    for key in sorted(any_answer):
+        if key.startswith("migration_complexity"):
+            row = biz.complexity(raw, docs, key, splits=args.splits,
+                                 seed=args.seed)
+            if row:
+                complexity.append(row)
+        elif key.startswith("rewrite_strategy"):
+            row = biz.strategy(raw, docs, key)
+            if row:
+                strategy.append(row)
+
+    wordings = sorted(k for k in any_answer
+                      if k.startswith("migration_complexity"))
+    if len(wordings) > 1:
+        row = biz.complexity(raw, docs, wordings, splits=args.splits,
+                             seed=args.seed)
+        if row:
+            complexity.append(row)
+
+    if not complexity and not strategy:
+        print("no business question in this run", file=sys.stderr)
+        return 2
+
+    census_mod.write_yaml(
+        {"run_id": args.run_id, "splits": args.splits, "seed": args.seed,
+         "note": "the complexity gold is a deterministic function of the "
+                 "extracted features, so the rubric itself scores 100% for free",
+         "migration_complexity": complexity,
+         "rewrite_strategy": strategy},
+        run_dir / "business.yml",
+    )
+
+    if complexity:
+        base = complexity[0]["majority_baseline"]
+        print(f"  migration_complexity   (base = classe majoritaria "
+              f"{base:.0%}, rubrica = 100%)")
+        print(f"    {'redacao':24}{'AUC low-high':>14}{'argmax':>8}{'rotulos':>9}"
+              f"{'hold-out':>10}{'[p05,p95]':>16}{'teto':>7}{'2 bandas':>10}")
+        for r in complexity:
+            ho = r["holdout_accuracy"]
+            print(f"    {r['wording']:24}"
+                  f"{(r['auc_low_vs_high'] or 0):>14.2f}"
+                  f"{r['argmax_accuracy']:>8.0%}{r['distinct_argmax_labels']:>9}"
+                  f"{ho['mean']:>10.0%}"
+                  f"{f'[{ho["p05"]:.0%},{ho["p95"]:.0%}]':>16}"
+                  f"{r['optimistic_accuracy']:>7.0%}"
+                  f"{r['error_structure_holdout']['two_bands']:>10.0%}")
+    if strategy:
+        base = strategy[0]["majority_baseline"]
+        print()
+        print(f"  rewrite_strategy       (base = classe majoritaria {base:.0%})")
+        print(f"    {'redacao':24}{'acuracia':>10}{'IC95':>18}   classes previstas")
+        for r in strategy:
+            low, high = r["accuracy_ci95"]
+            print(f"    {r['wording']:24}{r['accuracy']:>10.0%}"
+                  f"{f'[{low:.0%},{high:.0%}]':>18}   "
+                  f"{', '.join(r['distinct_predictions'])}")
+
+    print()
+    print(f"wrote {run_dir}/business.yml")
+    return 0
+
+
 def cmd_derive_labels(args: argparse.Namespace) -> int:
     """Label a finished migration by diffing legacy against migrated SQL."""
     from . import labels as lab
@@ -1072,6 +1222,30 @@ def build_parser() -> argparse.ArgumentParser:
                    default=["has_subquery", "has_window_function",
                             "multi_source", "needs_human_review"])
     e.set_defaults(func=cmd_ensemble)
+
+    pd_ = sub.add_parser("paired",
+                         help="Laya vs both logistic-regression variants, "
+                              "fitted on train only")
+    pd_.add_argument("--run-id", required=True)
+    pd_.add_argument("--runs-dir", default="runs")
+    pd_.add_argument("--state-dir", default="state")
+    pd_.add_argument("--paraphrases", action="store_true",
+                     help="average every <question>_pN wording (the E10 ensemble)")
+    pd_.add_argument("--splits", type=int, default=200)
+    pd_.add_argument("--seed", type=int, default=42)
+    pd_.add_argument("--questions", nargs="*",
+                     default=["has_subquery", "has_window_function",
+                              "multi_source", "needs_human_review"])
+    pd_.set_defaults(func=cmd_paired)
+
+    bz = sub.add_parser("business",
+                        help="score migration_complexity and rewrite_strategy")
+    bz.add_argument("--run-id", required=True)
+    bz.add_argument("--runs-dir", default="runs")
+    bz.add_argument("--state-dir", default="state")
+    bz.add_argument("--splits", type=int, default=200)
+    bz.add_argument("--seed", type=int, default=42)
+    bz.set_defaults(func=cmd_business)
 
     dl = sub.add_parser("derive-labels",
                         help="label a finished migration from legacy/migrated diffs")

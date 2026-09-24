@@ -215,6 +215,7 @@
   .call.neg  { border-left-color: var(--neg); }
   .call.warn { border-left-color: var(--warn); }
   .call p:last-child { margin-bottom: 0; }
+  .ci { color: var(--muted); font-size: .8em; }
   .call .tag {
     font-family: Archivo, sans-serif; font-size: .7rem; font-weight: 600;
     letter-spacing: .1em; text-transform: uppercase; color: var(--muted);
@@ -260,29 +261,31 @@
 <div class="wrap">
 
 <header class="hero">
-  <p class="eyebrow">Discovery técnico · corpus TPC-DS · n=99 · 12 experimentos</p>
+  <p class="eyebrow">Discovery técnico · corpus TPC-DS · n=99 · 13 experimentos</p>
   <h1>Laya na triagem de SQL</h1>
   <p class="lede">
     Um motor de decisão não-autoregressivo consegue triar um backlog de SQL
     legado antes de uma migração? Montei o experimento, rodei nas 99 queries do
-    TPC-DS, submeti a uma auditoria externa — e duas das minhas conclusões
-    caíram.
+    TPC-DS, submeti a <b>duas auditorias externas</b> — e as duas derrubaram
+    conclusões minhas. Inclusive a única vitória que o estudo tinha.
   </p>
 
   <div class="answer">
-    <strong>Resposta curta:</strong> não zero-shot. Depois de doze experimentos
-    sobram dois resultados úteis: <b>complexidade</b> dá para ordenar backlog
-    (94% dos erros ficam dentro de uma banda adjacente), e <b>estratégia de
-    reescrita</b> não sai do lugar em nenhuma das quatro formulações testadas
-    &mdash; mas essa nunca deveria ter sido testada zero-shot, porque o rótulo
-    depende do padrão de código de cada cliente.
+    <strong>Resposta curta:</strong> não. Treze experimentos depois, o modelo
+    <em>ordena</em> o corpus melhor do que a acurácia sugere &mdash; mas não
+    melhor do que a aritmética que o extrator já roda de graça. Quando a
+    regressão logística recebe <b>a mesma informação que o cartão entrega ao
+    Laya</b>, o Laya empata em uma pergunta e perde nas outras duas. E o
+    gabarito de complexidade é a própria rubrica: ela acerta 100% em
+    milissegundos.
   </div>
 
   <div class="facts">
     <span><b>99</b> queries</span>
     <span><b>99/99</b> parseadas</span>
     <span><b>594</b> decisões avaliadas</span>
-    <span><b>173</b> testes</span>
+    <span><b>191</b> testes</span>
+    <span><b>2</b> auditorias externas</span>
     <span><b>2,3 s</b> por script (CPU)</span>
   </div>
 </header>
@@ -1017,38 +1020,41 @@ flowchart LR
 
   <div class="plate">
     <div class="plate-head">
-      <span>Terceira e última comparação com a regressão &middot; 200 splits pareados</span>
+      <span>Comparação pareada &middot; 200 splits &middot; as duas regressões</span>
     </div>
     <div class="plate-body scroll">
       <table>
         <thead><tr>
-          <th>pergunta</th><th class="num">Laya 1&times;</th><th class="num">Laya 6&times;</th>
-          <th class="num">LR</th><th class="num">baseline</th>
-          <th class="num">6&times; &minus; LR</th><th class="num">IC90</th>
-          <th class="num">splits</th><th>leitura</th>
+          <th>pergunta</th><th class="num">Laya 6&times;</th>
+          <th class="num">LR limpa</th><th class="num">LR mesma info</th>
+          <th class="num">base</th>
+          <th class="num">vs. limpa</th><th class="num">vs. mesma info</th>
+          <th>leitura</th>
         </tr></thead>
         <tbody>
           <tr><td class="q">has_subquery</td>
-            <td class="num">86%</td><td class="num strong-num">95%</td>
-            <td class="num">80%</td><td class="num">58%</td>
-            <td class="num strong-num">+15,2</td><td class="num">+6,0 a +26,0</td>
-            <td class="num strong-num">100%</td>
-            <td><span class="pill pos">Laya vence</span></td></tr>
+            <td class="num strong-num">97%</td>
+            <td class="num">80%</td><td class="num">94%</td><td class="num">58%</td>
+            <td class="num">+17,2</td>
+            <td class="num">+3,3 <span class="ci">(&minus;4 a +14)</span></td>
+            <td><span class="pill flat">empate</span></td></tr>
           <tr><td class="q">has_window_function</td>
-            <td class="num">95%</td><td class="num">87%</td>
-            <td class="num">83%</td><td class="num">85%</td>
-            <td class="num">+4,1</td><td class="num">&minus;4,0 a +12,0</td><td class="num">75%</td>
-            <td><span class="pill flat">dentro do ruído</span></td></tr>
+            <td class="num">88%</td>
+            <td class="num">85%</td><td class="num strong-num">100%</td><td class="num">86%</td>
+            <td class="num">+3,6</td>
+            <td class="num" style="color:var(--neg)">&minus;11,3 <span class="ci">(&minus;22 a &minus;6)</span></td>
+            <td><span class="pill neg">LR vence</span></td></tr>
           <tr><td class="q">multi_source</td>
-            <td class="num">79%</td><td class="num">79%</td>
-            <td class="num">77%</td><td class="num">79%</td>
-            <td class="num">+2,8</td><td class="num">&minus;6,0 a +12,0</td><td class="num">62%</td>
-            <td><span class="pill flat">dentro do ruído</span></td></tr>
+            <td class="num">80%</td>
+            <td class="num">76%</td><td class="num strong-num">98%</td><td class="num">78%</td>
+            <td class="num">+3,8</td>
+            <td class="num" style="color:var(--neg)">&minus;18,1 <span class="ci">(&minus;24 a &minus;10)</span></td>
+            <td><span class="pill neg">LR vence</span></td></tr>
           <tr><td class="q">needs_human_review</td>
-            <td class="num">75%</td><td class="num">74%</td>
-            <td class="num strong-num">84%</td><td class="num">70%</td>
-            <td class="num" style="color:var(--neg)">&minus;9,8</td>
-            <td class="num">&minus;18,0 a 0,0</td><td class="num">3%</td>
+            <td class="num">74%</td>
+            <td class="num strong-num">84%</td><td class="num">84%</td><td class="num">70%</td>
+            <td class="num">&minus;9,8</td>
+            <td class="num">&minus;9,8 <span class="ci">(&minus;20 a 0)</span></td>
             <td><span class="pill neg">LR vence</span></td></tr>
         </tbody>
       </table>
@@ -1057,11 +1063,18 @@ flowchart LR
 
   <div class="col">
     <p>
-      <b><code>has_subquery</code> é a primeira vitória sólida do Laya neste
-      estudo:</b> 95% contra 80% da regressão e 58% do baseline, IC90 longe de
-      zero, consistente em 100% dos splits. É também a única pergunta já robusta
-      à paráfrase e que passa no teste de negação &mdash; três evidências apontando
-      para o mesmo lugar.
+      <b>Por muito tempo esta tabela tinha uma coluna só de regressão &mdash; a
+      limpa.</b> Contra ela, <code>has_subquery</code> ganhava por 17 pontos e eu
+      chamava isso de "a única vitória sólida do estudo". Mas a LR limpa é a que
+      <em>não recebe</em> as features que definem o rótulo, enquanto o cartão
+      imprime <code>subqueries=0</code> em letra de forma. A comparação media o
+      handicap, não o modelo.
+    </p>
+    <p>
+      Com a regressão enxergando o mesmo que o cartão, a vantagem cai para
+      <b>+3,3 pontos com intervalo de &minus;4 a +14</b>: empate. Nas outras
+      duas verificáveis, o Laya perde por 11 e por 18 pontos.
+      <b>Com a mesma informação, ele não vence nenhuma.</b>
     </p>
     <p>
       Repare no que aconteceu com <code>has_window_function</code>: o ensemble
@@ -1090,6 +1103,12 @@ flowchart LR
       modelo continua abaixo do baseline e perde para a regressão &mdash; com ou
       sem ensemble. Agregar não cria sinal onde não há.
     </p>
+    <p>
+      O que continua de pé aqui é o achado sobre <b>estabilidade</b>: agregar
+      paráfrases elimina a loteria da formulação, e isso independe de contra quem
+      se compara. O que caiu foi a leitura de que sobrar acima da regressão
+      significava alguma coisa.
+    </p>
   </div>
 </section>
 
@@ -1116,26 +1135,37 @@ flowchart LR
 
   <div class="plate">
     <div class="plate-head">
-      <span>Complexidade &middot; 4 redações, cortes ajustados em hold-out</span>
+      <span>Complexidade &middot; 4 redações, cortes ajustados só no treino</span>
     </div>
     <div class="plate-body scroll">
       <table>
         <thead><tr>
           <th>redação</th><th class="num">AUC low&harr;high</th>
-          <th class="num">3 bandas (hold-out)</th><th class="num">baseline</th>
+          <th class="num">argmax</th>
+          <th class="num">3 bandas (hold-out)</th><th class="num">[p05, p95]</th>
         </tr></thead>
         <tbody>
           <tr><td>p1 &mdash; a do estudo</td>
-            <td class="num strong-num">0,86</td><td class="num strong-num">52%</td>
-            <td class="num">31%</td></tr>
+            <td class="num strong-num">0,87</td><td class="num">37%</td>
+            <td class="num strong-num">54%</td><td class="num">45&ndash;61%</td></tr>
           <tr><td>p2 &mdash; por esforço</td>
-            <td class="num">0,77</td><td class="num">38%</td><td class="num">31%</td></tr>
+            <td class="num">0,78</td><td class="num">37%</td>
+            <td class="num">40%</td><td class="num">33&ndash;45%</td></tr>
           <tr><td>p3 &mdash; por quem faz</td>
-            <td class="num">0,83</td><td class="num">41%</td><td class="num">31%</td></tr>
+            <td class="num">0,83</td><td class="num">40%</td>
+            <td class="num">41%</td><td class="num">35&ndash;47%</td></tr>
           <tr><td>p4 &mdash; rótulos nus</td>
-            <td class="num">0,76</td><td class="num">41%</td><td class="num">31%</td></tr>
-          <tr><td>ensemble</td>
-            <td class="num">0,82</td><td class="num">43%</td><td class="num">31%</td></tr>
+            <td class="num">0,76</td><td class="num">37%</td>
+            <td class="num">44%</td><td class="num">35&ndash;53%</td></tr>
+          <tr><td>ensemble das 4</td>
+            <td class="num">0,82</td><td class="num">37%</td>
+            <td class="num">44%</td><td class="num">35&ndash;53%</td></tr>
+          <tr><td><b>baseline</b> &mdash; classe majoritária</td>
+            <td class="num">&mdash;</td><td class="num">&mdash;</td>
+            <td class="num">37%</td><td class="num">&mdash;</td></tr>
+          <tr><td><b>a própria rubrica</b></td>
+            <td class="num">&mdash;</td><td class="num">&mdash;</td>
+            <td class="num strong-num">100%</td><td class="num">determinística</td></tr>
         </tbody>
       </table>
     </div>
@@ -1144,39 +1174,47 @@ flowchart LR
   <div class="strip">
     <div class="metric">
       <div class="metric-lab">banda exata</div>
-      <div class="metric-val">58%</div>
+      <div class="metric-val">54%</div>
       <div class="metric-sub">acerta na mosca</div>
     </div>
     <div class="metric">
       <div class="metric-lab">erra 1 banda</div>
-      <div class="metric-val">36%</div>
+      <div class="metric-val">38%</div>
       <div class="metric-sub">ruído tolerável na triagem</div>
     </div>
     <div class="metric">
       <div class="metric-lab">erra 2 bandas</div>
-      <div class="metric-val" style="color:var(--pos)">6%</div>
+      <div class="metric-val" style="color:var(--pos)">8%</div>
       <div class="metric-sub">o erro que estraga planejamento</div>
     </div>
     <div class="metric">
-      <div class="metric-lab">dentro de 1 banda</div>
-      <div class="metric-val" style="color:var(--pos)">94%</div>
-      <div class="metric-sub">utilizável para ordenar</div>
+      <div class="metric-lab">a rubrica, de graça</div>
+      <div class="metric-val" style="color:var(--pos)">100%</div>
+      <div class="metric-sub">é ela que define o gabarito</div>
     </div>
   </div>
 
   <div class="col">
     <p>
-      <b>Complexidade tem base.</b> Todas as redações ficam acima do baseline, e
-      a estrutura do erro é a que importa: chamar um <code>high</code> de
-      <code>low</code> acontece em 6%. Para ordenar um backlog e decidir por onde
-      começar, serve.
+      <b>O modelo ordena.</b> AUC 0,87 entre <code>low</code> e
+      <code>high</code>, e chamar um <code>high</code> de <code>low</code>
+      &mdash; o erro que estraga planejamento &mdash; acontece em 8%.
     </p>
     <p>
-      Uma assimetria contra as binárias: aqui o <b>ensemble não ajuda</b> (43%
-      contra 52% da melhor redação). Para <code>score</code> ordinal, agregar
-      achata a distribuição em vez de estabilizá-la. E cuidado &mdash; comparar 4
-      redações e apontar a melhor já é seleção: o intervalo defensável é
-      <b>38&ndash;52%</b>.
+      <b>Mas ordenar não é o serviço.</b> Repare nas duas últimas linhas da
+      tabela. O argmax do Laya é <b>constante em <code>medium</code> nas 99
+      queries</b>, ou seja, exatamente o baseline de 37%; os 54% só aparecem
+      depois de recortar o score esperado em dados já rotulados. E o gabarito de
+      complexidade <em>é a rubrica</em> &mdash; uma função determinística das
+      features que o extrator já calcula, que acerta 100% em milissegundos.
+      Quem quer ordenar um backlog roda a rubrica.
+    </p>
+    <p>
+      Duas ressalvas que sobrevivem à correção: aqui o <b>ensemble não ajuda</b>
+      (44% contra 54% da melhor redação) &mdash; para <code>score</code> ordinal
+      agregar achata a distribuição em vez de estabilizá-la; e comparar 4
+      redações e apontar a melhor já é seleção, então o intervalo defensável é
+      <b>40&ndash;54%</b>, não os 54%.
     </p>
   </div>
 
@@ -1201,9 +1239,9 @@ flowchart LR
           <tr><td>p4 &mdash; rótulos nus</td><td class="num">1</td>
             <td class="num">55%</td>
             <td><span class="pill neg">constante</span></td></tr>
-          <tr><td>ensemble</td><td class="num">1</td>
-            <td class="num">55%</td>
-            <td><span class="pill neg">constante</span></td></tr>
+          <tr><td><b>baseline</b> &mdash; classe majoritária</td>
+            <td class="num">&mdash;</td><td class="num">55%</td>
+            <td><span class="pill flat">a linha a bater</span></td></tr>
         </tbody>
       </table>
     </div>
@@ -1359,7 +1397,7 @@ flowchart LR
 <section id="auditoria">
   <div class="sec-head col">
     <p class="eyebrow">Registro de revisões</p>
-    <h2>O que a auditoria derrubou</h2>
+    <h2>O que a primeira auditoria derrubou</h2>
   </div>
 
   <div class="col">
@@ -1427,6 +1465,122 @@ flowchart LR
       Isso é evidência direta de que parte do que chamei de "o checkpoint não
       carrega informação" era <b>viés de formulação</b> — e apenas uma formulação
       foi testada por pergunta.
+    </p>
+  </div>
+</section>
+
+<!-- ===================== SEGUNDA AUDITORIA ===================== -->
+<section id="segunda-auditoria">
+  <div class="sec-head col">
+    <p class="eyebrow">Rodada 5 &middot; o comparador estava errado</p>
+    <h2>O que a segunda auditoria derrubou</h2>
+  </div>
+
+  <div class="col">
+    <p>
+      A primeira auditoria me acusou de ser <em>duro demais</em> com o Laya: eu
+      cortava as probabilidades dele num 0,5 fixo enquanto a regressão saía
+      calibrada do ajuste. Corrigi, e nasceram as comparações pareadas.
+    </p>
+    <p>
+      A segunda auditoria encontrou o erro oposto, e mais caro: eu estava sendo
+      <b>frouxo demais</b> com o comparador.
+    </p>
+  </div>
+
+  <figure>
+    <div class="diagram">
+<pre class="mermaid">
+flowchart LR
+  CARD["evidence card<br/><small>subqueries=0 · window_fns=2 · sources=7</small>"]
+  LAYA(["Laya<br/>421M, CPU"])
+  CLEAN["LR limpa<br/><small>features do rótulo removidas</small>"]
+  LEAKY["LR mesma info<br/><small>as mesmas features do cartão</small>"]
+  SPLIT{"200 splits pareados<br/><small>ajusta no treino,<br/>mede no teste</small>"}
+  VER["empate em 1<br/>derrota em 2"]
+
+  CARD ==>|"lê"| LAYA
+  CARD -.->|"features removidas"| CLEAN
+  CARD ==>|"mesmas features"| LEAKY
+  LAYA ==> SPLIT
+  CLEAN -.-> SPLIT
+  LEAKY ==> SPLIT
+  SPLIT ==> VER
+
+  classDef pred fill:#e0f0f4,stroke:#0e7490,color:#0d1417
+  classDef weak fill:#eef1f2,stroke:#93a4ab,color:#0d1417
+  classDef gold fill:#e8f4ec,stroke:#15803d,color:#0d1417
+  classDef bad  fill:#fae9ec,stroke:#9f1239,color:#0d1417
+  class LAYA pred
+  class CLEAN weak
+  class LEAKY gold
+  class VER bad
+</pre>
+    </div>
+    <figcaption>
+      O cartão que o Laya lê <b>imprime os fatos perguntados</b>. A regressão
+      limpa (tracejada) é a que foi cegada para eles; a regressão com a mesma
+      informação é a única comparação honesta. E8 e E10 reportavam só a
+      primeira.
+    </figcaption>
+  </figure>
+
+  <div class="plate">
+    <div class="plate-head"><span>Achados confirmados &middot; segunda rodada</span></div>
+    <div class="plate-body scroll">
+      <table>
+        <thead><tr><th>achado</th><th>impacto</th><th>estado</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="note">Comparava o Laya contra a regressão <b>limpa</b>, mas o cartão entrega as features que ela não recebe</td>
+            <td class="note">Derruba a única vitória do estudo: <b>+15,2 vira +3,3</b>, com IC de &minus;4 a +14</td>
+            <td><span class="pill pos">corrigido</span></td>
+          </tr>
+          <tr>
+            <td class="note">Baseline de complexidade em 31%; a classe majoritária é <b>37%</b></td>
+            <td class="note">Uma redação a 40% deixa de estar "acima do baseline"</td>
+            <td><span class="pill pos">corrigido</span></td>
+          </tr>
+          <tr>
+            <td class="note">A conclusão positiva sobre complexidade é sobre um gabarito que é a própria rubrica</td>
+            <td class="note">A rubrica ordena o backlog de graça e com 100%; o Laya entrega 54% da mesma função</td>
+            <td><span class="pill warn">reescrita</span></td>
+          </tr>
+          <tr>
+            <td class="note">E8, a tabela pareada do E10 e o E11 inteiro não tinham código no repositório</td>
+            <td class="note">"Todos os números são regeneráveis" era falso</td>
+            <td><span class="pill pos"><code>mlaya paired</code> · <code>mlaya business</code></span></td>
+          </tr>
+          <tr>
+            <td class="note">O relatório lia a latência do YAML do script, que guarda o <b>último</b> run</td>
+            <td class="note">A tabela do <code>full99</code> mostrava o tempo do run <code>variants</code>: 4060 ms contra 2209 ms reais</td>
+            <td><span class="pill pos">corrigido</span></td>
+          </tr>
+          <tr>
+            <td class="note">Redações e paráfrases escritas <b>depois</b> de ver os erros</td>
+            <td class="note">Margem de manobra do pesquisador &mdash; legítima, mas não é o mesmo que pré-registro</td>
+            <td><span class="pill warn">declarado</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="call neg">
+    <span class="tag">O padrão que as duas auditorias mostram</span>
+    <p>
+      É a segunda vez que alguém de fora encontra a mesma forma de erro: <b>o
+      desenho favorece o resultado positivo até alguém olhar</b>. Da primeira vez
+      era a ausência de AUC; desta, a escolha do comparador. Nas duas, o achado
+      veio de fora.
+    </p>
+    <p>
+      O veredito do estudo não muda &mdash; continua <b>não adotar zero-shot</b>.
+      O que muda é que ele deixa de ter exceção: dos dois resultados positivos
+      que sobravam, nenhum sobreviveu. O que fica são os resultados
+      <b>negativos</b>, que ficaram mais fortes porque agora o comparador é mais
+      duro, e o plano de fine-tune &mdash; o único teste em que o gabarito deixa
+      de ser função das features e passa a ser a decisão real de alguém.
     </p>
   </div>
 </section>
@@ -1530,7 +1684,7 @@ mlaya compare full99 sql99</pre>
 
   <div class="col">
     <p>
-      <code>pytest</code> roda 173 testes, incluindo casos que travam as
+      <code>pytest</code> roda 191 testes, incluindo casos que travam as
       armadilhas que este estudo pisou: AUC abaixo de 0,5 como sinal invertido,
       McNemar chamando ±2% de ruído, Wilson impedindo que "8/8" vire "100%", e um
       teste que verifica que o leave-one-out não vaza.

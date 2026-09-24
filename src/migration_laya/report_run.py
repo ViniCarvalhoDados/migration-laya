@@ -380,8 +380,13 @@ def render(run: dict, decisions: list[dict], docs: dict, sample: dict,
     a("\n| script | estimado (ms) | medido (ms) | erro |")
     a("|---|---|---|---|")
     for d in decisions:
+        # The estimate is a deterministic function of card size, so it can come
+        # from the script's YAML. The measurement must not: `mlaya ask` writes
+        # `measured_ms` there on every run, so the YAML holds whichever run went
+        # last — reading it made this table show another experiment's latency.
+        # The only timing that belongs to *this* run is the one in its own raw.
         latency = docs.get(d["script_id"], {}).get("latency") or {}
-        est, real = latency.get("estimated_ms"), latency.get("measured_ms")
+        est, real = latency.get("estimated_ms"), d.get("elapsed_ms")
         if est and real:
             a(f"| `{d['script_id']}` | {est:.0f} | {real:.0f} | {100 * (real - est) / est:+.0f}% |")
     a("\n> O modelo de custo foi ajustado com texto sintético e subestima os cards\n"

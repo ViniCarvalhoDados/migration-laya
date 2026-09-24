@@ -103,6 +103,40 @@ quando o tamanho da amostra muda. Por isso `gold_judgements.yml` é chaveado por
 `query42`, e os JSONs de resposta guardam a origem — sem isso, re-pontuar um run
 antigo o casa em silêncio com o gabarito errado.
 
+### Dois comparadores, sempre os dois
+
+A regressão logística é ajustada em duas versões, e as duas aparecem em toda
+tabela:
+
+- **limpa** — sem as features de que o rótulo é definido. Responde "dá para
+  fazer isso com aritmética *sem* receber a resposta?".
+- **mesma informação** — com elas. É o que o evidence card entrega ao Laya, que
+  imprime `subqueries=0` e `window_fns=2` literalmente.
+
+Reportar só a limpa foi o erro que [E13](experiments.md#e13) corrigiu: mede o
+handicap dado ao comparador, não a capacidade do modelo. Reportar só a vazada
+esconderia que parte do problema é a pergunta ser trivial. As duas juntas
+delimitam o resultado por cima e por baixo.
+
+### Tudo ajustado só no treino, sempre
+
+No protocolo pareado (`mlaya paired`, `mlaya business`) cada braço tem exatamente
+uma coisa ajustada, e sempre na metade de treino: o **limiar** do Laya, os
+**coeficientes** da regressão, os **cortes** das bandas de complexidade, a
+**classe** do baseline majoritário. A metade de teste nunca é vista por nenhum
+deles.
+
+Sem p-valor, de propósito: as metades de teste se sobrepõem entre splits, então
+um teste pareado sobre elas seria anticonservador. A dispersão p05–p95 e a taxa
+de vitórias são os resumos honestos.
+
+### Latência vem do raw do próprio run
+
+`mlaya ask` grava `measured_ms` no YAML do script, que por isso guarda sempre o
+**último** run que passou por ali. O relatório lia de lá e mostrava o tempo de
+outro experimento. A estimativa continua vindo do YAML — é função determinística
+do tamanho do cartão —, mas a medição vem do JSON bruto daquele run.
+
 ### Cobertura por script, não só por resposta
 
 As duas curvas estão no relatório porque a diferença entre elas é a conclusão:
@@ -138,8 +172,9 @@ momento.
 | **Baseline de classe majoritária** | Acurácia sozinha engana com classes desbalanceadas. Binária não tem acaso em 50%. |
 | **AUC** | Um modelo pode ordenar bem e cortar errado. AUC <0,5 é sinal invertido, não ausência de sinal. |
 | **McNemar** | Sem ele, ±2% vira "achado". |
-| **IC de Wilson** | "8 scripts, zero erros" precisa do intervalo: 49–97%. |
+| **IC de Wilson** | "7 scripts, 1 erro" é 86% — e o intervalo é 49–97%. |
 | **Hold-out do limiar** | Corte ajustado no próprio dado é teto otimista. |
+| **Duas variantes do baseline** | A regressão sem as features que definem o rótulo é fraca por construção; comparar só contra ela inflou a única vitória do estudo. |
 | **Sensibilidade à paráfrase** | Reescrever uma pergunta moveu o AUC em 0,57. |
 | **Teste de negação** | Se a resposta não inverte quando a pergunta inverte, o modelo não está lendo. |
 | **Erro de duas bandas** | Em complexidade, errar adjacente é ruído; `high` → `low` estraga planejamento. |
@@ -151,7 +186,7 @@ momento.
 | pergunta | origem | cobertura |
 |---|---|---|
 | `has_subquery`, `has_window_function`, `multi_source` | AST (`sqlglot`) | 99, objetivo |
-| `migration_complexity` | rubrica sobre features do AST | 99, objetivo |
+| `migration_complexity` | rubrica sobre features do AST | 99, objetivo — e **reproduzível de graça pela própria rubrica** |
 | `rewrite_strategy`, `needs_human_review` | julgamento de Claude lendo cada SQL | 99, **um anotador só** |
 
 Os **10 primeiros** julgamentos foram escritos antes de o Laya rodar; os **89
