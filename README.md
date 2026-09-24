@@ -310,6 +310,84 @@ Na única pergunta que exigiria julgamento — `needs_human_review` — o modelo
 continua abaixo do baseline e perde para a regressão por 10 pontos, com ou sem
 ensemble. Agregar não cria sinal onde não há.
 
+### Validação 5 · as duas perguntas que a consultoria pagaria para responder
+
+`migration_complexity` e `rewrite_strategy` são as de valor comercial — e eram
+as únicas que eu nunca tinha submetido ao tratamento que salvou as binárias.
+Julguei as duas pelo argmax sob uma única redação, o que não é teste justo.
+Quatro redações cada, variando o eixo que a auditoria apontou (as opções
+originais ecoam o vocabulário do cartão; as alternativas descrevem por esforço,
+por quem faz o trabalho, e sem descrição nenhuma).
+
+**Complexidade: há base, e ela se sustenta.**
+
+| redação | AUC low↔high | 3 bandas (hold-out) | baseline |
+|---|---|---|---|
+| p1 (a do estudo) | **0,86** | **52%** | 31% |
+| p2 (por esforço) | 0,77 | 38% | 31% |
+| p3 (por quem faz) | 0,83 | 41% | 31% |
+| p4 (rótulos nus) | 0,76 | 41% | 31% |
+| ensemble | 0,82 | 43% | 31% |
+
+Todas acima do baseline. E a estrutura do erro é a que importa para triagem:
+
+| | banda exata | erra 1 banda | **erra 2 bandas** |
+|---|---|---|---|
+| p1 | 58% | 36% | **6%** |
+
+Chamar um `high` de `low` — o erro que estraga um planejamento — acontece em 6%.
+**94% das vezes o modelo erra no máximo uma banda adjacente.** Para ordenar um
+backlog e decidir por onde começar, isso é utilizável.
+
+> Curiosidade que contraria as binárias: aqui o **ensemble não ajuda** (43%
+> contra 52% da melhor redação isolada). Para `score` ordinal, agregar achata a
+> distribuição em vez de estabilizá-la. E cuidado com a leitura: comparar 4
+> redações e apontar a melhor já é seleção — o intervalo honesto é 38–52%.
+
+**Estratégia de reescrita: morta em todas as quatro redações.**
+
+| redação | classes emitidas | acurácia |
+|---|---|---|
+| p1 (a do estudo) | 1 | 55% = baseline |
+| p2 (por resultado) | 2 | 54% |
+| p3 (por abordagem) | 1 | 55% |
+| p4 (rótulos nus) | 1 | 55% |
+| ensemble | 1 | 55% |
+
+Quatro formulações muito diferentes, todas colapsam em `refactor`. **Isso não é
+viés de formulação — é ausência de capacidade zero-shot.** Nem os rótulos nus
+destravam.
+
+**Mas zero-shot nunca foi o teste certo para essa pergunta.** O rótulo de
+`rewrite_strategy` depende do padrão de código da empresa: o que é "refactor"
+numa casa é "lift and shift" em outra. Meu gabarito é a minha opinião, não a
+decisão do cliente. O caminho é **fine-tune com o histórico de decisões do
+cliente** — que é o uso para o qual o Laya foi desenhado (o repositório traz um
+notebook de fine-tune, e reporta base 0,36 → 0,766 nesse regime).
+
+### O caso de negócio, com números
+
+Custo de LLM para classificar 5.000 scripts nas duas perguntas, uma chamada por
+script (entrada medida no próprio corpus: 167 tokens de cartão, 517 de SQL cru):
+
+| modelo | só o rótulo | com justificativa |
+|---|---|---|
+| Haiku 4.5 | **$5,83** | $19 |
+| Sonnet 5 | $12 | $56 |
+| Opus 5 | $20 | $94 |
+
+Com Batch API, metade. O Laya sai por **~$1,28 de CPU para 50.000 scripts**.
+
+Relativamente é 10–100× mais barato; em absoluto são dezenas de dólares.
+**Custo de token sozinho não justifica um classificador pior.** Os dois eixos
+que justificam são outros:
+
+1. **Residência de dado.** O Laya roda local; o SQL do cliente não sai do
+   perímetro. Para consultoria isso costuma valer muito mais que $94.
+2. **Fine-tune por cliente.** Um encoder de 421M você afina com algumas centenas
+   de exemplos rotulados do próprio cliente. Opus, não. E é exatamente o que
+   `rewrite_strategy` exige.
+
 ### O que o experimento **não** pode concluir
 
 - **A rubrica não mede dificuldade de migração.** Ela tem **rho = 0.82 com

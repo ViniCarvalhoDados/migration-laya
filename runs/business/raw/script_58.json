@@ -1,0 +1,117 @@
+{
+  "script_id": "script_58",
+  "origin": "query85",
+  "answers": {
+    "migration_complexity_p1": {
+      "question": "migration_complexity_p1",
+      "type": "score",
+      "value": 0.8069,
+      "label": "moderate - joins or subqueries need restructuring",
+      "reported_confidence": 0.125,
+      "max_probability": 0.546,
+      "probabilities": {
+        "trivial - only dialect syntax needs changing": 0.3236,
+        "moderate - joins or subqueries need restructuring": 0.546,
+        "high - logic must be redesigned and validated in depth": 0.1305
+      }
+    },
+    "migration_complexity_p2": {
+      "question": "migration_complexity_p2",
+      "type": "score",
+      "value": 0.757,
+      "label": "most of a day",
+      "reported_confidence": 0.2158,
+      "max_probability": 0.6071,
+      "probabilities": {
+        "under an hour": 0.318,
+        "most of a day": 0.6071,
+        "several days, with result validation": 0.075
+      }
+    },
+    "migration_complexity_p3": {
+      "question": "migration_complexity_p3",
+      "type": "score",
+      "value": 0.9113,
+      "label": "someone who knows the source engine well",
+      "reported_confidence": 0.0116,
+      "max_probability": 0.3871,
+      "probabilities": {
+        "any engineer can do it": 0.3508,
+        "someone who knows the source engine well": 0.3871,
+        "whoever wrote it, or a specialist": 0.2621
+      }
+    },
+    "migration_complexity_p4": {
+      "question": "migration_complexity_p4",
+      "type": "score",
+      "value": 0.9559,
+      "label": "medium",
+      "reported_confidence": 0.1857,
+      "max_probability": 0.6443,
+      "probabilities": {
+        "low": 0.1999,
+        "medium": 0.6443,
+        "high": 0.1558
+      }
+    },
+    "rewrite_strategy_p1": {
+      "question": "rewrite_strategy_p1",
+      "type": "choice",
+      "value": "refactor",
+      "label": "refactor",
+      "reported_confidence": 0.1532,
+      "max_probability": 0.5523,
+      "probabilities": {
+        "lift_and_shift": 0.1817,
+        "refactor": 0.5523,
+        "redesign": 0.1246,
+        "manual_rewrite": 0.1414
+      }
+    },
+    "rewrite_strategy_p2": {
+      "question": "rewrite_strategy_p2",
+      "type": "choice",
+      "value": "refactor",
+      "label": "refactor",
+      "reported_confidence": 0.0786,
+      "max_probability": 0.4488,
+      "probabilities": {
+        "lift_and_shift": 0.2319,
+        "refactor": 0.4488,
+        "redesign": 0.1927,
+        "manual_rewrite": 0.1266
+      }
+    },
+    "rewrite_strategy_p3": {
+      "question": "rewrite_strategy_p3",
+      "type": "choice",
+      "value": "refactor",
+      "label": "refactor",
+      "reported_confidence": 0.0965,
+      "max_probability": 0.487,
+      "probabilities": {
+        "lift_and_shift": 0.1672,
+        "refactor": 0.487,
+        "redesign": 0.1987,
+        "manual_rewrite": 0.1472
+      }
+    },
+    "rewrite_strategy_p4": {
+      "question": "rewrite_strategy_p4",
+      "type": "choice",
+      "value": "refactor",
+      "label": "refactor",
+      "reported_confidence": 0.1008,
+      "max_probability": 0.4962,
+      "probabilities": {
+        "lift_and_shift": 0.1696,
+        "refactor": 0.4962,
+        "redesign": 0.1675,
+        "manual_rewrite": 0.1667
+      }
+    }
+  },
+  "input_tokens": 1268,
+  "elapsed_ms": 2756.8,
+  "ms_per_question": 344.6
+}

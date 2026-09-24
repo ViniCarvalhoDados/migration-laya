@@ -1,0 +1,86 @@
+# The two questions a data consultancy would actually pay for, given the
+# treatment that rescued the binary ones.
+#
+# Neither `migration_complexity` nor `rewrite_strategy` has ever been tested
+# with fitted cut-points or a paraphrase ensemble — the whole "constant
+# predictor" verdict rests on their argmax under a single wording. That is not
+# a fair test, and they are the two questions with business value.
+#
+# Four wordings each. The axis being varied is deliberate: the study's original
+# criteria describe the levels using the same vocabulary the evidence card
+# prints ("joins or subqueries"), which is exactly the lexical overlap the
+# audit flagged. The alternatives describe the same levels by effort, by who
+# can do the work, and with no description at all.
+#
+# Pre-registered: if the study's wording wins only because it echoes the card,
+# the bare-label variant (c4/s4) should do at least as well once aggregated.
+
+# ---- migration_complexity: 3 ordered levels --------------------------------
+migration_complexity_p1:
+  type: score
+  instructions: "How hard is this SQL script to migrate to a modern cloud warehouse?"
+  criteria:
+    - "trivial - only dialect syntax needs changing"
+    - "moderate - joins or subqueries need restructuring"
+    - "high - logic must be redesigned and validated in depth"
+
+migration_complexity_p2:
+  type: score
+  instructions: "How much work is it to move this script to another SQL engine?"
+  criteria:
+    - "under an hour"
+    - "most of a day"
+    - "several days, with result validation"
+
+migration_complexity_p3:
+  type: score
+  instructions: "Who is needed to port this script safely?"
+  criteria:
+    - "any engineer can do it"
+    - "someone who knows the source engine well"
+    - "whoever wrote it, or a specialist"
+
+migration_complexity_p4:
+  type: score
+  instructions: "Rate the migration difficulty of this script."
+  criteria:
+    - "low"
+    - "medium"
+    - "high"
+
+# ---- rewrite_strategy: 4 options -------------------------------------------
+rewrite_strategy_p1:
+  type: choice
+  instructions: "Which migration strategy does this script require?"
+  criteria:
+    lift_and_shift: "runs as-is after dialect-level syntax fixes"
+    refactor: "needs joins, CTEs or subqueries restructured"
+    redesign: "logic must be redesigned for the target engine"
+    manual_rewrite: "too entangled for automated conversion"
+
+rewrite_strategy_p2:
+  type: choice
+  instructions: "What has to change for this script to run on the target engine?"
+  criteria:
+    lift_and_shift: "nothing but the dialect"
+    refactor: "the same logic, written a different way"
+    redesign: "different logic that produces the same answer"
+    manual_rewrite: "start from the requirement, not from this code"
+
+rewrite_strategy_p3:
+  type: choice
+  instructions: "How would you approach porting this script?"
+  criteria:
+    lift_and_shift: "run a converter and move on"
+    refactor: "run a converter, then clean up what it produced"
+    redesign: "read what it is for, then write it again"
+    manual_rewrite: "hand it to whoever owns the business rule"
+
+rewrite_strategy_p4:
+  type: choice
+  instructions: "Pick the migration strategy for this script."
+  criteria:
+    lift_and_shift: "lift and shift"
+    refactor: "refactor"
+    redesign: "redesign"
+    manual_rewrite: "manual rewrite"

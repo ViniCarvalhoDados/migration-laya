@@ -1,0 +1,72 @@
+run_id: business
+model: convaiinnovations/laya
+device: cpu
+load_seconds: 10.569
+n_scripts: 99
+n_questions: 8
+purpose_ablated: true
+source: card
+runtime_warnings:
+- 'laya: this checkpoint ships invalid temperatures or values outside [0.5, 5]; using choice:11+=0.10058280825614929
+  -> 0.5. Treat confidence from the affected entries as uncalibrated.'
+questions:
+  migration_complexity_p1:
+    type: score
+    instructions: How hard is this SQL script to migrate to a modern cloud warehouse?
+    criteria:
+    - trivial - only dialect syntax needs changing
+    - moderate - joins or subqueries need restructuring
+    - high - logic must be redesigned and validated in depth
+  migration_complexity_p2:
+    type: score
+    instructions: How much work is it to move this script to another SQL engine?
+    criteria:
+    - under an hour
+    - most of a day
+    - several days, with result validation
+  migration_complexity_p3:
+    type: score
+    instructions: Who is needed to port this script safely?
+    criteria:
+    - any engineer can do it
+    - someone who knows the source engine well
+    - whoever wrote it, or a specialist
+  migration_complexity_p4:
+    type: score
+    instructions: Rate the migration difficulty of this script.
+    criteria:
+    - low
+    - medium
+    - high
+  rewrite_strategy_p1:
+    type: choice
+    instructions: Which migration strategy does this script require?
+    criteria:
+      lift_and_shift: runs as-is after dialect-level syntax fixes
+      refactor: needs joins, CTEs or subqueries restructured
+      redesign: logic must be redesigned for the target engine
+      manual_rewrite: too entangled for automated conversion
+  rewrite_strategy_p2:
+    type: choice
+    instructions: What has to change for this script to run on the target engine?
+    criteria:
+      lift_and_shift: nothing but the dialect
+      refactor: the same logic, written a different way
+      redesign: different logic that produces the same answer
+      manual_rewrite: start from the requirement, not from this code
+  rewrite_strategy_p3:
+    type: choice
+    instructions: How would you approach porting this script?
+    criteria:
+      lift_and_shift: run a converter and move on
+      refactor: run a converter, then clean up what it produced
+      redesign: read what it is for, then write it again
+      manual_rewrite: hand it to whoever owns the business rule
+  rewrite_strategy_p4:
+    type: choice
+    instructions: Pick the migration strategy for this script.
+    criteria:
+      lift_and_shift: lift and shift
+      refactor: refactor
+      redesign: redesign
+      manual_rewrite: manual rewrite
