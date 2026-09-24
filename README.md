@@ -9,6 +9,8 @@ com que confiabilidade?
 
 📄 **Relatório visual:** [`reports/discovery.html`](reports/discovery.html) —
 metodologia, resultados e pontos em aberto com diagramas.
+🔧 **Próximo passo operacional:** [`docs/finetuning.md`](docs/finetuning.md) —
+como afinar o modelo com dados de um cliente, incluindo de onde vêm os rótulos.
 Publicado também em <https://claude.ai/code/artifact/6f7ffaeb-abbb-47c1-97b6-f662771470af>.
 
 ---
@@ -543,7 +545,7 @@ mlaya compare full99 sql99              # head-to-head sobre o mesmo gabarito
 Auditoria e testes:
 
 ```bash
-pytest                                   # 159 testes
+pytest                                   # 173 testes
 mlaya census --verify                    # falha se alguma das 99 não parsear
 mlaya features corpus/tpcds/query23.sql  # dump de features para conferência manual
 mlaya card --check                       # valida orçamento sem escrever

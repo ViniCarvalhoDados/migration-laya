@@ -867,6 +867,93 @@ def cmd_ensemble(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_derive_labels(args: argparse.Namespace) -> int:
+    """Label a finished migration by diffing legacy against migrated SQL."""
+    from . import labels as lab
+
+    legacy_dir, migrated_dir = Path(args.legacy), Path(args.migrated)
+    if not legacy_dir.is_dir() or not migrated_dir.is_dir():
+        print("both --legacy and --migrated must be directories", file=sys.stderr)
+        return 2
+
+    pairs = []
+    for path in sorted(legacy_dir.glob("*.sql")):
+        counterpart = migrated_dir / path.name
+        if counterpart.exists():
+            pairs.append((path.as_posix(), counterpart.as_posix()))
+    if not pairs:
+        print(f"no file in {legacy_dir} has a match by name in {migrated_dir}",
+              file=sys.stderr)
+        return 2
+
+    rows = lab.derive_many(pairs)
+    summary = lab.summarise(rows)
+    census_mod.write_yaml(
+        {"summary": summary, "derivations": [r.as_dict() for r in rows]},
+        args.out,
+    )
+
+    print(f"  {'script':24}{'estrategia':18}{'confianca':12} motivo")
+    for row in rows:
+        print(f"  {row.name[:23]:24}{row.strategy:18}{row.confidence:12}"
+              f"{row.reasons[0][:44] if row.reasons else ''}")
+    print()
+    print(f"  {summary['n']} pares  ->  {summary['by_strategy']}")
+    print(f"  confianca: {summary['by_confidence']}")
+    if summary["thin_classes"]:
+        print(f"  CLASSES MAGRAS (<20 exemplos): {summary['thin_classes']}")
+        print("  um fine-tune nunca vai prever uma classe que quase nao viu.")
+    if summary["needs_human_review"]:
+        print(f"  precisam de revisao humana: {len(summary['needs_human_review'])}")
+    print()
+    print(f"wrote {args.out}")
+    return 0
+
+
+def cmd_export_training(args: argparse.Namespace) -> int:
+    """Emit train/calibration/test JSONL in the fine-tune notebook's format."""
+    from . import training as tr
+
+    questions = yaml.safe_load(Path(args.questions).read_text(encoding="utf-8"))
+    cases = []
+    for path in _state_files(args.state_dir):
+        doc = yaml.safe_load(path.read_text(encoding="utf-8"))
+        case = tr.build_case(doc, questions, doc.get("gold") or {})
+        if case:
+            cases.append(case)
+    if not cases:
+        print("no state file had both an evidence card and gold labels",
+              file=sys.stderr)
+        return 2
+
+    splits = tr.split_by_family(cases, seed=args.seed)
+    out_dir = Path(args.out_dir)
+    for name, rows in splits.items():
+        tr.write_jsonl(rows, out_dir / f"{name}.jsonl")
+
+    summary = tr.report(splits, questions)
+    census_mod.write_yaml(summary, out_dir / "dataset.yml")
+
+    print(f"  casos por split : {summary['cases']}")
+    print(f"  familias        : {summary['families']}")
+    print(f"  decisoes totais : {summary['decisions_total']}"
+          f"  (referencia do notebook: {summary['reference_scale']['decisions']})")
+    if summary["family_overlap"]:
+        print(f"  VAZAMENTO: familias repetidas entre splits "
+              f"{summary['family_overlap']}", file=sys.stderr)
+    else:
+        print("  vazamento entre splits: nenhum (split por familia)")
+    print()
+    for qid, counts in summary["label_counts"].items():
+        thin = [k for k, v in counts.items() if v < 20]
+        flag = f"   CLASSES MAGRAS: {thin}" if thin else ""
+        print(f"  {qid:24}{counts}{flag}")
+    print()
+    print(f"wrote {out_dir}/train.jsonl, calibration.jsonl, test.jsonl "
+          f"and dataset.yml")
+    return 0
+
+
 def cmd_features(args: argparse.Namespace) -> int:
     """Print the extracted features for one file — the manual-audit tool."""
     f = extract_features(args.path)
@@ -985,6 +1072,21 @@ def build_parser() -> argparse.ArgumentParser:
                    default=["has_subquery", "has_window_function",
                             "multi_source", "needs_human_review"])
     e.set_defaults(func=cmd_ensemble)
+
+    dl = sub.add_parser("derive-labels",
+                        help="label a finished migration from legacy/migrated diffs")
+    dl.add_argument("--legacy", required=True, help="directory of original .sql")
+    dl.add_argument("--migrated", required=True, help="directory of migrated .sql")
+    dl.add_argument("--out", default="state/derived_labels.yml")
+    dl.set_defaults(func=cmd_derive_labels)
+
+    et = sub.add_parser("export-training",
+                        help="emit JSONL splits for the fine-tune notebook")
+    et.add_argument("--state-dir", default="state")
+    et.add_argument("--questions", default=QUESTIONS_YML)
+    et.add_argument("--out-dir", default="training")
+    et.add_argument("--seed", type=int, default=42)
+    et.set_defaults(func=cmd_export_training)
 
     f = sub.add_parser("features", help="dump features for one SQL file")
     f.add_argument("path")

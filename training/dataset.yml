@@ -1,0 +1,34 @@
+cases:
+  train: 69
+  calibration: 10
+  test: 20
+decisions_total: 594
+families:
+  train: 52
+  calibration: 10
+  test: 20
+family_overlap: {}
+label_counts:
+  migration_complexity:
+    '0': 31
+    '1': 37
+    '2': 31
+  rewrite_strategy:
+    lift_and_shift: 35
+    refactor: 54
+    redesign: 10
+  has_subquery:
+    'false': 42
+    'true': 57
+  has_window_function:
+    'false': 84
+    'true': 15
+  multi_source:
+    'false': 21
+    'true': 78
+  needs_human_review:
+    'false': 30
+    'true': 69
+reference_scale:
+  cases: 1200
+  decisions: 6000
