@@ -276,7 +276,10 @@ info** recebe — é a informação que o cartão entrega ao Laya de graça.
 | `multi_source` | 80% | 76% | **98%** | 78% | +3,8 (−4 a +14) | **−18,0** (−26 a −10) |
 | `needs_human_review` | 74% | **84%** | 84% | 70% | **−9,5** (−18 a −2) | **−9,5** (−18 a −2) |
 
-Entre parênteses, p05 e p95 da diferença entre os 200 splits. `needs_human_review`
+Entre parênteses, p05 e p95 da diferença entre os 200 splits. **Não é um
+intervalo de confiança** — as metades de teste se sobrepõem, o que subestima a
+variância; é dispersão observada, e o teste correto seria o *corrected resampled
+t-test* de Nadeau & Bengio. `needs_human_review`
 tem as duas colunas iguais porque o rótulo é julgamento humano: não há feature
 que o defina, logo nada a vazar.
 
@@ -426,23 +429,51 @@ splits:
 | **baseline (classe majoritária)** | — | — | — | **37%** | — | — |
 | **a própria rubrica** | — | — | — | **100%** | — | — |
 
+E agora as regras triviais — uma feature só, cortada em três bandas, mesmo
+protocolo de hold-out:
+
+| preditor | AUC low↔high | 3 bandas (hold-out) | erra 2 bandas |
+|---|---|---|---|
+| **`loc_code` — contar linhas** | **0,98** | **72%** | **2%** |
+| `graph_edges` | 0,84 | 58% | 5% |
+| `max_nesting_depth` | 0,89 | 57% | 3% |
+| `subquery_count` | 0,83 | 53% | 7% |
+| `source_tables` | 0,88 | 51% | 5% |
+| constante `medium` | — | 37% | **0%** |
+| *Laya, melhor redação* | *0,87* | *54%* | *8%* |
+
 Estrutura do erro da p1, também em hold-out:
 
 | banda exata | erra 1 banda | **erra 2 bandas** | dentro de 1 banda |
 |---|---|---|---|
 | 54% | 38% | **8%** | 92% |
 
-**Conclusão específica.** ↻ **Corrigida por [E13](#e13).** O que sobrevive: o
-score esperado **ordena** o corpus (AUC 0,87 entre `low` e `high`) e o erro de
-duas bandas é raro (8%). O que não sobrevive: a leitura de que isso serve para
-ordenar backlog.
+**Esses 8% não querem dizer nada sozinhos.** Um preditor constante `medium` erra
+duas bandas em **0%** dos casos, e `loc_code` em 2%. O Laya erra em 8% — mais do
+que as duas alternativas gratuitas.
 
-**Por quê.** O gabarito de complexidade *é a rubrica*, uma função determinística
-e gratuita das features que o extrator já calcula. A última linha da tabela não
-é retórica: para ordenar o backlog basta rodar a rubrica, que acerta 100% em
-milissegundos. O Laya a reproduz com 54% — e só depois de cortes ajustados em
-dados rotulados. Sem esse ajuste, o argmax é **constante em `medium` nas 99**,
-ou seja, exatamente o baseline.
+**Conclusão específica.** ↻ **Corrigida por [E13](#e13).**
+
+**Contar linhas é melhor que o modelo, em todas as três métricas.** AUC 0,98
+contra 0,87, 72% contra 54%, 2% de erro grave contra 8%. Não é uma diferença de
+margem: é `wc -l` ganhando de um encoder de 421M parâmetros na pergunta que a
+consultoria pagaria para responder.
+
+E faz sentido que ganhe. O gabarito de complexidade *é a rubrica*, e a rubrica
+tem **ρ = 0,82 com contagem de linhas**
+([limitações](limitations.md)) — ela mede tamanho. Não é que o Laya seja ruim em
+estimar esforço de migração; é que esta pergunta, com este gabarito, é uma
+pergunta sobre tamanho, e tamanho tem um preditor de uma linha.
+
+Sem cortes ajustados, o argmax é **constante em `medium` nas 99**, ou seja,
+exatamente o baseline de 37%.
+
+**O teste pré-registrado, e o que ele deu.** `questions_business.yml` registrou
+antes de rodar: *se a redação do estudo vence só porque ecoa o vocabulário do
+cartão, a variante de rótulos nus (p4) deveria ir pelo menos igual bem.* Ela não
+foi: p1 dá 54% e p4 dá 44%. **A hipótese de eco lexical não foi confirmada** —
+a vantagem da p1 não se explica por ela repetir as palavras do cartão. É o único
+resultado deste estudo que saiu de uma hipótese escrita antes de ver o dado.
 
 **Assimetria contra E10:** aqui o **ensemble não ajuda** (44% contra 54% da
 melhor redação). Para `score` ordinal, agregar achata a distribuição em vez de
@@ -522,26 +553,31 @@ medidos só no teste.
 ```bash
 mlaya paired  --run-id full99                  # E8, agora com as duas LRs
 mlaya paired  --run-id ensemble --paraphrases  # E10, idem
-mlaya business --run-id business               # E11, com o baseline certo
+mlaya business --run-id business               # E11, com os baselines certos
 ```
+
+`mlaya business` passou a imprimir, ao lado de cada redação, as **regras
+triviais**: cada feature do AST sozinha, cortada em três bandas pelo mesmo
+protocolo, mais o preditor constante. É a tabela que faltava.
 
 **Resultado — o Laya contra a regressão com a mesma informação.**
 
-| pergunta | Laya 6× | LR mesma info | diferença | IC90 | veredito |
+| pergunta | Laya 6× | LR mesma info | diferença | p05–p95 | veredito |
 |---|---|---|---|---|---|
 | `has_subquery` | 97% | 94% | +3,3 | −4 a +14 | empate |
 | `has_window_function` | 88% | **100%** | −11,3 | −22 a −6 | **perde** |
 | `multi_source` | 80% | **98%** | −18,1 | −24 a −10 | **perde** |
 | `needs_human_review` | 74% | 84% | −9,8 | −20 a 0 | empate |
 
-**Resultado — complexidade contra o baseline certo.**
+**Resultado — complexidade contra os baselines certos.**
 
-| | valor |
-|---|---|
-| classe majoritária (`medium`, 37 de 99) | **37%** |
-| argmax do Laya, qualquer redação | 37%, e constante em `medium` |
-| melhor redação, cortes em hold-out | 54% (45–61%) |
-| a rubrica que define o gabarito | **100%, determinística, grátis** |
+| preditor | AUC low↔high | 3 bandas (hold-out) | erra 2 bandas |
+|---|---|---|---|
+| classe majoritária (`medium`, 37 de 99) | — | 37% | **0%** |
+| argmax do Laya, qualquer redação | — | 37%, constante em `medium` | — |
+| melhor redação do Laya, cortes em hold-out | 0,87 | 54% (45–61%) | 8% |
+| **`loc_code` — contar linhas** | **0,98** | **72%** | **2%** |
+| a rubrica que define o gabarito | — | **100%** | 0% |
 
 **Conclusão específica.** ↻ **Corrige E8, E10 e E11.**
 
@@ -549,10 +585,17 @@ mlaya business --run-id business               # E11, com o baseline certo
 nas outras duas verificáveis. Os "+15,2 pontos" que o README anunciava mediam o
 quanto a regressão tinha sido cegada.
 
-**E a conclusão positiva sobre complexidade não se sustenta.** Ela era positiva
-*sobre um gabarito que é ele próprio uma função gratuita das features*. Quem
-quer ordenar um backlog roda a rubrica e acerta 100%; o Laya entrega 54% da
-mesma coisa, e só com cortes ajustados em dados já rotulados.
+**E a conclusão positiva sobre complexidade não se sustenta.** Não porque a
+barra fosse alta, mas porque ela nunca tinha sido posta: **contar linhas acerta
+mais que o modelo** (AUC 0,98 contra 0,87; 72% contra 54%) e erra feio menos
+(2% contra 8%). O gabarito é a rubrica, a rubrica tem ρ = 0,82 com contagem de
+linhas, e um `wc -l` reproduz quase tudo que ela faz. Quem quer ordenar um
+backlog roda a rubrica — ou, se quiser uma aproximação de uma linha, conta
+linhas.
+
+**E "só 8% de erro de duas bandas" não era um resultado.** Um preditor constante
+`medium` erra duas bandas em **0%** das vezes. Toda métrica de estrutura de erro
+precisa do baseline ao lado, ou vira propaganda.
 
 **O que isto não derruba.** Os resultados **negativos** ficam todos de pé — e
 ficam mais fortes, porque agora o comparador é mais duro, não mais frouxo:
@@ -601,6 +644,9 @@ que eu chamava de "o checkpoint não carrega informação" era viés de formula�
 | E8/E10 comparavam o Laya contra a LR **limpa**, mas o cartão entrega as features que ela não recebe | Derruba a única vitória do estudo: +15,2 vira +3,3 com IC de −4 a +14 | corrigido em [E13](#e13) |
 | Baseline de complexidade em 31%; a classe majoritária é 37% | A redação p2 (40%) deixa de estar "acima do baseline" | corrigido em [E13](#e13) |
 | A conclusão positiva sobre complexidade é sobre um gabarito que é a própria rubrica | A rubrica ordena o backlog de graça e com 100%; o Laya entrega 54% da mesma função | conclusão reescrita |
+| Complexidade nunca foi comparada com regras triviais | **`loc_code` sozinho dá AUC 0,98 e 72%**, contra 0,87 e 54% do Laya | corrigido: `mlaya business` imprime as regras triviais |
+| "6% de erro de duas bandas" reportado sem baseline | Um preditor constante erra duas bandas em 0%; `loc_code`, em 2%; o Laya, em 8% | corrigido |
+| O teste pré-registrado do E11 não teve resultado reportado | A hipótese de eco lexical **não se confirmou**: p1 54%, p4 44% | reportado |
 | E8, a tabela pareada do E10 e o E11 inteiro não tinham código no repositório | "Todos os números são regeneráveis" era falso | corrigido: `mlaya paired` e `mlaya business` |
 | O relatório lia `measured_ms` do YAML do script, que guarda o **último** run | A tabela de latência do `full99` mostrava o tempo do run `variants` (4060 ms contra 2209 ms reais) | corrigido: lê o raw do próprio run |
 | `methodology.md` dizia "8 scripts, zero erros: 49–97%" | Eram 7 scripts com 1 erro | corrigido |

@@ -17,7 +17,14 @@ analysis got one of them wrong:
    so any usable accuracy comes from re-cutting the expected value — and a cut
    chosen on the same rows it is scored on is hindsight, not performance.
 
-3. **The gold is the rubric, and the rubric is free.** `migration_complexity`
+3. **The trivial rules are baselines, not curiosities.** A single feature —
+   line count — cut into three bands reaches AUC 0.98 where the model reaches
+   0.87. An error structure quoted alone ("only 8% are two-band errors") says
+   nothing: a constant `medium` predictor makes *zero* two-band errors. So every
+   number the model gets is reported beside the same number for `loc_code`,
+   `max_nesting_depth` and the constant.
+
+4. **The gold is the rubric, and the rubric is free.** `migration_complexity`
    gold is a deterministic function of features the extractor already computes,
    so anything that merely reproduces it adds nothing: the rubric itself scores
    100% at zero cost. That is reported next to every number here, because
@@ -222,4 +229,93 @@ def strategy(raw: dict, docs: dict, wording: str) -> dict:
         "majority_baseline": round(max(counts.values()) / len(gold), 4),
         "accuracy": round(hits / len(gold), 4),
         "accuracy_ci95": metrics.wilson_interval(hits, len(gold)),
+    }
+
+
+TRIVIAL: tuple[str, ...] = ("loc_code", "max_nesting_depth", "subquery_count",
+                            "source_tables", "graph_edges")
+
+
+def trivial_baselines(docs: dict, *, splits: int = DEFAULT_SPLITS,
+                      seed: int = DEFAULT_SEED) -> list[dict]:
+    """Score single AST features as three-band predictors of complexity.
+
+    Same protocol as the model: cut-points fitted on a training half, scored on
+    the held-out half. Without these rows, "AUC 0.87" and "only 8% two-band
+    errors" read as achievements; beside `loc_code` at 0.98, and beside a
+    constant `medium` that makes zero two-band errors by construction, they read
+    as what they are.
+    """
+    ids = [k for k, d in sorted(docs.items())
+           if (d.get("gold") or {}).get("migration_complexity") in BANDS]
+    if len(ids) < 20:
+        return []
+    gold = [BANDS.index(docs[i]["gold"]["migration_complexity"]) for i in ids]
+
+    rows = []
+    for feature in TRIVIAL:
+        values = [round(float((docs[i].get("features") or {}).get(feature, 0) or 0),
+                        PLACES) for i in ids]
+        if len(set(values)) < 3:
+            continue
+        rows.append(_score_ordinal(values, gold, feature, splits=splits,
+                                   seed=seed))
+
+    # The constant predictor: right 37% of the time, and never off by two bands.
+    constant = [1] * len(gold)
+    rows.append({
+        "predictor": "constante `medium`",
+        "auc_low_vs_high": None,
+        "holdout_accuracy": {"mean": round(gold.count(1) / len(gold), 4)},
+        "optimistic_accuracy": round(gold.count(1) / len(gold), 4),
+        "error_structure_optimistic": _error_structure(constant, gold),
+    })
+    return rows
+
+
+def _score_ordinal(values: list[float], gold: list[int], name: str, *,
+                   splits: int, seed: int) -> dict:
+    """Cut one ordered score into three bands, fitted on train, scored on test."""
+    extremes = [(v, g) for v, g in zip(values, gold) if g != 1]
+    auc = metrics.roc_auc([
+        {"score": v, "gold_bool": g == 2, "gradable": True} for v, g in extremes
+    ]) if extremes else None
+
+    rng = random.Random(seed)
+    by_band = {i: [j for j, g in enumerate(gold) if g == i] for i in range(3)}
+    holdout, structures = [], []
+    for _ in range(splits):
+        train, test = [], []
+        for members in by_band.values():
+            shuffled = list(members)
+            rng.shuffle(shuffled)
+            cut = max(1, round(len(shuffled) * 0.5))
+            train.extend(shuffled[:cut])
+            test.extend(shuffled[cut:])
+        if not test:
+            continue
+        thresholds = _fit_cuts([values[i] for i in train],
+                               [gold[i] for i in train])
+        predicted = [_cut(values[i], thresholds) for i in test]
+        actual = [gold[i] for i in test]
+        holdout.append(sum(p == g for p, g in zip(predicted, actual)) / len(test))
+        structures.append(_error_structure(predicted, actual))
+
+    ordered = sorted(holdout)
+    in_sample = [_cut(v, _fit_cuts(values, gold)) for v in values]
+    return {
+        "predictor": name,
+        "auc_low_vs_high": auc,
+        "holdout_accuracy": {
+            "mean": round(sum(ordered) / len(ordered), 4),
+            "p05": round(ordered[int(0.05 * len(ordered))], 4),
+            "p95": round(ordered[min(len(ordered) - 1, int(0.95 * len(ordered)))], 4),
+        },
+        "optimistic_accuracy": round(
+            sum(p == g for p, g in zip(in_sample, gold)) / len(gold), 4),
+        "error_structure_holdout": {
+            key: round(sum(s[key] for s in structures) / len(structures), 4)
+            for key in ("exact", "one_band", "two_bands", "within_one")
+        },
+        "error_structure_optimistic": _error_structure(in_sample, gold),
     }

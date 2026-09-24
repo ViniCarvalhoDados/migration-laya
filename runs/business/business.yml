@@ -2,7 +2,7 @@ run_id: business
 splits: 200
 seed: 42
 note: the complexity gold is a deterministic function of the extracted features, so the rubric itself
-  scores 100% for free
+  scores 100% for free and single features are strong baselines
 migration_complexity:
 - wording: migration_complexity_p1
   n: 99
@@ -115,7 +115,7 @@ migration_complexity:
 - wording: ensemble
   n: 99
   n_wordings: 4
-  distinct_argmax_labels: 1
+  distinct_argmax_labels: 2
   band_counts:
     low: 31
     medium: 37
@@ -139,6 +139,102 @@ migration_complexity:
     two_bands: 0.1212
     within_one: 0.8788
   rubric_accuracy: 1.0
+trivial_baselines:
+- predictor: loc_code
+  auc_low_vs_high: 0.9787
+  holdout_accuracy:
+    mean: 0.7186
+    p05: 0.6327
+    p95: 0.7959
+  optimistic_accuracy: 0.7778
+  error_structure_holdout:
+    exact: 0.7186
+    one_band: 0.2636
+    two_bands: 0.0179
+    within_one: 0.9822
+  error_structure_optimistic:
+    exact: 0.7778
+    one_band: 0.202
+    two_bands: 0.0202
+    within_one: 0.9798
+- predictor: max_nesting_depth
+  auc_low_vs_high: 0.8928
+  holdout_accuracy:
+    mean: 0.5676
+    p05: 0.4898
+    p95: 0.6531
+  optimistic_accuracy: 0.596
+  error_structure_holdout:
+    exact: 0.5675
+    one_band: 0.4046
+    two_bands: 0.0278
+    within_one: 0.9722
+  error_structure_optimistic:
+    exact: 0.596
+    one_band: 0.3838
+    two_bands: 0.0202
+    within_one: 0.9798
+- predictor: subquery_count
+  auc_low_vs_high: 0.8319
+  holdout_accuracy:
+    mean: 0.5253
+    p05: 0.449
+    p95: 0.6122
+  optimistic_accuracy: 0.5657
+  error_structure_holdout:
+    exact: 0.5253
+    one_band: 0.4001
+    two_bands: 0.0746
+    within_one: 0.9254
+  error_structure_optimistic:
+    exact: 0.5657
+    one_band: 0.3636
+    two_bands: 0.0707
+    within_one: 0.9293
+- predictor: source_tables
+  auc_low_vs_high: 0.8793
+  holdout_accuracy:
+    mean: 0.5099
+    p05: 0.449
+    p95: 0.5714
+  optimistic_accuracy: 0.5657
+  error_structure_holdout:
+    exact: 0.5099
+    one_band: 0.4392
+    two_bands: 0.0509
+    within_one: 0.9491
+  error_structure_optimistic:
+    exact: 0.5657
+    one_band: 0.3838
+    two_bands: 0.0505
+    within_one: 0.9495
+- predictor: graph_edges
+  auc_low_vs_high: 0.8429
+  holdout_accuracy:
+    mean: 0.5757
+    p05: 0.4898
+    p95: 0.6735
+  optimistic_accuracy: 0.6162
+  error_structure_holdout:
+    exact: 0.5757
+    one_band: 0.377
+    two_bands: 0.0472
+    within_one: 0.9528
+  error_structure_optimistic:
+    exact: 0.6162
+    one_band: 0.3434
+    two_bands: 0.0404
+    within_one: 0.9596
+- predictor: constante `medium`
+  auc_low_vs_high: null
+  holdout_accuracy:
+    mean: 0.3737
+  optimistic_accuracy: 0.3737
+  error_structure_optimistic:
+    exact: 0.3737
+    one_band: 0.6263
+    two_bands: 0.0
+    within_one: 1.0
 rewrite_strategy:
 - wording: rewrite_strategy_p1
   n: 99

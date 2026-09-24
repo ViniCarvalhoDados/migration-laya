@@ -129,3 +129,40 @@ def test_strategy_reports_which_classes_were_ever_predicted():
     result = biz.strategy(raw, docs, "rewrite_strategy_p1")
     assert result["distinct_predictions"] == ["refactor"]
     assert result["accuracy"] == pytest.approx(result["majority_baseline"])
+
+
+def test_a_single_feature_is_scored_as_a_baseline():
+    """R02: counting lines beats the model, so the model is scored beside it."""
+    docs = {}
+    for i, band in enumerate(CORPUS_BANDS):
+        # `loc_code` that orders the bands perfectly, `noise` that does not.
+        docs[f"script_{i:02d}"] = {
+            "id": f"script_{i:02d}", "name": f"query{i:02d}",
+            "features": {"loc_code": {"low": 10, "medium": 50,
+                                      "high": 200}[band] + i % 3,
+                         "max_nesting_depth": i % 4,
+                         "subquery_count": i % 5,
+                         "source_tables": i % 6,
+                         "graph_edges": i % 7},
+            "gold": {"migration_complexity": band},
+        }
+
+    rows = {r["predictor"]: r for r in biz.trivial_baselines(docs, splits=20)}
+    assert rows["loc_code"]["auc_low_vs_high"] == 1.0
+    assert rows["loc_code"]["holdout_accuracy"]["mean"] > 0.9
+
+
+def test_the_constant_predictor_makes_zero_two_band_errors():
+    """Why quoting a two-band rate without a baseline says nothing."""
+    docs = {
+        f"script_{i:02d}": {
+            "id": f"script_{i:02d}", "name": f"query{i:02d}",
+            "features": {"loc_code": 10 + i},
+            "gold": {"migration_complexity": band},
+        }
+        for i, band in enumerate(CORPUS_BANDS)
+    }
+    rows = {r["predictor"]: r for r in biz.trivial_baselines(docs, splits=10)}
+    constant = rows["constante `medium`"]
+    assert constant["error_structure_optimistic"]["two_bands"] == 0.0
+    assert constant["optimistic_accuracy"] == pytest.approx(37 / 99, abs=1e-3)

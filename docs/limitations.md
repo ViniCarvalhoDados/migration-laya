@@ -89,6 +89,25 @@ estrutural, mas nada aqui fala sobre legado procedural.
 
 ---
 
+## Pontos de revisão declarados, não corrigidos
+
+A segunda auditoria levantou oito pontos que **não** mudam uma conclusão
+publicada e que ficaram registrados em vez de corrigidos. Estão aqui para que
+ninguém precise reencontrá-los:
+
+| ponto | por que importa | por que não foi corrigido |
+|---|---|---|
+| **Near-duplicates atravessam os splits.** `finetuning.md` identifica 82 famílias em 99 scripts, mas o split por família só existe no `export-training`; os hold-outs de avaliação usam metades estratificadas aleatórias, então gêmeos como q33/q56/q60 caem em lados opostos. | Infla os braços **ajustados** (a LR e o limiar) mais que o Laya zero-shot — ou seja, favorece o comparador, não o modelo. A conclusão de [E13](experiments.md#e13) fica conservadora, não otimista. | mudaria os números sem mudar o sinal |
+| **A dispersão entre splits sobrepostos é reportada como se fosse intervalo.** | Subestima a variância; o correto seria o *corrected resampled t-test* (Nadeau & Bengio, 2003) ou bootstrap por família. | rótulo corrigido em todo lugar; o teste, não |
+| **Caminhos de análise demais para n = 99.** Treze experimentos, 4–6 redações por pergunta, limiar invertido, escolha de variante. | Inverter o limiar de `needs_human_review` porque o AUC saiu 0,22 é decisão tirada do dado; o ganho (74% contra 70%) está dentro do ruído e a pergunta falha no teste de negação. | exigiria um conjunto confirmatório separado |
+| **O caso de custo não mede o acerto do LLM.** [E12](experiments.md#e12) compara preços, nunca qualidade: nenhum LLM foi rodado nas seis perguntas. | "10–100× mais barato" só vira argumento com a acurácia do outro lado na mesa. | é um experimento, não uma correção |
+| **A árvore de decisão usa confiança não calibrada.** ECE 0,085, e o próprio README do Laya diz que o checkpoint sai *over-confident*. | Os cortes de 0,85 da árvore são sobre um número que não é probabilidade. | ver [`finetuning.md`](finetuning.md) |
+| **`rewrite_strategy` foi avaliada só por argmax.** Nunca recebeu cortes ajustados nem ensemble, ao contrário das binárias. | A afirmação "ausência de capacidade zero-shot" é mais forte do que o teste sustenta. | e zero-shot não é o teste certo para ela de todo modo |
+| **Não foi verificado se várias perguntas na mesma chamada interferem entre si.** Seis a 24 perguntas vão juntas, num contexto de 512 tokens. | Truncamento silencioso explicaria parte dos resultados ruins sem envolver capacidade. | ablação simples, ainda não feita |
+| **A procedência do gabarito se contradiz entre arquivos.** | `methodology.md` e o cabeçalho de `state/gold_judgements.yml` não dizem exatamente a mesma coisa sobre quando os 89 últimos foram escritos. | conferir e unificar |
+
+---
+
 ## Ainda em aberto
 
 | pergunta | por quê | custo |

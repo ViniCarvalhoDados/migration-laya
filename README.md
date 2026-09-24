@@ -7,7 +7,7 @@ legado antes de uma migração.
 **Pergunta:** quantos scripts podem ser classificados sem envolver um humano, e
 com que confiabilidade?
 
-**Corpus:** as 99 queries do TPC-DS · **13 experimentos** · 191 testes ·
+**Corpus:** as 99 queries do TPC-DS · **13 experimentos** · 193 testes ·
 execução em CPU · **duas auditorias externas**, ambas com achados que mudaram
 conclusões.
 
@@ -36,23 +36,23 @@ a segunda auditoria encontrou ([E13](docs/experiments.md#e13)).
 | `has_subquery` | **97%** (ensemble + limiar) | 58% | +17,2 pts | **+3,3** (−4 a +14) | não — empata, e o `sqlglot` faz de graça |
 | `has_window_function` | 88% (ensemble) | 86% | +3,6 pts | **−11,3** (−22 a −6) | não |
 | `multi_source` | 80% | 78% | +3,8 pts | **−18,1** (−24 a −10) | não |
-| `migration_complexity` | 40–54% em 3 bandas | **37%** | — | a rubrica acerta **100%** de graça | não |
+| `migration_complexity` | 54% em 3 bandas · AUC 0,87 | **37%** | — | **contar linhas: 72%, AUC 0,98** | não |
 | `rewrite_strategy` | 55% = taxa-base | 55% | — | — | **não zero-shot** |
 | `needs_human_review` | 74% | 70% | −9,8 pts | −9,8 pts | não |
 
-**Com a mesma informação que o cartão, o Laya não vence nenhuma das quatro.**
+**Com a mesma informação que o cartão, o Laya não vence nenhuma das quatro.** E
+na pergunta de maior valor comercial, perde para `wc -l`.
 
 ### As três conclusões que importam
 
-**1. Complexidade: o modelo ordena, mas quem ordena o backlog é a rubrica.** O
-score esperado separa `low` de `high` com AUC 0,87 e raramente erra feio — só
-8% dos erros são de duas bandas. Mas o gabarito de complexidade **é a rubrica**,
-uma função determinística e gratuita das features que o extrator já calcula:
-ela acerta 100% em milissegundos, e o Laya reproduz 54% dela — só depois de
-cortes ajustados em dados já rotulados. Sem esse ajuste o argmax é **constante
-em `medium` nas 99 queries**, exatamente o baseline de 37%. Para ordenar
-backlog, rode a rubrica. ([E11](docs/experiments.md#e11) ·
-[E13](docs/experiments.md#e13))
+**1. Complexidade: contar linhas é melhor que o modelo.** O score esperado
+separa `low` de `high` com AUC 0,87 e acerta 54% das três bandas. A feature
+`loc_code` sozinha, cortada em três bandas pelo mesmo protocolo, faz **AUC 0,98
+e 72%** — e erra duas bandas em 2% contra os 8% do Laya. Faz sentido que ganhe:
+o gabarito é a rubrica, e a rubrica tem ρ = 0,82 com contagem de linhas. Sem
+cortes ajustados em dados já rotulados, o argmax do Laya é **constante em
+`medium` nas 99 queries** — exatamente o baseline de 37%.
+([E11](docs/experiments.md#e11) · [E13](docs/experiments.md#e13))
 
 **2. Estratégia de reescrita não funciona zero-shot — e nunca deveria ter sido
 testada assim.** Quatro formulações bem diferentes, todas colapsam em
@@ -97,7 +97,8 @@ features e passa a ser a decisão real de alguém. ([E12](docs/experiments.md#e1
 ## O que este repositório entrega
 
 **Bloco A — censo determinístico.** Vale por si só, independentemente do
-veredito sobre o Laya: perfil objetivo das 99 queries, 47 features por script
+veredito sobre o Laya — e, depois de [E13](docs/experiments.md#e13), é o que de
+fato entrega o resultado: perfil objetivo das 99 queries, 47 features por script
 extraídas do AST, grafo de joins, e uma rubrica de complexidade com limiares
 derivados de percentis do corpus em vez de opinião. Roda em segundos, sem torch.
 
@@ -143,7 +144,7 @@ perguntas comerciais), que fecham o que antes só existia em script solto.
 ### Auditoria e testes
 
 ```bash
-pytest                                   # 191 testes
+pytest                                   # 193 testes
 mlaya census --verify                    # falha se alguma das 99 não parsear
 mlaya features corpus/tpcds/query23.sql  # dump de features para conferência manual
 mlaya card --check                       # valida orçamento sem escrever

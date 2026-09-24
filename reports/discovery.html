@@ -275,16 +275,16 @@
     <em>ordena</em> o corpus melhor do que a acurácia sugere &mdash; mas não
     melhor do que a aritmética que o extrator já roda de graça. Quando a
     regressão logística recebe <b>a mesma informação que o cartão entrega ao
-    Laya</b>, o Laya empata em uma pergunta e perde nas outras duas. E o
-    gabarito de complexidade é a própria rubrica: ela acerta 100% em
-    milissegundos.
+    Laya</b>, o Laya empata em uma pergunta e perde nas outras duas. E na
+    pergunta de maior valor comercial, <b>contar linhas de código ganha
+    dele</b>: AUC 0,98 contra 0,87.
   </div>
 
   <div class="facts">
     <span><b>99</b> queries</span>
     <span><b>99/99</b> parseadas</span>
     <span><b>594</b> decisões avaliadas</span>
-    <span><b>191</b> testes</span>
+    <span><b>193</b> testes</span>
     <span><b>2</b> auditorias externas</span>
     <span><b>2,3 s</b> por script (CPU)</span>
   </div>
@@ -1163,6 +1163,9 @@ flowchart LR
           <tr><td><b>baseline</b> &mdash; classe majoritária</td>
             <td class="num">&mdash;</td><td class="num">&mdash;</td>
             <td class="num">37%</td><td class="num">&mdash;</td></tr>
+          <tr><td><b><code>loc_code</code></b> &mdash; contar linhas</td>
+            <td class="num strong-num">0,98</td><td class="num">&mdash;</td>
+            <td class="num strong-num">72%</td><td class="num">&mdash;</td></tr>
           <tr><td><b>a própria rubrica</b></td>
             <td class="num">&mdash;</td><td class="num">&mdash;</td>
             <td class="num strong-num">100%</td><td class="num">determinística</td></tr>
@@ -1188,9 +1191,9 @@ flowchart LR
       <div class="metric-sub">o erro que estraga planejamento</div>
     </div>
     <div class="metric">
-      <div class="metric-lab">a rubrica, de graça</div>
-      <div class="metric-val" style="color:var(--pos)">100%</div>
-      <div class="metric-sub">é ela que define o gabarito</div>
+      <div class="metric-lab">constante <code>medium</code></div>
+      <div class="metric-val" style="color:var(--pos)">0%</div>
+      <div class="metric-sub">erra 2 bandas menos que o modelo</div>
     </div>
   </div>
 
@@ -1201,13 +1204,19 @@ flowchart LR
       &mdash; o erro que estraga planejamento &mdash; acontece em 8%.
     </p>
     <p>
-      <b>Mas ordenar não é o serviço.</b> Repare nas duas últimas linhas da
-      tabela. O argmax do Laya é <b>constante em <code>medium</code> nas 99
-      queries</b>, ou seja, exatamente o baseline de 37%; os 54% só aparecem
-      depois de recortar o score esperado em dados já rotulados. E o gabarito de
-      complexidade <em>é a rubrica</em> &mdash; uma função determinística das
-      features que o extrator já calcula, que acerta 100% em milissegundos.
-      Quem quer ordenar um backlog roda a rubrica.
+      <b>Só que contar linhas ordena melhor.</b> A feature <code>loc_code</code>
+      sozinha, cortada em três bandas pelo mesmo protocolo, faz <b>AUC 0,98 e
+      72%</b> &mdash; e erra duas bandas em 2%. Faz sentido que ganhe: o gabarito
+      é a rubrica, e a rubrica tem <b>&rho; = 0,82 com contagem de
+      linhas</b>. Esta pergunta, com este gabarito, é uma pergunta sobre
+      <em>tamanho</em>, e tamanho tem um preditor de uma linha.
+    </p>
+    <p>
+      E os 8% não eram um resultado: um preditor <b>constante
+      <code>medium</code></b> erra duas bandas em <b>0%</b> das vezes. Métrica de
+      estrutura de erro sem o baseline ao lado é propaganda. Sem cortes
+      ajustados em dados já rotulados, aliás, o argmax do Laya <em>é</em> esse
+      constante: 37% nas 99 queries.
     </p>
     <p>
       Duas ressalvas que sobrevivem à correção: aqui o <b>ensemble não ajuda</b>
@@ -1547,6 +1556,16 @@ flowchart LR
             <td><span class="pill warn">reescrita</span></td>
           </tr>
           <tr>
+            <td class="note">Complexidade nunca foi comparada com regras triviais</td>
+            <td class="note"><b><code>loc_code</code> sozinho dá AUC 0,98 e 72%</b>, contra 0,87 e 54% do Laya</td>
+            <td><span class="pill pos">corrigido</span></td>
+          </tr>
+          <tr>
+            <td class="note">"6% de erro de duas bandas" reportado sem baseline</td>
+            <td class="note">Um preditor constante erra duas bandas em <b>0%</b>; <code>loc_code</code>, em 2%; o Laya, em 8%</td>
+            <td><span class="pill pos">corrigido</span></td>
+          </tr>
+          <tr>
             <td class="note">E8, a tabela pareada do E10 e o E11 inteiro não tinham código no repositório</td>
             <td class="note">"Todos os números são regeneráveis" era falso</td>
             <td><span class="pill pos"><code>mlaya paired</code> · <code>mlaya business</code></span></td>
@@ -1684,7 +1703,7 @@ mlaya compare full99 sql99</pre>
 
   <div class="col">
     <p>
-      <code>pytest</code> roda 191 testes, incluindo casos que travam as
+      <code>pytest</code> roda 193 testes, incluindo casos que travam as
       armadilhas que este estudo pisou: AUC abaixo de 0,5 como sinal invertido,
       McNemar chamando ±2% de ruído, Wilson impedindo que "8/8" vire "100%", e um
       teste que verifica que o leave-one-out não vaza.

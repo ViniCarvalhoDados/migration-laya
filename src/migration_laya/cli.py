@@ -977,11 +977,15 @@ def cmd_business(args: argparse.Namespace) -> int:
         print("no business question in this run", file=sys.stderr)
         return 2
 
+    trivial = biz.trivial_baselines(docs, splits=args.splits, seed=args.seed)
+
     census_mod.write_yaml(
         {"run_id": args.run_id, "splits": args.splits, "seed": args.seed,
          "note": "the complexity gold is a deterministic function of the "
-                 "extracted features, so the rubric itself scores 100% for free",
+                 "extracted features, so the rubric itself scores 100% for "
+                 "free and single features are strong baselines",
          "migration_complexity": complexity,
+         "trivial_baselines": trivial,
          "rewrite_strategy": strategy},
         run_dir / "business.yml",
     )
@@ -1001,6 +1005,20 @@ def cmd_business(args: argparse.Namespace) -> int:
                   f"{f'[{ho["p05"]:.0%},{ho["p95"]:.0%}]':>16}"
                   f"{r['optimistic_accuracy']:>7.0%}"
                   f"{r['error_structure_holdout']['two_bands']:>10.0%}")
+
+    if trivial:
+        print()
+        print("  regras triviais sobre uma feature so, mesmo protocolo")
+        print(f"    {'preditor':24}{'AUC low-high':>14}{'hold-out':>26}"
+              f"{'teto':>7}{'2 bandas':>10}")
+        for r in trivial:
+            auc = r["auc_low_vs_high"]
+            es = r.get("error_structure_holdout") or r["error_structure_optimistic"]
+            print(f"    {r['predictor']:24}"
+                  f"{(f'{auc:.2f}' if auc is not None else '-'):>14}"
+                  f"{r['holdout_accuracy']['mean']:>26.0%}"
+                  f"{r['optimistic_accuracy']:>7.0%}{es['two_bands']:>10.0%}")
+
     if strategy:
         base = strategy[0]["majority_baseline"]
         print()
